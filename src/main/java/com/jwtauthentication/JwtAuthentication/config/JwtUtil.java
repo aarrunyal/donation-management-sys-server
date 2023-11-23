@@ -14,7 +14,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
 
-@Component
+//@Component
 public class JwtUtil {
 
 	private final String SECRET_KEY= "mysecret_key";

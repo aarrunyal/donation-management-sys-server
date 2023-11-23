@@ -1,13 +1,14 @@
 package com.jwtauthentication.JwtAuthentication.repository;
 
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.jwtauthentication.JwtAuthentication.model.User;
 
 @Repository
-public class UserRepository {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-	public User findUserByEmail(String email) {
-		return new User(email, "12345", "Arun", "Aryal");
-	}
+	Optional<User> findByEmail(String username); 
 }

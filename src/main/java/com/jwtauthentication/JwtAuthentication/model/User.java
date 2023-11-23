@@ -1,5 +1,8 @@
 package com.jwtauthentication.JwtAuthentication.model;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -13,12 +16,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class User {
 
-	
+	@Id
+	 @GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private long id;
 	private String email;
 	private String password;
 	private String firstName;
 	private String lastName;
+	private String roles; 
 
 	public User(String email, String password) {
         this.email = email;
@@ -80,6 +85,14 @@ public class User {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String roles) {
+		this.roles = roles;
 	}
 	
 	
