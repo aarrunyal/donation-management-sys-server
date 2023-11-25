@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,35 +16,36 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jwtauthentication.JwtAuthentication.config.JwtUtil;
 import com.jwtauthentication.JwtAuthentication.model.User;
 import com.jwtauthentication.JwtAuthentication.model.request.LoginRequest;
-import com.jwtauthentication.JwtAuthentication.model.response.ErrorResponse;
-import com.jwtauthentication.JwtAuthentication.model.response.LoginResponse;
 import com.jwtauthentication.JwtAuthentication.service.JwtService;
-import com.jwtauthentication.JwtAuthentication.service.UserInfoService;
+import com.jwtauthentication.JwtAuthentication.service.UserService;
+
+import org.springframework.security.core.Authentication; 
+
 @RestController
-@RequestMapping("/auth") 
+@RequestMapping(value ="/auth") 
 public class AuthController {
+	
+	@Autowired
+	UserService userService;
 
     @Autowired
-    private UserInfoService userInfoService; 
-  
-    @Autowired
-    private JwtService jwtService; 
-  
-    @Autowired
     private AuthenticationManager authenticationManager; 
+    
+    @Autowired
+    JwtService jwtService;
+
+    @GetMapping(value ="/welcome") 
+    public ResponseEntity welcome() {
+        System.out.println("HELOOOO");
+        return new ResponseEntity<>("hello", HttpStatus.OK);
+    }
   
-    @GetMapping("/welcome") 
-    public String welcome() { 
-        return "Welcome this endpoint is not secure"; 
+    @PostMapping("/addNewUser") 
+    public String addNewUser(@RequestBody User userInfo) { 
+        return userService.addUser(userInfo); 
     } 
-  
-//    @PostMapping("/addNewUser") 
-//    public String addNewUser(@RequestBody User userInfo) { 
-//        return userInfoService.addUser(userInfo); 
-//    } 
   
     @GetMapping("/user/userProfile") 
     @PreAuthorize("hasAuthority('ROLE_USER')") 
@@ -54,14 +54,17 @@ public class AuthController {
     } 
   
     @GetMapping("/admin/adminProfile") 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')") 
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')") 
     public String adminProfile() { 
         return "Welcome to Admin Profile"; 
     } 
-  
-    @PostMapping("/generateToken") 
-    public String authenticateAndGetToken(@RequestBody LoginRequest authRequest) { 
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())); 
+    
+    @PostMapping(value ="/generateToken") 
+    public String authenticateAndGetToken(@RequestBody LoginRequest authRequest) {
+//    	System.out.println(authRequest.getEmail());
+    	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword());
+    	 Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+    	 System.out.println(authentication.isAuthenticated());
         if (authentication.isAuthenticated()) { 
             return jwtService.generateToken(authRequest.getEmail()); 
         } else { 
