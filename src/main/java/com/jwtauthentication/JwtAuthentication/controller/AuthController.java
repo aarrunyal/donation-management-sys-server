@@ -23,12 +23,14 @@ import com.jwtauthentication.JwtAuthentication.model.request.LoginRequest;
 import com.jwtauthentication.JwtAuthentication.service.JwtService;
 import com.jwtauthentication.JwtAuthentication.service.UserService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder; 
 
 @RestController
-@RequestMapping(value ="/auth") 
+@RequestMapping(value ="/api/user") 
 public class AuthController {
 	
 	@Autowired
@@ -40,35 +42,24 @@ public class AuthController {
     @Autowired
     JwtService jwtService;
 
-    @GetMapping(value ="/welcome") 
-    public ResponseEntity welcome() {
-        System.out.println("HELOOOO");
-        return new ResponseEntity<>("hello", HttpStatus.OK);
-    }
-  
-    @PostMapping("/addNewUser") 
-    public UserDto addNewUser(@RequestBody UserDto userInfo) { 
-        return userService.addUser(userInfo); 
+    @PostMapping("/create") 
+    public ResponseEntity<UserDto> addNewUser(@Valid @RequestBody UserDto userInfo){ 
+        UserDto userDto =  userService.addUser(userInfo); 
+        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     } 
   
     @GetMapping("/user") 
 //    @PreAuthorize("hasAuthority('ROLE_USER')") 
-    public User  getAuth() throws TokenMisMatchException{ 
+    public User  getAuth(){ 
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	User user = userService.getByEmail(auth.getName());
     	return user;
     } 
   
-    @GetMapping("/admin/adminProfile") 
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')") 
-    public String adminProfile() { 
-        return "Welcome to Admin Profile"; 
-    }
-    
 
     
     @PostMapping(value ="/generateToken") 
-    public String authenticateAndGetToken(@RequestBody LoginRequest authRequest) throws AuthenticationException{
+    public String authenticateAndGetToken(@Valid @RequestBody LoginRequest authRequest) throws AuthenticationException{
     	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword());
     	 Authentication authentication = authenticationManager.authenticate(authenticationToken);
         if (authentication.isAuthenticated()) { 
