@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jwtauthentication.JwtAuthentication.model.User;
+import com.jwtauthentication.JwtAuthentication.model.Dto.UserDto;
 import com.jwtauthentication.JwtAuthentication.model.request.LoginRequest;
 import com.jwtauthentication.JwtAuthentication.service.JwtService;
 import com.jwtauthentication.JwtAuthentication.service.UserService;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException; 
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder; 
 
 @RestController
 @RequestMapping(value ="/auth") 
@@ -44,21 +46,25 @@ public class AuthController {
     }
   
     @PostMapping("/addNewUser") 
-    public String addNewUser(@RequestBody User userInfo) { 
+    public UserDto addNewUser(@RequestBody UserDto userInfo) { 
         return userService.addUser(userInfo); 
     } 
   
-    @GetMapping("/user/userProfile") 
+    @GetMapping("/user") 
 //    @PreAuthorize("hasAuthority('ROLE_USER')") 
-    public String userProfile() { 
-        return "Welcome to User Profile"; 
+    public User  getAuth() { 
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	User user = userService.getByEmail(auth.getName());
+    	return user;
     } 
   
     @GetMapping("/admin/adminProfile") 
 //    @PreAuthorize("hasAuthority('ROLE_ADMIN')") 
     public String adminProfile() { 
         return "Welcome to Admin Profile"; 
-    } 
+    }
+    
+
     
     @PostMapping(value ="/generateToken") 
     public String authenticateAndGetToken(@RequestBody LoginRequest authRequest) throws AuthenticationException{

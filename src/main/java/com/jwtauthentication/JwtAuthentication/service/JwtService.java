@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.jwtauthentication.JwtAuthentication.config.AppConstant;
 import com.jwtauthentication.JwtAuthentication.model.User;
 
 import io.jsonwebtoken.Claims;
@@ -24,11 +25,7 @@ public class JwtService {
 	
 	@Autowired
 	UserService userService;
-	
-	public static final String  SECRET_KEY = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
-	private final String TOKEN_HEADER = "Authorization";
-	private final String TOKEN_PREFIX = "Bearer ";
-	private long ACCESS_TOKEN_VALIDITY = 60 *60 *100;
+
 	
 	public String generateToken(String userName) { 
         Map<String, Object> claims = new HashMap<>(); 
@@ -40,12 +37,12 @@ public class JwtService {
                 .setClaims(claims) 
                 .setSubject(userName) 
                 .setIssuedAt(new Date(System.currentTimeMillis())) 
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) 
+                .setExpiration(new Date(System.currentTimeMillis() + AppConstant.ACCESS_TOKEN_VALIDITY)) 
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact(); 
     } 
 	
 	private Key getSignKey() { 
-        byte[] keyBytes= Decoders.BASE64.decode(SECRET_KEY); 
+        byte[] keyBytes= Decoders.BASE64.decode(AppConstant.SECRET_KEY); 
         return Keys.hmacShaKeyFor(keyBytes); 
     } 
 	
