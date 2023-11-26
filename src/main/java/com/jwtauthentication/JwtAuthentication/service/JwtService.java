@@ -4,10 +4,14 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.jwtauthentication.JwtAuthentication.model.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,7 +22,10 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtService {
 	
-	public static final String  SECRET_KEY = "3598794456";
+	@Autowired
+	UserService userService;
+	
+	public static final String  SECRET_KEY = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 	private final String TOKEN_HEADER = "Authorization";
 	private final String TOKEN_PREFIX = "Bearer ";
 	private long ACCESS_TOKEN_VALIDITY = 60 *60 *100;
@@ -70,6 +77,8 @@ public class JwtService {
   
     public Boolean validateToken(String token, UserDetails userDetails) { 
         final String username = extractUsername(token); 
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token)); 
+        User user = userService.getByEmail(username);
+        //authenticates if the user email or user name matches with the extracted username
+        return ((username.equals(user.getEmail())) || (username.equals(userDetails.getUsername())) && !isTokenExpired(token)); 
     } 
 }

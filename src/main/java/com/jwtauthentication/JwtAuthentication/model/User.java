@@ -26,6 +26,9 @@ public class User {
 	
 	
 	
+	public User() {
+		super();
+	}
 	public User(long id, String email, String password, String firstName, String lastName, String roles) {
 		super();
 		this.id = id;

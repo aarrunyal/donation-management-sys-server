@@ -21,7 +21,8 @@ import com.jwtauthentication.JwtAuthentication.model.request.LoginRequest;
 import com.jwtauthentication.JwtAuthentication.service.JwtService;
 import com.jwtauthentication.JwtAuthentication.service.UserService;
 
-import org.springframework.security.core.Authentication; 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException; 
 
 @RestController
 @RequestMapping(value ="/auth") 
@@ -48,7 +49,7 @@ public class AuthController {
     } 
   
     @GetMapping("/user/userProfile") 
-    @PreAuthorize("hasAuthority('ROLE_USER')") 
+//    @PreAuthorize("hasAuthority('ROLE_USER')") 
     public String userProfile() { 
         return "Welcome to User Profile"; 
     } 
@@ -60,11 +61,10 @@ public class AuthController {
     } 
     
     @PostMapping(value ="/generateToken") 
-    public String authenticateAndGetToken(@RequestBody LoginRequest authRequest) {
-//    	System.out.println(authRequest.getEmail());
+    public String authenticateAndGetToken(@RequestBody LoginRequest authRequest) throws AuthenticationException{
     	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword());
-    	 Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
-    	 System.out.println(authentication.isAuthenticated());
+   	 	System.out.println(authenticationManager.authenticate(authenticationToken));
+    	 Authentication authentication = authenticationManager.authenticate(authenticationToken);
         if (authentication.isAuthenticated()) { 
             return jwtService.generateToken(authRequest.getEmail()); 
         } else { 

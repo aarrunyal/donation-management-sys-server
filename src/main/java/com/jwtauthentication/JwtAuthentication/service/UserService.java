@@ -37,4 +37,10 @@ public class UserService implements UserDetailsService {
         repository.save(userInfo); 
         return "User Added Successfully"; 
     } 
+	
+	public User getByEmail(String email) {
+		User user = 	repository.getByEmail(email);
+		return user;
+	}
+	
 }
