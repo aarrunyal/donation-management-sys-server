@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.jwtauthentication.JwtAuthentication.config.AppConstant;
+import com.jwtauthentication.JwtAuthentication.exception.TokenMisMatchException;
 import com.jwtauthentication.JwtAuthentication.model.User;
 
 import io.jsonwebtoken.Claims;
@@ -54,18 +55,19 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration); 
     } 
 	
-	public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) { 
-        final Claims claims = extractAllClaims(token); 
+	public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) throws TokenMisMatchException{
+        final Claims claims = extractAllClaims(token);        
         return claimsResolver.apply(claims); 
     }
 	
-	private Claims extractAllClaims(String token) { 
-        return Jwts 
+	private  Claims extractAllClaims(String token)  { 
+        Claims  claim =  Jwts 
                 .parserBuilder() 
                 .setSigningKey(getSignKey()) 
                 .build() 
                 .parseClaimsJws(token) 
                 .getBody(); 
+       return claim;
     } 
 	
 	private Boolean isTokenExpired(String token) { 

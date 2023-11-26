@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.jwtauthentication.JwtAuthentication.exception.TokenMisMatchException;
 import com.jwtauthentication.JwtAuthentication.model.User;
 import com.jwtauthentication.JwtAuthentication.service.JwtService;
 import com.jwtauthentication.JwtAuthentication.service.UserService;
@@ -35,17 +36,17 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 	        String token = null; 
 	        String username = null; 
 	        if (authHeader != null && authHeader.startsWith(AppConstant.TOKEN_PREFIX)) { 
-	            token = authHeader.substring(7); 
+	            token = authHeader.substring(7);
 	            username = jwtService.extractUsername(token); 
-	        } 
-	        System.out.println(username);
+	        }
 	        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) { 
 	            UserDetails userDetails = userDetailsService.loadUserByUsername(username); 
 	            if (jwtService.validateToken(token, userDetails)) { 
 	                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()); 
 	                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); 
 	                SecurityContextHolder.getContext().setAuthentication(authToken); 
-	            } 
+	            } else
+	            	throw new TokenMisMatchException();
 	        } 
 	        filterChain.doFilter(request, response); 
 	    } 

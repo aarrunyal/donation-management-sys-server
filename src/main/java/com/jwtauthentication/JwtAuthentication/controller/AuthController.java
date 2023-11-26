@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jwtauthentication.JwtAuthentication.exception.TokenMisMatchException;
 import com.jwtauthentication.JwtAuthentication.model.User;
 import com.jwtauthentication.JwtAuthentication.model.Dto.UserDto;
 import com.jwtauthentication.JwtAuthentication.model.request.LoginRequest;
@@ -52,7 +53,7 @@ public class AuthController {
   
     @GetMapping("/user") 
 //    @PreAuthorize("hasAuthority('ROLE_USER')") 
-    public User  getAuth() { 
+    public User  getAuth() throws TokenMisMatchException{ 
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	User user = userService.getByEmail(auth.getName());
     	return user;
@@ -69,7 +70,6 @@ public class AuthController {
     @PostMapping(value ="/generateToken") 
     public String authenticateAndGetToken(@RequestBody LoginRequest authRequest) throws AuthenticationException{
     	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword());
-   	 	System.out.println(authenticationManager.authenticate(authenticationToken));
     	 Authentication authentication = authenticationManager.authenticate(authenticationToken);
         if (authentication.isAuthenticated()) { 
             return jwtService.generateToken(authRequest.getEmail()); 
