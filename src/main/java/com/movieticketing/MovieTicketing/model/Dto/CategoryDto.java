@@ -1,7 +1,9 @@
 package com.movieticketing.MovieTicketing.model.Dto;
 
 import com.movieticketing.MovieTicketing.model.CategoryType;
+import com.movieticketing.MovieTicketing.model.StatusType;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 
 
@@ -9,12 +11,90 @@ import jakarta.validation.constraints.NotEmpty;
 public class CategoryDto {
 
 	
+	private long id;
+	
 	@NotEmpty(message="Title is required")
 	private String title;
 	
-	@NotEmpty(message="State of category needs to be either active or not")
-	private boolean isActive;
+	@Column(nullable=false)
+	private StatusType status;
 	
-	@NotEmpty(message="Type is required")
+
 	private CategoryType type;
+
+	
+	
+	public CategoryDto() {
+		super();
+	}
+
+
+
+
+
+
+	public CategoryDto(long id, @NotEmpty(message = "Title is required") String title, StatusType status,
+			CategoryType type) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.status = status;
+		this.type = type;
+	}
+
+
+
+
+
+
+	public long getId() {
+		return id;
+	}
+
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	
+
+	public StatusType getStatus() {
+		return status;
+	}
+
+
+
+
+
+
+	public void setStatus(StatusType status) {
+		this.status = status;
+	}
+
+
+
+
+
+
+	public CategoryType getType() {
+		return type;
+	}
+
+	public void setType(CategoryType type) {
+		this.type = type;
+	}
+	
+	
+	
 }

@@ -55,9 +55,9 @@ public class UserService implements UserDetailsService {
         return this.mapper.map(user, UserDto.class);
     } 
 	
-	public User getByEmail(String email) {
+	public UserDto getByEmail(String email) {
 		User user = 	this.repository.getByEmail(email);
-		return user;
+		return this.mapper.map(user,UserDto.class);
 	}
 	
 }

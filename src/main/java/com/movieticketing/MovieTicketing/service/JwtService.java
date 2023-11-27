@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.movieticketing.MovieTicketing.config.AppConstant;
 import com.movieticketing.MovieTicketing.exception.TokenMisMatchException;
 import com.movieticketing.MovieTicketing.model.User;
+import com.movieticketing.MovieTicketing.model.Dto.UserDto;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -76,7 +77,7 @@ public class JwtService {
   
     public Boolean validateToken(String token, UserDetails userDetails) { 
         final String username = extractUsername(token); 
-        User user = userService.getByEmail(username);
+        UserDto user = userService.getByEmail(username);
         //authenticates if the user email or user name matches with the extracted username
         return ((username.equals(user.getEmail())) || (username.equals(userDetails.getUsername())) && !isTokenExpired(token)); 
     } 

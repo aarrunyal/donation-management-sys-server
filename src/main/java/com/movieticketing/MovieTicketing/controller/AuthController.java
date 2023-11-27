@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.movieticketing.MovieTicketing.exception.ResourceNotFoundException;
 import com.movieticketing.MovieTicketing.exception.TokenMisMatchException;
 import com.movieticketing.MovieTicketing.model.User;
+import com.movieticketing.MovieTicketing.model.Dto.CategoryDto;
 import com.movieticketing.MovieTicketing.model.Dto.UserDto;
 import com.movieticketing.MovieTicketing.model.request.LoginRequest;
 import com.movieticketing.MovieTicketing.service.JwtService;
@@ -53,12 +54,11 @@ public class AuthController {
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     } 
   
-    @GetMapping("/user") 
-//    @PreAuthorize("hasAuthority('ROLE_USER')") 
-    public User  getAuth(){ 
+    @GetMapping("/auth") 
+    public ResponseEntity<UserDto>  getAuth(){ 
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	User user = userService.getByEmail(auth.getName());
-    	return user;
+    	UserDto user = userService.getByEmail(auth.getName());
+    	return new ResponseEntity<UserDto>(user, HttpStatus.OK);
     } 
   
 
@@ -69,7 +69,7 @@ public class AuthController {
     	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword());
     	 Authentication authentication = authenticationManager.authenticate(authenticationToken);
         if (authentication.isAuthenticated()) { 
-        	User user = userService.getByEmail(authentication.getName());
+        	UserDto user = userService.getByEmail(authentication.getName());
         	Map<String, String> auth = new HashMap<>();
         	auth.put("token", jwtService.generateToken(authRequest.getEmail()));
         	auth.put("first_name", user.getFirstName());

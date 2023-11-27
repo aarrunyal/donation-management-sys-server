@@ -1,5 +1,7 @@
 package com.movieticketing.MovieTicketing.config;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,14 +38,15 @@ public class SecurityConfig {
 
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { 
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
       return http.csrf().disable() 
-              .authorizeHttpRequests() 
-              .requestMatchers("/api/user/create", "/api/user/generateToken").permitAll() 
+              .authorizeHttpRequests()
+              .requestMatchers(RouteClassifier.getUnSecuredUrls().toArray(new String[0])).permitAll()
+//              .requestMatchers("/api/user/create", "/api/user/generateToken", "/api/category/**").permitAll() 
               .and() 
-              .authorizeHttpRequests().requestMatchers("/auth/user/**").authenticated() 
-              .and() 
-              .authorizeHttpRequests().requestMatchers("/auth/admin/**").authenticated() 
+              .authorizeHttpRequests()
+//              .requestMatchers(RouteClassifier.getSecuredUrls().toArray(new String[0])).authenticated()
+              .requestMatchers("/api/category/**", "/api/user/auth").authenticated() 
               .and() 
               .sessionManagement() 
               .sessionCreationPolicy(SessionCreationPolicy.STATELESS) 

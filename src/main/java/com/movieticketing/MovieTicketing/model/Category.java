@@ -19,19 +19,27 @@ public class Category {
 	private String title;
 	
 	@Column(nullable=false)
-	private boolean isActive;
+	private StatusType status;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="type", nullable=false, length=100)
 	private CategoryType type;
 
-	public Category(long id, String title, boolean isActive, CategoryType type) {
+	public Category() {
+		super();
+	}
+
+
+
+	public Category(long id, String title, StatusType status, CategoryType type) {
 		super();
 		this.id = id;
 		this.title = title;
-		this.isActive = isActive;
+		this.status = status;
 		this.type = type;
 	}
+
+
 
 	public long getId() {
 		return id;
@@ -49,13 +57,21 @@ public class Category {
 		this.title = title;
 	}
 
-	public boolean isActive() {
-		return isActive;
+	
+
+
+
+	public StatusType getStatus() {
+		return status;
 	}
 
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+
+
+	public void setStatus(StatusType status) {
+		this.status = status;
 	}
+
+
 
 	public CategoryType getType() {
 		return type;
