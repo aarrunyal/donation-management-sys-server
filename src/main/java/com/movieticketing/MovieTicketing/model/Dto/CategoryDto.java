@@ -1,5 +1,7 @@
 package com.movieticketing.MovieTicketing.model.Dto;
 
+import java.util.Date;
+
 import com.movieticketing.MovieTicketing.model.CategoryType;
 import com.movieticketing.MovieTicketing.model.StatusType;
 
@@ -23,27 +25,24 @@ public class CategoryDto {
 	private CategoryType type;
 
 	
+	@Column(nullable=false, length=100)
+	private Date createdAt;
 	
 	public CategoryDto() {
 		super();
 	}
 
-
-
-
-
-
+	
+	
 	public CategoryDto(long id, @NotEmpty(message = "Title is required") String title, StatusType status,
-			CategoryType type) {
+			CategoryType type, Date createdAt) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.status = status;
 		this.type = type;
+		this.createdAt = createdAt;
 	}
-
-
-
 
 
 
@@ -51,13 +50,9 @@ public class CategoryDto {
 		return id;
 	}
 
-
-
 	public void setId(long id) {
 		this.id = id;
 	}
-
-
 
 	public String getTitle() {
 		return title;
@@ -67,25 +62,13 @@ public class CategoryDto {
 		this.title = title;
 	}
 
-	
-
 	public StatusType getStatus() {
 		return status;
 	}
 
-
-
-
-
-
 	public void setStatus(StatusType status) {
 		this.status = status;
 	}
-
-
-
-
-
 
 	public CategoryType getType() {
 		return type;
@@ -94,7 +77,18 @@ public class CategoryDto {
 	public void setType(CategoryType type) {
 		this.type = type;
 	}
-	
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+
+
+
 	
 	
 }
