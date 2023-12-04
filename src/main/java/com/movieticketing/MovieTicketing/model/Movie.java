@@ -31,6 +31,9 @@ public class Movie {
 	private String title;
 	
 	@Column(nullable=false)
+	private String slug;
+	
+	@Column(nullable=false)
 	private String description;
 	
 	@Column(nullable=false)
@@ -46,7 +49,7 @@ public class Movie {
 	private String director;
 	
 	@Column(nullable=false)
-	private String startCast;
+	private String startCasts;
 	
 	@Column(nullable=false)
 	@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
@@ -71,22 +74,32 @@ public class Movie {
 
 
 
-	public Movie(long id, String title, String description, long price, int rating, String genre, String director,
-			String startCast, LocalTime playTime, LocalDate createdAt, String releaseYear, boolean status) {
+	
+
+
+
+	public Movie(long id, String title, String slug, String description, long price, int rating, String genre,
+			String director, String startCasts, LocalTime playTime, LocalDate createdAt, String releaseYear,
+			boolean status) {
 		super();
 		this.id = id;
 		this.title = title;
+		this.slug = slug;
 		this.description = description;
 		this.price = price;
 		this.rating = rating;
 		this.genre = genre;
 		this.director = director;
-		this.startCast = startCast;
+		this.startCasts = startCasts;
 		this.playTime = playTime;
 		this.createdAt = createdAt;
 		this.releaseYear = releaseYear;
 		this.status = status;
 	}
+
+
+
+
 
 
 
@@ -146,15 +159,29 @@ public class Movie {
 		this.director = director;
 	}
 
-	public String getStartCast() {
-		return startCast;
-	}
-
-	public void setStartCast(String startCast) {
-		this.startCast = startCast;
-	}
+	
 
 	
+	public String getStartCasts() {
+		return startCasts;
+	}
+
+
+
+
+
+
+
+	public void setStartCasts(String startCasts) {
+		this.startCasts = startCasts;
+	}
+
+
+
+
+
+
+
 	public String getReleaseYear() {
 		return releaseYear;
 	}
@@ -193,6 +220,26 @@ public class Movie {
 
 	public void setCreatedAt(LocalDate createdAt) {
 		this.createdAt = createdAt;
+	}
+
+
+
+
+
+
+
+	public String getSlug() {
+		return slug;
+	}
+
+
+
+
+
+
+
+	public void setSlug(String slug) {
+		this.slug = slug;
 	}
 
 	

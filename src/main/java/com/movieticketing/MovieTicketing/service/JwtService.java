@@ -17,10 +17,12 @@ import com.movieticketing.MovieTicketing.model.User;
 import com.movieticketing.MovieTicketing.model.Dto.UserDto;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 
 @Component
 public class JwtService {
@@ -62,13 +64,14 @@ public class JwtService {
     }
 	
 	private  Claims extractAllClaims(String token)  { 
-        Claims  claim =  Jwts 
-                .parserBuilder() 
-                .setSigningKey(getSignKey()) 
-                .build() 
-                .parseClaimsJws(token) 
-                .getBody(); 
-       return claim;
+			Claims  claim =  Jwts 
+	                .parserBuilder() 
+	                .setSigningKey(getSignKey()) 
+	                .build() 
+	                .parseClaimsJws(token) 
+	                .getBody(); 
+	       return claim;
+        
     } 
 	
 	private Boolean isTokenExpired(String token) { 

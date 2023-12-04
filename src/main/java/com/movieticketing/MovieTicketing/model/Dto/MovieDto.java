@@ -27,6 +27,8 @@ public class MovieDto {
 	@NotEmpty
 	private String title;
 	
+	private String slug;
+	
 	@NotEmpty
 	private String description;
 	
@@ -43,7 +45,7 @@ public class MovieDto {
 	private String director;
 	
 	@NotEmpty
-	private String startCast;
+	private String startCasts;
 	
 	
 	@NotNull
@@ -66,18 +68,20 @@ public class MovieDto {
 	}
 
 
-	public MovieDto( @NotEmpty String title, @NotEmpty String description, @NotNull long price,
-			@NotNull int rating, @NotEmpty String genre, @NotEmpty String director, @NotEmpty String startCast,
-			@NotNull LocalTime playTime, @NotNull LocalDate createdAt, @NotEmpty String releaseYear,
-			@NotNull boolean status) {
+	public MovieDto(long id, @NotEmpty String title, @NotEmpty String slug, @NotEmpty String description,
+			@NotNull long price, @NotNull int rating, @NotEmpty String genre, @NotEmpty String director,
+			@NotEmpty String startCasts, @NotNull LocalTime playTime, @NotNull LocalDate createdAt,
+			@NotEmpty String releaseYear, @NotNull @AssertTrue boolean status) {
 		super();
+		this.id = id;
 		this.title = title;
+		this.slug = slug;
 		this.description = description;
 		this.price = price;
 		this.rating = rating;
 		this.genre = genre;
 		this.director = director;
-		this.startCast = startCast;
+		this.startCasts = startCasts;
 		this.playTime = playTime;
 		this.createdAt = createdAt;
 		this.releaseYear = releaseYear;
@@ -155,13 +159,13 @@ public class MovieDto {
 	}
 
 
-	public String getStartCast() {
-		return startCast;
+	public String getStartCasts() {
+		return startCasts;
 	}
 
 
-	public void setStartCast(String startCast) {
-		this.startCast = startCast;
+	public void setStartCasts(String startCasts) {
+		this.startCasts = startCasts;
 	}
 
 
@@ -202,5 +206,19 @@ public class MovieDto {
 
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+	
+	public String getSlug() {
+		return slug;
+	}
+
+
+
+
+
+
+
+	public void setSlug(String slug) {
+		this.slug = slug;
 	}
 }

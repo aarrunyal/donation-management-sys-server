@@ -27,7 +27,7 @@ public class MovieController {
 	@Autowired
 	private MovieService movieService;
 	
-	@PostMapping("/create")
+	@PostMapping("")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
 	public ResponseEntity<MovieDto> createMovie(@Valid @RequestBody MovieDto movieDto){
 		MovieDto movie = this.movieService.create(movieDto);
@@ -47,7 +47,7 @@ public class MovieController {
 		return new ResponseEntity<MovieDto>(movieDto, HttpStatus.OK);
 	}
 //	
-	@GetMapping(value="/list")
+	@GetMapping(value="")
 	public ResponseEntity<List<MovieDto>> getAll(){
 		List<MovieDto> movieDtos = this.movieService.all();
 		return new ResponseEntity<List<MovieDto>>(movieDtos, HttpStatus.OK);
