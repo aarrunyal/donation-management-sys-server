@@ -1,9 +1,12 @@
 package com.movieticketing.MovieTicketing.model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.movieticketing.MovieTicketing.model.Dto.MovieDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,8 +15,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
 
 	@Id
@@ -33,61 +42,6 @@ public class Category {
 	@Column(nullable=false, length=100)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate createdAt;
-
-	public Category() {
-		super();
-	}
-
-	public Category(long id, String title, StatusType status, CategoryType type, LocalDate createdAt) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.status = status;
-		this.type = type;
-		this.createdAt = createdAt;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public StatusType getStatus() {
-		return status;
-	}
-
-	public void setStatus(StatusType status) {
-		this.status = status;
-	}
-
-	public CategoryType getType() {
-		return type;
-	}
-
-	public void setType(CategoryType type) {
-		this.type = type;
-	}
-
-	public LocalDate getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(LocalDate createdAt) {
-		this.createdAt = createdAt;
-	}
-	
-	
 
 }
 

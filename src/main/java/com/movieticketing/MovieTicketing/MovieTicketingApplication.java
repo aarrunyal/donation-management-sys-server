@@ -16,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.movieticketing.MovieTicketing.model.User;
 import com.movieticketing.MovieTicketing.repository.UserRepository;
 //https://www.geeksforgeeks.org/spring-boot-3-0-jwt-authentication-with-spring-security-using-mysql-database/
+//https://medium.com/javarevisited/creating-a-springboot-crud-api-using-the-jackson-objectmapper-a3457ec158ef
 @SpringBootApplication
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MovieTicketingApplication {

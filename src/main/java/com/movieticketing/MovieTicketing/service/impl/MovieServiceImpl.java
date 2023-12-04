@@ -34,16 +34,25 @@ public class MovieServiceImpl implements MovieService{
 		Movie movie = this.modelMapper.map(movieDto, Movie.class);
 		movie.setCreatedAt(LocalDate.now());
 		movie.setSlug(Slugify.makeSlug(movieDto.getTitle()));
+		movie.setStatus(true);
 		movie = this.movieRepository.save(movie);
-		
 		return this.modelMapper.map(movie, MovieDto.class);
 	}
 
 	@Override
 	public MovieDto update(MovieDto movieDto, Long movieId) {
 		Movie oldMovie = this.movieRepository.findById(movieId).orElseThrow((()->new ResourceNotFoundException("Movie", "id", movieId)));
-		oldMovie = this.modelMapper.map(movieDto, Movie.class);
 		oldMovie.setId(movieId);
+		oldMovie.setDescription(movieDto.getDescription());
+		oldMovie.setDirector(movieDto.getDirector());
+		oldMovie.setGenre(movieDto.getGenre());
+		oldMovie.setPlayTime(movieDto.getPlayTime());
+		oldMovie.setPrice(movieDto.getPrice());
+		oldMovie.setRating(movieDto.getRating());
+		oldMovie.setReleaseYear(movieDto.getReleaseYear());
+		oldMovie.setStarCasts(movieDto.getStarCasts());
+		oldMovie.setStatus(movieDto.isStatus());
+		oldMovie.setTitle(movieDto.getTitle());
 		Movie movie = this.movieRepository.save(oldMovie);
 		return this.modelMapper.map(movie, MovieDto.class);
 	}
