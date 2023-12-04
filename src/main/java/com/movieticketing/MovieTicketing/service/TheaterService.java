@@ -2,8 +2,9 @@ package com.movieticketing.MovieTicketing.service;
 
 import java.util.List;
 
-import com.movieticketing.MovieTicketing.model.Dto.MovieDto;
 import com.movieticketing.MovieTicketing.model.Dto.TheaterDto;
+
+
 
 public interface TheaterService {
 

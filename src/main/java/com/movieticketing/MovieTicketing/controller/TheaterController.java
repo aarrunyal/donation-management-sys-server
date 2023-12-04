@@ -2,6 +2,7 @@ package com.movieticketing.MovieTicketing.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,22 +23,23 @@ import com.movieticketing.MovieTicketing.service.MovieService;
 import com.movieticketing.MovieTicketing.service.TheaterService;
 
 import jakarta.validation.Valid;
+
 @RestController
-@RequestMapping("api/theater")
+@RequestMapping("api/theatre")
 public class TheaterController {
 	
 	@Autowired
 	private TheaterService theaterService;
 	
 	@PostMapping("")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
 	public ResponseEntity<TheaterDto> createTheater(@Valid @RequestBody TheaterDto theaterDto){
 		TheaterDto theater = this.theaterService.create(theaterDto);
 		return new ResponseEntity<TheaterDto>(theater, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{theaterId}")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
 	public ResponseEntity<TheaterDto> updateTheater(@Valid @RequestBody TheaterDto theaterDto, @PathVariable Long theaterId){
 		TheaterDto updatedDto = this.theaterService.update(theaterDto, theaterId);
 		return new ResponseEntity<TheaterDto>(updatedDto, HttpStatus.OK);

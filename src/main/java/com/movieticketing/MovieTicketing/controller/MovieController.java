@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,14 +29,14 @@ public class MovieController {
 	private MovieService movieService;
 	
 	@PostMapping("")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
 	public ResponseEntity<MovieDto> createMovie(@Valid @RequestBody MovieDto movieDto){
 		MovieDto movie = this.movieService.create(movieDto);
 		return new ResponseEntity<MovieDto>(movie, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{movieId}")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
 	public ResponseEntity<MovieDto> updateMovie(@Valid @RequestBody MovieDto movieDto, @PathVariable Long movieId){
 		MovieDto updateDto = this.movieService.update(movieDto, movieId);
 		return new ResponseEntity<MovieDto>(updateDto, HttpStatus.OK);

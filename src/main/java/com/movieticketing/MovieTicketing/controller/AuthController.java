@@ -35,7 +35,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder; 
 
 @RestController
-@RequestMapping(value ="/api/user") 
+@RequestMapping(value ="/api") 
 public class AuthController {
 	
 	@Autowired
@@ -63,7 +63,7 @@ public class AuthController {
   
 
     
-    @PostMapping(value ="/generateToken") 
+    @PostMapping(value ="/login") 
     public Map<String, String> authenticateAndGetToken(@Valid @RequestBody LoginRequest authRequest) throws AuthenticationException{
     	System.out.println(authRequest.getEmail());
     	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword());
