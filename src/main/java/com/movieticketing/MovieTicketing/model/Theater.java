@@ -36,7 +36,7 @@ public class Theater {
 	private int noOfRows;
 	
 	@Column(nullable=false)
-	private int seatInEachRow;
+	private int seatsInEachRow;
 	
 	@Column(nullable=false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
