@@ -1,5 +1,7 @@
 package com.movieticketing.MovieTicketing.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +60,22 @@ public class MovieController {
 	public ResponseEntity<ApiResponse> deleteMovie(@PathVariable Long movieId){
 		this.movieService.delete(movieId);
 		return new ResponseEntity<ApiResponse>(new ApiResponse("movie has been deleted !!", true), HttpStatus.OK);
+	}
+	
+	@GetMapping("/search/{title}")
+	public ResponseEntity<HashMap<String, Object>> searchMovie(@PathVariable String title){
+		List<MovieDto> movie = this.movieService.searchByKey(title);
+		HashMap<String, Object> response = new HashMap<>();
+		if(movie.size()>0) {
+			response.put("message", "Movies found successfully");
+			response.put("data", movie);
+			response.put("length", movie.size());	
+		}else {
+			response.put("message", "Movies found successfully");
+			response.put("data", new ArrayList<>());
+			response.put("length", movie.size());
+		}
+		
+		return new ResponseEntity<HashMap<String, Object>>(response, HttpStatus.CREATED);
 	}
 }

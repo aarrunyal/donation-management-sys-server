@@ -16,4 +16,5 @@ public interface MovieService {
 
 	void delete(Long movieId);
 
+	List<MovieDto> searchByKey(String key);
 }

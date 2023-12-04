@@ -75,6 +75,13 @@ public class MovieServiceImpl implements MovieService{
 	public void delete(Long movieId) {
 		Movie movie = this.movieRepository.findById(movieId).orElseThrow((()->new ResourceNotFoundException("Movie", "id", movieId)));
 		this.movieRepository.delete(movie);
-		
 	}
+
+	@Override
+	public List<MovieDto> searchByKey(String key) {
+		List<Movie> movies =  this.movieRepository.searchByMovieKey(key);
+		List<MovieDto> movieDtos = movies.stream().map((movie)->this.modelMapper.map(movie, MovieDto.class)).collect(Collectors.toList());
+		return movieDtos;
+	}
+	
 }
