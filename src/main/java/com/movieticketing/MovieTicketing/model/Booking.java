@@ -60,8 +60,7 @@ public class Booking {
 	private boolean status;
 	
 	@Column(nullable=false)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate bookingDate;
+	private String bookingDate;
 	
 	@Column(nullable=false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

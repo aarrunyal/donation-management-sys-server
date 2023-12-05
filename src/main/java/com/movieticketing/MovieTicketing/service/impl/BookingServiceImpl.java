@@ -2,6 +2,11 @@ package com.movieticketing.MovieTicketing.service.impl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +22,7 @@ import com.movieticketing.MovieTicketing.model.Movie;
 import com.movieticketing.MovieTicketing.model.Theater;
 import com.movieticketing.MovieTicketing.model.Dto.BookingDto;
 import com.movieticketing.MovieTicketing.model.Dto.CategoryDto;
+import com.movieticketing.MovieTicketing.model.Dto.MovieDto;
 import com.movieticketing.MovieTicketing.model.Dto.TheaterDto;
 import com.movieticketing.MovieTicketing.repository.BookingRepository;
 import com.movieticketing.MovieTicketing.repository.MovieRepository;
@@ -30,18 +36,24 @@ public class BookingServiceImpl implements BookingService {
 	
 	@Autowired 
 	private BookingRepository bookingRepository;
-	
-	@Autowired 
+		
+		@Autowired 
 	private MovieRepository movieRepository;
 	
 	@Override
-	public BookingDto create(BookingDto bookingDto) {
+	public boolean create(BookingDto bookingDto) {
+		 DateTimeFormatter f = new DateTimeFormatterBuilder().parseCaseInsensitive()
+		            .append(DateTimeFormatter.ofPattern("yyyy-MMM-dd")).toFormatter();
 		Movie movie = this.movieRepository.getById(bookingDto.getMovieId());
 		Booking booking = this.modelMapper.map(bookingDto, Booking.class);
 		booking.setCreatedAt(LocalDateTime.now());
 		booking.setMovie(movie);
+		booking.setStatus(true);
+		booking.setSelectedSeats(bookingDto.getSelectedSeats().toString());
+		System.out.println(bookingDto.getSelectedSeats().toString());
 		booking = this.bookingRepository.save(booking);
-		return this.modelMapper.map(booking, BookingDto.class);
+		return true;
+//		return this.modelMapper.map(booking, BookingDto.class);
 	}
 
 	@Override
@@ -78,7 +90,8 @@ public class BookingServiceImpl implements BookingService {
 	@Override
 	public List<BookingDto> all() {
 		List<Booking> bookings = this.bookingRepository.findAll(Sort.by("id").descending());
-		List<BookingDto> theaterDtos = bookings.stream().map((booking)->this.modelMapper.map(booking, BookingDto.class)).collect(Collectors.toList());
+		List<BookingDto> theaterDtos = bookings.stream()
+				.map((booking)->this.modelMapper.map(booking, BookingDto.class)).collect(Collectors.toList());
 		return theaterDtos;
 	}
 
@@ -87,6 +100,22 @@ public class BookingServiceImpl implements BookingService {
 		Booking booking = this.bookingRepository.findById(bookingId)
 				.orElseThrow((() -> new ResourceNotFoundException("Movie", "id", bookingId)));
 		this.bookingRepository.delete(booking);
+	}
+
+	@Override
+	public List<Integer> getBookedSeat(HashMap<String, String> data) {
+			System.out.println(data.get("booking_date"));
+			System.out.println(data.get("movie_id"));
+			List<String> selectedSeats= this.bookingRepository.getBookedSeatByBookingDateAndMovieId(data.get("booking_date"), data.get("movie_id"));
+			List<Integer> result = new ArrayList<>();
+	        for (String input : selectedSeats) {
+	            List<String> values = Arrays.asList(input.split(","));
+	            for (String value : values) {
+	                result.add(Integer.parseInt(value));
+	            }
+	        }
+			return result;
+//		
 	}
 
 }

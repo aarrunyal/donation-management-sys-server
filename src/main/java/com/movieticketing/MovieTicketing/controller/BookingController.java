@@ -1,5 +1,6 @@
 package com.movieticketing.MovieTicketing.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -35,9 +36,9 @@ public class BookingController {
 	
 	@PostMapping("")
 //	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
-	public ResponseEntity<BookingDto> createTheater(@Valid @RequestBody BookingDto bookingDto){
-		BookingDto booking = this.bookingService.create(bookingDto);
-		return new ResponseEntity<BookingDto>(booking, HttpStatus.CREATED);
+	public ResponseEntity<ApiResponse> createBooking(@Valid @RequestBody BookingDto bookingDto){
+		boolean flag = this.bookingService.create(bookingDto);
+		return new ResponseEntity<ApiResponse>(new ApiResponse("Bookin has been created !!", true), HttpStatus.OK);
 	}
 	
 	@PutMapping("/{bookingId}")
@@ -65,4 +66,9 @@ public class BookingController {
 		return new ResponseEntity<ApiResponse>(new ApiResponse("Booking has been deleted !!", true), HttpStatus.OK);
 	}
 	
+	@PostMapping("/booked_seats")
+	public ResponseEntity<List<Integer>> getBookedSeat(@RequestBody HashMap<String, String> data){
+		List<Integer> seats = 	this.bookingService.getBookedSeat(data);
+		return new ResponseEntity<List<Integer>>(seats, HttpStatus.OK);
+	}
 }

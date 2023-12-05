@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,31 +30,33 @@ public class BookingDto {
 	@NotEmpty
 	private String email;
 	
-	@NotEmpty
+	@NotNull
 	private long contact;
 	
-	@NotEmpty
+	@NotNull
 	private long quantity;
 	
 	@NotEmpty
 	private String selectedSeats;
 	
-	@NotEmpty
+	@NotNull
 	private long subTotal;
 	
-	@NotEmpty
+	@NotNull
 	private long tax;
 	
-	@NotEmpty
+	@NotNull
 	private long total;
 	
-	@NotEmpty
+	@NotNull
 	private long movieId;
 	
-	@NotEmpty
+	@NotNull
 	private boolean status;
 	
-	private LocalDate bookingDate;
+	private String bookingDate;
 	
 	private LocalDateTime createdAt;
+	
+	private Movie movie;
 }

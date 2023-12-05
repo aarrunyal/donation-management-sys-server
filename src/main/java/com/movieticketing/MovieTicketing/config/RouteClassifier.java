@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RouteClassifier {
 
-	public static final String[] SECURED_URLS= {"/api/user/auth", "/api/category/**", "/api/movie/**", "/api/theatre/**"};
+	public static final String[] SECURED_URLS= {"/api/user/auth", "/api/category/**", "/api/movie/**", "/api/theatre/**", "/api/booking/**"};
 	
 	public static final String[] UN_SECURED_URLS= {"/api/user/create", "/api/login"};
 	

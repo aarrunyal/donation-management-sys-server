@@ -1,5 +1,6 @@
 package com.movieticketing.MovieTicketing.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.movieticketing.MovieTicketing.model.Dto.BookingDto;
@@ -7,7 +8,7 @@ import com.movieticketing.MovieTicketing.model.Dto.MovieDto;
 
 public interface BookingService {
 	
-	BookingDto create(BookingDto bookingDto);
+	boolean create(BookingDto bookingDto);
 
 	BookingDto update(BookingDto bookingDto, Long bookingId);
 
@@ -16,5 +17,7 @@ public interface BookingService {
 	List<BookingDto> all();
 
 	void delete(Long bookingId);
+	
+	List<Integer> getBookedSeat(HashMap<String, String> object);
 
 }
