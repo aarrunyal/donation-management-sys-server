@@ -67,6 +67,8 @@ public class MovieDto {
 	private LocalDateTime createdAt;
 	
 	private long theatreId;
+	
+	private Theater theatre;
 
 
 }

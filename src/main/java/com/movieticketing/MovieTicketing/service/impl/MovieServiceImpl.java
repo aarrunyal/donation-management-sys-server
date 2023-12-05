@@ -75,7 +75,12 @@ public class MovieServiceImpl implements MovieService {
 	public MovieDto show(Long movieId) {
 		Movie movie = this.movieRepository.findById(movieId)
 				.orElseThrow((() -> new ResourceNotFoundException("Movie", "id", movieId)));
-		return this.modelMapper.map(movie, MovieDto.class);
+		MovieDto movieDto = this.modelMapper.map(movie, MovieDto.class);
+		if (movie.getTheatre() != null) {
+//			Theater theater = this.theaterRepository.getOne(movie.getTheatre().getId());
+			movieDto.setTheatre(movie.getTheatre());
+		}
+		return movieDto; 
 	}
 
 	@Override

@@ -43,5 +43,7 @@ public class TheaterDto {
 	
 	private LocalDateTime createdAt;
 	
-	private Long theater_id;
+	private Long theaterId;
+	
+
 }
