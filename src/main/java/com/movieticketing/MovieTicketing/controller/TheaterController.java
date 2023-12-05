@@ -62,4 +62,10 @@ public class TheaterController {
 		this.theaterService.delete(theaterId);
 		return new ResponseEntity<ApiResponse>(new ApiResponse("movie has been deleted !!", true), HttpStatus.OK);
 	}
+	
+	@GetMapping("/active/lists")
+	public ResponseEntity<List<TheaterDto>> getActiveList(){
+		List<TheaterDto> theatreDtos =  this.theaterService.getActiveList();
+		return new ResponseEntity<List<TheaterDto>>(theatreDtos, HttpStatus.OK);
+	}
 }

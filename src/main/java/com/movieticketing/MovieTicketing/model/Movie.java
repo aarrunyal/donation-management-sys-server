@@ -2,6 +2,7 @@ package com.movieticketing.MovieTicketing.model;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -13,6 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -56,15 +58,21 @@ public class Movie {
 	private String playTime;
 	
 	@Column(nullable=false)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate createdAt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime createdAt;
 	
 	
 	@Column(nullable=false)
 	private String releaseYear;
 	
 	@Column(nullable=false)
+	private String currency;
+	
+	@Column(nullable=false)
 	private boolean status;
+
+	@ManyToOne
+	private Theater theatre;
 	
 	
 	

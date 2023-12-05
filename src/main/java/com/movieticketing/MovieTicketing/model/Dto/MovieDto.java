@@ -2,9 +2,12 @@ package com.movieticketing.MovieTicketing.model.Dto;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.movieticketing.MovieTicketing.model.Theater;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -55,8 +58,15 @@ public class MovieDto {
 	@NotEmpty
 	private String releaseYear;
 	
+	@NotEmpty
+	private String currency;
+	
 	
 	private boolean status;
+	
+	private LocalDateTime createdAt;
+	
+	private long theatreId;
 
 
 }

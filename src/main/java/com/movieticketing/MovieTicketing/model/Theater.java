@@ -1,6 +1,7 @@
 package com.movieticketing.MovieTicketing.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -40,9 +41,9 @@ public class Theater {
 	
 	@Column(nullable=false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate createdAt;
+	private LocalDateTime createdAt;
 
-	
+
 	
 	
 }

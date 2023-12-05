@@ -17,4 +17,6 @@ public interface TheaterService {
 	List<TheaterDto> all();
 
 	void delete(Long theaterDto);
+	
+	List<TheaterDto> getActiveList();
 }

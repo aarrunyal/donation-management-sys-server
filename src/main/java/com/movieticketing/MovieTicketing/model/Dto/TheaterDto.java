@@ -1,6 +1,7 @@
 package com.movieticketing.MovieTicketing.model.Dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -38,6 +39,9 @@ public class TheaterDto {
 	@NotNull
 	private int seatsInEachRow;
 
-	private LocalDate createdAt;
 	
+	
+	private LocalDateTime createdAt;
+	
+	private Long theater_id;
 }

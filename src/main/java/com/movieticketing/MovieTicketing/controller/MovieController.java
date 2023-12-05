@@ -71,7 +71,7 @@ public class MovieController {
 			response.put("data", movie);
 			response.put("length", movie.size());	
 		}else {
-			response.put("message", "Movies found successfully");
+			response.put("message", "Data not found");
 			response.put("data", new ArrayList<>());
 			response.put("length", movie.size());
 		}
