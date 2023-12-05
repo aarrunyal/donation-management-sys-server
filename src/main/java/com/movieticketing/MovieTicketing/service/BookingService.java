@@ -19,5 +19,7 @@ public interface BookingService {
 	void delete(Long bookingId);
 	
 	List<Integer> getBookedSeat(HashMap<String, String> object);
+	
+	boolean cancelBooking(long bookingId);
 
 }

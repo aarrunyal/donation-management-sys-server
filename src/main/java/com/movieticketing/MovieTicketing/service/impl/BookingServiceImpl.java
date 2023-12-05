@@ -114,8 +114,18 @@ public class BookingServiceImpl implements BookingService {
 	                result.add(Integer.parseInt(value));
 	            }
 	        }
-			return result;
+			return result;	
 //		
+	}
+
+	@Override
+	public boolean cancelBooking(long bookingId) {
+		Booking booking = this.bookingRepository.findById(bookingId)
+				.orElseThrow((()->new ResourceNotFoundException("Booking", "id", bookingId)));
+		booking.setStatus(false);
+//		booking.setSelectedSeats(null);
+		this.bookingRepository.save(booking);
+		return true;
 	}
 
 }

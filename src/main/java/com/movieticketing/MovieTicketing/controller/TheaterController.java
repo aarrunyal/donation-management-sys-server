@@ -68,4 +68,6 @@ public class TheaterController {
 		List<TheaterDto> theatreDtos =  this.theaterService.getActiveList();
 		return new ResponseEntity<List<TheaterDto>>(theatreDtos, HttpStatus.OK);
 	}
+	
+//	inactive
 }

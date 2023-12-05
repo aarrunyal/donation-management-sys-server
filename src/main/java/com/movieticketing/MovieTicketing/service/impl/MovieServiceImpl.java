@@ -2,6 +2,7 @@ package com.movieticketing.MovieTicketing.service.impl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public class MovieServiceImpl implements MovieService {
 	private TheaterRepository theaterRepository;
 
 	@Override
-	public MovieDto create(MovieDto movieDto) {
+	public boolean create(MovieDto movieDto) {
 		Theater theater = this.theaterRepository.getOne(movieDto.getTheatreId());
 		Movie movie = this.modelMapper.map(movieDto, Movie.class);
 		movie.setCreatedAt(LocalDateTime.now());
@@ -44,7 +45,7 @@ public class MovieServiceImpl implements MovieService {
 		movie.setStatus(true);
 		movie.setTheatre(theater);
 		movie = this.movieRepository.save(movie);
-		return this.modelMapper.map(movie, MovieDto.class);
+		return true;
 	}
 
 	@Override
@@ -84,8 +85,12 @@ public class MovieServiceImpl implements MovieService {
 	}
 
 	@Override
-	public List<MovieDto> all() {
-		List<Movie> movies = this.movieRepository.findAll(Sort.by("id").descending());
+	public List<MovieDto> all(boolean active) {
+		List<Movie> movies = new ArrayList<>();
+		if(active==false)
+			movies = this.movieRepository.findAll(Sort.by("id").descending());
+		else
+			movies = this.movieRepository.getActiveMovies();
 		List<MovieDto> movieDtos = movies.stream().map((movie) -> this.modelMapper.map(movie, MovieDto.class))
 				.collect(Collectors.toList());
 		return movieDtos;

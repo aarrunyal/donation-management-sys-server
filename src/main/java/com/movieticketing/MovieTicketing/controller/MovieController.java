@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.movieticketing.MovieTicketing.model.Dto.BookingDto;
 import com.movieticketing.MovieTicketing.model.Dto.MovieDto;
 import com.movieticketing.MovieTicketing.model.response.ApiResponse;
 import com.movieticketing.MovieTicketing.service.MovieService;
@@ -32,16 +33,22 @@ public class MovieController {
 	
 	@PostMapping("")
 //	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
-	public ResponseEntity<MovieDto> createMovie(@Valid @RequestBody MovieDto movieDto){
-		MovieDto movie = this.movieService.create(movieDto);
-		return new ResponseEntity<MovieDto>(movie, HttpStatus.CREATED);
+//	public ResponseEntity<MovieDto> createMovie(@Valid @RequestBody MovieDto movieDto){
+//		MovieDto movie = this.movieService.create(movieDto);
+//		return new ResponseEntity<MovieDto>(movie, HttpStatus.CREATED);
+//	}
+	
+	public ResponseEntity<ApiResponse> createBooking(@Valid @RequestBody MovieDto movieDto){
+		boolean flag = this.movieService.create(movieDto);
+		return new ResponseEntity<ApiResponse>(new ApiResponse("Movie has been created !!", true), HttpStatus.OK);
 	}
 	
 	@PutMapping("/{movieId}")
 //	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
-	public ResponseEntity<MovieDto> updateMovie(@Valid @RequestBody MovieDto movieDto, @PathVariable Long movieId){
+	public ResponseEntity<ApiResponse> updateMovie(@Valid @RequestBody MovieDto movieDto, @PathVariable Long movieId){
 		MovieDto updateDto = this.movieService.update(movieDto, movieId);
-		return new ResponseEntity<MovieDto>(updateDto, HttpStatus.OK);
+//		return new ResponseEntity<MovieDto>(updateDto, HttpStatus.OK);
+		return new ResponseEntity<ApiResponse>(new ApiResponse("Movie has been updated !!", true), HttpStatus.OK);
 	}
 //	
 	@GetMapping("/{movieId}")
@@ -52,7 +59,13 @@ public class MovieController {
 //	
 	@GetMapping(value="")
 	public ResponseEntity<List<MovieDto>> getAll(){
-		List<MovieDto> movieDtos = this.movieService.all();
+		List<MovieDto> movieDtos = this.movieService.all(false);
+		return new ResponseEntity<List<MovieDto>>(movieDtos, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="active/lists")
+	public ResponseEntity<List<MovieDto>> activeList(){
+		List<MovieDto> movieDtos = this.movieService.all(true);
 		return new ResponseEntity<List<MovieDto>>(movieDtos, HttpStatus.OK);
 	}
 //	

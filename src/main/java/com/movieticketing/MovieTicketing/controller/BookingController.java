@@ -71,4 +71,11 @@ public class BookingController {
 		List<Integer> seats = 	this.bookingService.getBookedSeat(data);
 		return new ResponseEntity<List<Integer>>(seats, HttpStatus.OK);
 	}
+	
+	@GetMapping("/inactive/{bookingId}")
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
+	public ResponseEntity<ApiResponse> cancelBooking(@PathVariable long bookingId){
+		boolean flag = this.bookingService.cancelBooking(bookingId);
+		return new ResponseEntity<ApiResponse>(new ApiResponse("Booking has been cancelled !!", true), HttpStatus.OK);
+	}
 }

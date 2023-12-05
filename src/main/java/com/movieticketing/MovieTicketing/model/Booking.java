@@ -42,7 +42,7 @@ public class Booking {
 	@Column(nullable=false)
 	private long quantity;
 	
-	@Column(nullable=false)
+	@Column(nullable=true)
 	private String selectedSeats;
 	
 	@Column(nullable=false)
