@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.movieticketing.MovieTicketing.model.Dto.MovieDto;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -54,7 +55,8 @@ public class Booking {
 	@Column(nullable=false)
 	private long total;
 	
-	@ManyToOne
+	@ManyToOne( cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE })
+//	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Movie movie;
 	
 	private boolean status;

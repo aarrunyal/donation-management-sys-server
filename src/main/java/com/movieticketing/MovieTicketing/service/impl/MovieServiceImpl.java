@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -13,11 +14,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.movieticketing.MovieTicketing.exception.ResourceNotFoundException;
+import com.movieticketing.MovieTicketing.model.Booking;
 import com.movieticketing.MovieTicketing.model.Category;
 import com.movieticketing.MovieTicketing.model.Movie;
 import com.movieticketing.MovieTicketing.model.Theater;
 import com.movieticketing.MovieTicketing.model.Dto.CategoryDto;
 import com.movieticketing.MovieTicketing.model.Dto.MovieDto;
+import com.movieticketing.MovieTicketing.repository.BookingRepository;
 import com.movieticketing.MovieTicketing.repository.CategoryRepository;
 import com.movieticketing.MovieTicketing.repository.MovieRepository;
 import com.movieticketing.MovieTicketing.repository.TheaterRepository;
@@ -35,6 +38,9 @@ public class MovieServiceImpl implements MovieService {
 
 	@Autowired
 	private TheaterRepository theaterRepository;
+	
+	@Autowired
+	private BookingRepository bookingRepository;
 
 	@Override
 	public boolean create(MovieDto movieDto) {
@@ -100,6 +106,16 @@ public class MovieServiceImpl implements MovieService {
 	public void delete(Long movieId) {
 		Movie movie = this.movieRepository.findById(movieId)
 				.orElseThrow((() -> new ResourceNotFoundException("Movie", "id", movieId)));
+		List<Booking> bookings = this.bookingRepository.getBookingByMovieId(movieId);
+//		if(bookings.size()>0) {
+//			ListIterator<Booking>
+//            iterator = bookings.listIterator();
+//			 while (iterator.hasNext()) {
+//				 	iterator.next().setMovie(null);
+//	               this.bookingRepository.delete(iterator.next());
+//	            }
+//			
+//		}
 		this.movieRepository.delete(movie);
 	}
 
