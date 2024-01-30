@@ -24,56 +24,56 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig { 
+public class SecurityConfig {
 
-  @Autowired
-  private JwtAuthFilter authFilter; 
+    @Autowired
+    private JwtAuthFilter authFilter;
 
-  // User Creation 
-  @Bean
-  public UserDetailsService userDetailsService() { 
-      return new UserService(); 
-  } 
+    // User Creation
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new UserService();
+    }
 
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .cors(Customizer.withDefaults())
+                .csrf().disable()
+                .authorizeHttpRequests()
+                .requestMatchers(RouteClassifier.getUnSecuredUrls().toArray(new String[0])).permitAll()
+                // .requestMatchers("/api/user/create", "/api/user/generateToken",
+                // "/api/category/**").permitAll()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers(RouteClassifier.getSecuredUrls().toArray(new String[0])).authenticated()
+                // .requestMatchers("/api/category/**", "/api/user/auth").authenticated()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
+    }
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-      return http
-    .cors(Customizer.withDefaults())
-    .csrf().disable() 
-    .authorizeHttpRequests()
-    .requestMatchers(RouteClassifier.getUnSecuredUrls().toArray(new String[0])).permitAll()
-//              .requestMatchers("/api/user/create", "/api/user/generateToken", "/api/category/**").permitAll() 
-    .and() 
-    .authorizeHttpRequests()
-    .requestMatchers(RouteClassifier.getSecuredUrls().toArray(new String[0])).authenticated()
-//              .requestMatchers("/api/category/**", "/api/user/auth").authenticated() 
-    .and() 
-    .sessionManagement() 
-    .sessionCreationPolicy(SessionCreationPolicy.STATELESS) 
-    .and() 
-    .authenticationProvider(authenticationProvider()) 
-    .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class) 
-    .build(); 
-  } 
-  // Password Encoding 
-  @Bean
-  public PasswordEncoder passwordEncoder() { 
-      return new BCryptPasswordEncoder(); 
-  } 
+    // Password Encoding
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-  @Bean
-  public AuthenticationProvider authenticationProvider() { 
-      DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(); 
-      authenticationProvider.setUserDetailsService(userDetailsService()); 
-      authenticationProvider.setPasswordEncoder(passwordEncoder()); 
-      return authenticationProvider; 
-  } 
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService());
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
+    }
 
-  @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-      return config.getAuthenticationManager(); 
-  } 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 
-
-} 
+}
