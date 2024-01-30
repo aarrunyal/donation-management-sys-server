@@ -41,22 +41,22 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
       return http
-    		  .cors(Customizer.withDefaults())
-    		  .csrf().disable() 
-              .authorizeHttpRequests()
-              .requestMatchers(RouteClassifier.getUnSecuredUrls().toArray(new String[0])).permitAll()
+    .cors(Customizer.withDefaults())
+    .csrf().disable() 
+    .authorizeHttpRequests()
+    .requestMatchers(RouteClassifier.getUnSecuredUrls().toArray(new String[0])).permitAll()
 //              .requestMatchers("/api/user/create", "/api/user/generateToken", "/api/category/**").permitAll() 
-              .and() 
-              .authorizeHttpRequests()
-              .requestMatchers(RouteClassifier.getSecuredUrls().toArray(new String[0])).authenticated()
+    .and() 
+    .authorizeHttpRequests()
+    .requestMatchers(RouteClassifier.getSecuredUrls().toArray(new String[0])).authenticated()
 //              .requestMatchers("/api/category/**", "/api/user/auth").authenticated() 
-              .and() 
-              .sessionManagement() 
-              .sessionCreationPolicy(SessionCreationPolicy.STATELESS) 
-              .and() 
-              .authenticationProvider(authenticationProvider()) 
-              .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class) 
-              .build(); 
+    .and() 
+    .sessionManagement() 
+    .sessionCreationPolicy(SessionCreationPolicy.STATELESS) 
+    .and() 
+    .authenticationProvider(authenticationProvider()) 
+    .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class) 
+    .build(); 
   } 
   // Password Encoding 
   @Bean
