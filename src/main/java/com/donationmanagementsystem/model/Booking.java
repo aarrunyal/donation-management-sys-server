@@ -1,0 +1,71 @@
+package com.donationmanagementsystem.model;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.donationmanagementsystem.model.Dto.MovieDto;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Booking {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	
+	@Column(nullable=false)
+	private String name;
+	
+	@Column(nullable=false)
+	private String email;
+	
+	@Column(nullable=false)
+	private long contact;
+	
+	@Column(nullable=false)
+	private long quantity;
+	
+	@Column(nullable=true)
+	private String selectedSeats;
+	
+	@Column(nullable=false)
+	private long subTotal;
+	
+	@Column(nullable=false)
+	private long tax;
+	
+	@Column(nullable=false)
+	private long total;
+	
+	@ManyToOne( cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE })
+//	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	private Movie movie;
+	
+	private boolean status;
+	
+	@Column(nullable=false)
+	private String bookingDate;
+	
+	@Column(nullable=false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime createdAt;
+	
+}
