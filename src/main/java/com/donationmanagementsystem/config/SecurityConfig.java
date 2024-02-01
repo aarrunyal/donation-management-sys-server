@@ -14,6 +14,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
+import com.donationmanagementsystem.utils.AppConstant;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -22,9 +24,7 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity
 public class SecurityConfig {
 	
-	private static final String[] WHITE_LIST_URL = {
-			"/api/v1/auth/**"
-	};
+
 	
 	private final JwtAuthenticationFilter jwtAuthFilter;
 	
@@ -38,7 +38,7 @@ public class SecurityConfig {
 	        .cors().and().csrf()
 	        .disable()
 	        .authorizeHttpRequests(request ->
-	        	request.requestMatchers(WHITE_LIST_URL)
+	        	request.requestMatchers(AppConstant.WHITE_LIST_URL)
 	        	.permitAll()
 	        	
 	        	.requestMatchers("/api/v1/organiser/**").hasAnyRole(Role.ADMIN.name(), Role.ORGANISER.name())

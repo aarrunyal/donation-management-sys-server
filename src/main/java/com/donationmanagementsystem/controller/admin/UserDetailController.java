@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/admin/user")
-public class UserProfileController {
+@RequestMapping("/api/v1/admin/user/detail")
+public class UserDetailController {
 
 }

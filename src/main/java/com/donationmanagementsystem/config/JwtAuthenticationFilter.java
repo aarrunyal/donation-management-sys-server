@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.donationmanagementsystem.repository.TokenRepository;
+import com.donationmanagementsystem.utils.AppConstant;
 
 import io.micrometer.common.lang.NonNull;
 import jakarta.servlet.FilterChain;
@@ -38,11 +39,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 			@NonNull HttpServletResponse response, 
 			@NonNull FilterChain filterChain)
 			throws ServletException, IOException {
-		final String authHeader = request.getHeader("Authorization");
+		final String authHeader = request.getHeader(AppConstant.TOKEN_HEADER);
 		final String jwt;
 		final String userEmail;
 		
-		if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+		if(authHeader == null || !authHeader.startsWith(AppConstant.TOKEN_PREFIX)) {
 			filterChain.doFilter(request, response);
 			return;
 		}

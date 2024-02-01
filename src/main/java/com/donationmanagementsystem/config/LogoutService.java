@@ -5,6 +5,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 
 import com.donationmanagementsystem.repository.TokenRepository;
+import com.donationmanagementsystem.utils.AppConstant;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,10 +22,10 @@ public class LogoutService implements LogoutHandler {
 			HttpServletRequest request, 
 			HttpServletResponse response, 
 			Authentication authentication) {
-		final String authHeader = request.getHeader("Authorization");
+		final String authHeader = request.getHeader(AppConstant.TOKEN_HEADER);
 		final String jwt;
 		
-		if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+		if(authHeader == null || !authHeader.startsWith(AppConstant.TOKEN_PREFIX)) {
 			return;
 		}
 		jwt = authHeader.substring(7);
