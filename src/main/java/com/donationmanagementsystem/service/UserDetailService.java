@@ -1,5 +1,5 @@
 package com.donationmanagementsystem.service;
 
-public interface UserService {
+public class UserDetailService {
 
 }

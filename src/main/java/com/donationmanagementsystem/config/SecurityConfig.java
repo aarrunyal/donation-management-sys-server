@@ -1,82 +1,74 @@
 package com.donationmanagementsystem.config;
 
-import java.util.Arrays;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import com.donationmanagementsystem.service.UserService;
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {
+	
+	private static final String[] WHITE_LIST_URL = {
+			"/api/v1/auth/**"
+	};
+	
+	private final JwtAuthenticationFilter jwtAuthFilter;
+	
+	private final AuthenticationProvider authenticationProvider;
+	
+	private final LogoutHandler logoutHandler;
+	
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		 http
+	        .cors().and().csrf()
+	        .disable()
+	        .authorizeHttpRequests(request ->
+	        	request.requestMatchers(WHITE_LIST_URL)
+	        	.permitAll()
+	        	
+	        	.requestMatchers("/api/v1/organiser/**").hasAnyRole(Role.ADMIN.name(), Role.ORGANISER.name())
+	        	.requestMatchers(HttpMethod.GET, "/api/v1/organiser/**").hasAnyAuthority(Permission.ADMIN_READ.name(), Permission.ORGANISER_READ.name())
+	        	.requestMatchers(HttpMethod.POST, "/api/v1/organiser/**").hasAnyAuthority(Permission.ADMIN_CREATE.name(), Permission.ORGANISER_CREATE.name())
+	        	.requestMatchers(HttpMethod.PUT, "/api/v1/organiser/**").hasAnyAuthority(Permission.ADMIN_UPDATE.name(), Permission.ORGANISER_UPDATE.name())
+	        	.requestMatchers(HttpMethod.DELETE, "/api/v1/organiser/**").hasAnyAuthority(Permission.ADMIN_DELETE.name(), Permission.ORGANISER_DELETE.name())
+//	        	// ad
+//	        	.requestMatchers("/api/v1/admin/**").hasRole(Role.ADMIN.name())
+//	        	.requestMatchers(HttpMethod.GET, "/api/v1/admin/**").hasAuthority(Permission.ADMIN_READ.name())
+//	        	.requestMatchers(HttpMethod.POST, "/api/v1/admin/**").hasAuthority(Permission.ADMIN_CREATE.name())
+//	        	.requestMatchers(HttpMethod.PUT, "/api/v1/admin/**").hasAuthority(Permission.ADMIN_UPDATE.name())
+//	        	.requestMatchers(HttpMethod.DELETE, "/api/v1/admin/**").hasAuthority(Permission.ADMIN_DELETE.name())
+	        	
+	        	.anyRequest()
+	        	.authenticated()
+	        )
+	        .sessionManagement()
+	        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	        .and()
+	        .authenticationProvider(authenticationProvider)
+	        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+	        .logout()
+	        .logoutUrl("/api/v1/auth/logout")
+	        .addLogoutHandler(logoutHandler)
+	        .logoutSuccessHandler(
+	        	(request, response, authentication)->{
+	        	SecurityContextHolder.clearContext();
+	        });
 
-    @Autowired
-    private JwtAuthFilter authFilter;
-
-    // User Creation
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new UserService();
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .cors(Customizer.withDefaults())
-                .csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers(RouteClassifier.getUnSecuredUrls().toArray(new String[0])).permitAll()
-                // .requestMatchers("/api/user/create", "/api/user/generateToken",
-                // "/api/category/**").permitAll()
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers(RouteClassifier.getSecuredUrls().toArray(new String[0])).authenticated()
-                // .requestMatchers("/api/category/**", "/api/user/auth").authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }
-
-    // Password Encoding
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider
-                .setUserDetailsService(userDetailsService());
-        authenticationProvider
-                .setPasswordEncoder(passwordEncoder());
-        return authenticationProvider;
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-
+	    return http.build();
+	}
 }
