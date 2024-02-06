@@ -17,11 +17,14 @@ import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.payload.request.UserAddressRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.UserAddressResponse;
+import com.donationmanagementsystem.service.EmailService;
 import com.donationmanagementsystem.service.UserAddressService;
 import com.donationmanagementsystem.service.UserService;
-
+import com.donationmanagementsystem.utils.EmailDetails;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/v1/admin/user-address")
@@ -32,6 +35,9 @@ public class UserAddressController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired 
+    private EmailService emailService;
 
     @PostMapping
     public ResponseEntity<ApiResponse> post(@Valid @RequestBody UserAddressRequest userAddressRequest) {
@@ -63,4 +69,14 @@ public class UserAddressController {
         User user = userService.getLoggedInUser();
         return this.userAddressService.show(id, user);
     }
+
+    @GetMapping("/test/mail")
+    public String testMail() {
+        var emailDetails = EmailDetails.builder().msgBody("Hello this is test mail")
+        .receipient("aarrunyal@gmail.com")
+        .subject("Test mail")
+        .build();
+        return emailService.sendMail(emailDetails);
+    }
+    
 }
