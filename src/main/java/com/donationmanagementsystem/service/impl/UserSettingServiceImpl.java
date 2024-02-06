@@ -18,8 +18,8 @@ import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.UserSettingResponse;
 import com.donationmanagementsystem.repository.UserSettingRepository;
 import com.donationmanagementsystem.service.UserSettingService;
+import com.donationmanagementsystem.utils.ResponseMessage;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -33,55 +33,69 @@ public class UserSettingServiceImpl implements UserSettingService {
 
 	@Override
 	public ResponseEntity<ApiResponse> create(UserSettingRequest userSettingRequest, User user) {
-		Optional<UserSetting> savedSetting = userSettingRepository.findByUserId(user.getId());
-		if(!savedSetting.isEmpty())
-			return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "User setting already exist"), HttpStatus.BAD_REQUEST);
-		
-		UserSetting setting = this.modelMapper.map(userSettingRequest,UserSetting.class);
-		setting.setUser(user);
-		userSettingRepository.save(setting);
-		return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Setting has been creeated successfully"), HttpStatus.OK);
+		try {
+			Optional<UserSetting> savedSetting = userSettingRepository.findByUserId(user.getId());
+			if (!savedSetting.isEmpty())
+				return ResponseMessage.notAcceptable(null);
+
+			UserSetting setting = this.modelMapper.map(userSettingRequest, UserSetting.class);
+			setting.setUser(user);
+			userSettingRepository.save(setting);
+			return ResponseMessage.created("Setting has been creeated successfully");
+		} catch (Exception ex) {
+			return ResponseMessage.internalServerError(null);
+		}
 	}
 
 	@Override
 	public ResponseEntity<ApiResponse> update(UserSettingRequest userSettingRequest, Long userSettingId, User user) {
-		UserSetting savedSetting = userSettingRepository.findByUserId(user.getId())
-				.orElseThrow(()->new ResourceNotFoundException("User Setting", "user id", user.getId()));
-		
-		savedSetting.setContactNo(userSettingRequest.getContactNo());
-		savedSetting.setAlternativeContactNo(userSettingRequest.getAlternativeContactNo());
-		userSettingRepository.save(savedSetting);
-		return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Setting has been updated successfully"), HttpStatus.OK);
+		try {
+			UserSetting savedSetting = userSettingRepository.findByUserId(user.getId())
+					.orElseThrow(() -> new ResourceNotFoundException("User Setting", "user id", user.getId()));
+
+			savedSetting.setContactNo(userSettingRequest.getContactNo());
+			savedSetting.setAlternativeContactNo(userSettingRequest.getAlternativeContactNo());
+			userSettingRepository.save(savedSetting);
+			return ResponseMessage.ok("Setting has been updated successfully");
+		} catch (Exception ex) {
+			return ResponseMessage.internalServerError(null);
+		}
+
 	}
 
 	@Override
 	public ResponseEntity<UserSettingResponse> show(User user) {
 		UserSetting savedSetting = userSettingRepository.findByUserId(user.getId())
-				.orElseThrow(()->new ResourceNotFoundException("User Setting", "user id", user.getId()));
+				.orElseThrow(() -> new ResourceNotFoundException("User Setting", "user id", user.getId()));
 		return new ResponseEntity<>(this.modelMapper.map(savedSetting, UserSettingResponse.class), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<List<UserSettingResponse>> all() {
+
 		List<UserSetting> usersettings = userSettingRepository.findAll();
 		List<UserSettingResponse> userSettingResponses = usersettings
 				.stream()
 				.map(
-						(setting)-> this.modelMapper
-						.map(setting, UserSettingResponse.class))
+						(setting) -> this.modelMapper
+								.map(setting, UserSettingResponse.class))
 				.collect(Collectors.toList());
 		return new ResponseEntity<List<UserSettingResponse>>(userSettingResponses, HttpStatus.OK);
-	
+
 	}
 
 	@Override
-	public  ResponseEntity<ApiResponse> delete(Long userSettingId, User user) {
-		UserSetting savedSetting = userSettingRepository.findByUserIdAndId(user.getId(), userSettingId)
-				.orElseThrow(()->new ResourceNotFoundException("User Setting", "user id", user.getId()));
-		if(savedSetting!=null) {
-			userSettingRepository.delete(savedSetting);
+	public ResponseEntity<ApiResponse> delete(Long userSettingId, User user) {
+		try {
+			UserSetting savedSetting = userSettingRepository.findByUserIdAndId(user.getId(), userSettingId)
+					.orElseThrow(() -> new ResourceNotFoundException("User Setting", "user id", user.getId()));
+			if (savedSetting != null) {
+				userSettingRepository.delete(savedSetting);
+			}
+			return ResponseMessage.ok("User setting deleted successfully");
+		} catch (Exception ex) {
+			return ResponseMessage.internalServerError("");
 		}
-		return new ResponseEntity<>(new ApiResponse(true, "User setting deleted successfully"), HttpStatus.OK);
 	}
 
 }

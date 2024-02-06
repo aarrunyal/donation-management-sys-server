@@ -1,5 +1,7 @@
 package com.donationmanagementsystem.exception;
 
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
