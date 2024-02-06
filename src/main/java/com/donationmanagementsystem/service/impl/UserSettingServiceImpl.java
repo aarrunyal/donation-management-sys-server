@@ -1,8 +1,11 @@
 package com.donationmanagementsystem.service.impl;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,24 +16,26 @@ import com.donationmanagementsystem.exception.ResourceNotFoundException;
 import com.donationmanagementsystem.payload.request.UserSettingRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.UserSettingResponse;
-import com.donationmanagementsystem.repository.UserRepository;
 import com.donationmanagementsystem.repository.UserSettingRepository;
 import com.donationmanagementsystem.service.UserSettingService;
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserSettingServiceImpl implements UserSettingService{
-	
+public class UserSettingServiceImpl implements UserSettingService {
+
 	private final UserSettingRepository userSettingRepository;
-	
-	private final ModelMapper modelMapper;
+
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	public ResponseEntity<ApiResponse> create(UserSettingRequest userSettingRequest, User user) {
-		UserSetting savedSetting = userSettingRepository.findByUserId(user.getId())			
-				.orElseThrow(()->	new ResourceNotFoundException("User", "user id", user.getId()));
+		Optional<UserSetting> savedSetting = userSettingRepository.findByUserId(user.getId());
+		if(!savedSetting.isEmpty())
+			return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "User setting already exist"), HttpStatus.BAD_REQUEST);
 		
 		UserSetting setting = this.modelMapper.map(userSettingRequest,UserSetting.class);
 		setting.setUser(user);
@@ -40,39 +45,43 @@ public class UserSettingServiceImpl implements UserSettingService{
 
 	@Override
 	public ResponseEntity<ApiResponse> update(UserSettingRequest userSettingRequest, Long userSettingId, User user) {
-		UserSetting oldSetting = userSettingRepository.findByUserIdAndUserSettingId(user.getId(), userSettingId)			
-				.orElseThrow(()->	new ResourceNotFoundException("User", "user id", user.getId()));
+		UserSetting savedSetting = userSettingRepository.findByUserId(user.getId())
+				.orElseThrow(()->new ResourceNotFoundException("User Setting", "user id", user.getId()));
 		
-		oldSetting
-		.builder()
-		.contactNo(userSettingRequest.getContactNo())
-		.alternativeContactNo(userSettingRequest.getAlternativeContactNo())
-		.build();
-		userSettingRepository.save(oldSetting);
+		savedSetting.setContactNo(userSettingRequest.getContactNo());
+		savedSetting.setAlternativeContactNo(userSettingRequest.getAlternativeContactNo());
+		userSettingRepository.save(savedSetting);
 		return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Setting has been updated successfully"), HttpStatus.OK);
 	}
 
 	@Override
-	public ResponseEntity<UserSettingResponse> show(Long userSettingId) {
-		UserSetting savedSetting = userSettingRepository.findById(userSettingId)			
-				.orElseThrow(()->	new ResourceNotFoundException("User", "user id", userSettingId));
-		UserSettingResponse response = this.modelMapper.map(savedSetting, UserSettingResponse.class);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+	public ResponseEntity<UserSettingResponse> show(User user) {
+		UserSetting savedSetting = userSettingRepository.findByUserId(user.getId())
+				.orElseThrow(()->new ResourceNotFoundException("User Setting", "user id", user.getId()));
+		return new ResponseEntity<>(this.modelMapper.map(savedSetting, UserSettingResponse.class), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<List<UserSettingResponse>> all() {
-		// TODO Auto-generated method stub
-		return null;
+		List<UserSetting> usersettings = userSettingRepository.findAll();
+		List<UserSettingResponse> userSettingResponses = usersettings
+				.stream()
+				.map(
+						(setting)-> this.modelMapper
+						.map(setting, UserSettingResponse.class))
+				.collect(Collectors.toList());
+		return new ResponseEntity<List<UserSettingResponse>>(userSettingResponses, HttpStatus.OK);
+	
 	}
 
 	@Override
-	public ApiResponse delete(Long userSettingId) {
-		// TODO Auto-generated method stub
-		return null;
+	public  ResponseEntity<ApiResponse> delete(Long userSettingId, User user) {
+		UserSetting savedSetting = userSettingRepository.findByUserIdAndId(user.getId(), userSettingId)
+				.orElseThrow(()->new ResourceNotFoundException("User Setting", "user id", user.getId()));
+		if(savedSetting!=null) {
+			userSettingRepository.delete(savedSetting);
+		}
+		return new ResponseEntity<>(new ApiResponse(true, "User setting deleted successfully"), HttpStatus.OK);
 	}
-
-	
-
 
 }

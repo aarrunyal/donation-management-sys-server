@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.donationmanagementsystem.config.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -75,5 +76,15 @@ public class User implements UserDetails {
 		return password;
 	}
 	
+	
+	@JsonIgnore
+	public List<Token> getTokens(){
+		return tokens;
+	}
+	
+	@JsonIgnore
+	public Role getRole(){
+		return role;
+	}
 	
 }

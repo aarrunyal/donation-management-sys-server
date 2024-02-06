@@ -15,9 +15,9 @@ public interface UserSettingService {
 
 	ResponseEntity<ApiResponse> update(UserSettingRequest userSettingRequest, Long userSettingId, User user);
 
-	ResponseEntity<UserSettingResponse> show(Long userSettingId);
+	ResponseEntity<UserSettingResponse> show(User user);
 
 	ResponseEntity<List<UserSettingResponse>> all();
 
-	ApiResponse delete(Long userSettingId);
+	 ResponseEntity<ApiResponse> delete(Long userSettingId, User user);
 }
