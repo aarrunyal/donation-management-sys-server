@@ -1,7 +1,7 @@
 package com.donationmanagementsystem.entity;
 
-import com.donationmanagementsystem.config.Role;
 import com.donationmanagementsystem.config.TokenType;
+import com.donationmanagementsystem.utils.BaseEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table (name="tokens")
-public class Token {
+public class Token extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy =GenerationType.AUTO)

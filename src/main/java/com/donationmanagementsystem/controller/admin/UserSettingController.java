@@ -1,15 +1,7 @@
 package com.donationmanagementsystem.controller.admin;
 
-import java.security.Principal;
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +19,6 @@ import com.donationmanagementsystem.service.UserService;
 import com.donationmanagementsystem.service.UserSettingService;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/admin/user-setting")
@@ -64,18 +55,4 @@ public class UserSettingController {
 		User user = userService.getLoggedInUser();
 		return this.userSettingService.delete(id, user);
 	}
-//	
-//	@PostMapping("/booked_seats")
-//	public ResponseEntity<List<Integer>> getBookedSeat(@RequestBody HashMap<String, String> data){
-//		List<Integer> seats = 	this.bookingService.getBookedSeat(data);
-//		return new ResponseEntity<List<Integer>>(seats, HttpStatus.OK);
-//	}
-//	
-//	@GetMapping("/inactive/{bookingId}")
-////	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
-//	public ResponseEntity<ApiResponse> cancelBooking(@PathVariable long bookingId){
-//		boolean flag = this.bookingService.cancelBooking(bookingId);
-//		return new ResponseEntity<ApiResponse>(new ApiResponse("Booking has been cancelled !!", true), HttpStatus.OK);
-//	}
-	
 }

@@ -2,19 +2,22 @@ package com.donationmanagementsystem.service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
+import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.payload.request.UserAddressRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.UserAddressResponse;
 
 public interface UserAddressService {
-	
-	UserAddressResponse create(UserAddressRequest theaterDto);
 
-	UserAddressResponse update(UserAddressRequest theaterDto, Long theaterId);
+	ResponseEntity<ApiResponse> create(UserAddressRequest userAddressRequest, User user);
 
-	UserAddressResponse show(Long theaterDto);
+	ResponseEntity<ApiResponse> update(UserAddressRequest userAddressRequest, Long userAddressId, User user);
 
-	List<UserAddressResponse> all();
+	ResponseEntity<UserAddressResponse> show(Long userAddressId, User user);
 
-	ApiResponse delete(Long theaterDto);
+	ResponseEntity<List<UserAddressResponse>> all(User user);
+
+	ResponseEntity<ApiResponse> delete(Long userAddressId, User user);
 }

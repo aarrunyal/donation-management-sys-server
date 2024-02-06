@@ -10,7 +10,7 @@ import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.UserSettingResponse;
 
 public interface UserSettingService {
-	
+
 	ResponseEntity<ApiResponse> create(UserSettingRequest userSettingRequest, User user);
 
 	ResponseEntity<ApiResponse> update(UserSettingRequest userSettingRequest, Long userSettingId, User user);
@@ -19,5 +19,5 @@ public interface UserSettingService {
 
 	ResponseEntity<List<UserSettingResponse>> all();
 
-	 ResponseEntity<ApiResponse> delete(Long userSettingId, User user);
+	ResponseEntity<ApiResponse> delete(Long userSettingId, User user);
 }

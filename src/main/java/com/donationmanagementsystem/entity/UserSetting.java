@@ -1,5 +1,6 @@
 package com.donationmanagementsystem.entity;
 
+import com.donationmanagementsystem.utils.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.annotation.Generated;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name="user_settings")
-public class UserSetting {
+public class UserSetting extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
