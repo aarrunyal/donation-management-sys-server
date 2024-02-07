@@ -28,10 +28,10 @@ public class AuthenticationController {
 	private final UserService userService;
 
 	@PostMapping("/register")
-	public ResponseEntity<AuthenticationResponse> register(
+	public ResponseEntity<ApiResponse> register(
 			@RequestBody RegisterRequest request
 			){
-		return ResponseEntity.ok(service.register(request));
+		return service.register(request);
 	}
 	
 	@PostMapping("/authenticate")
@@ -52,10 +52,9 @@ public class AuthenticationController {
 		return new ResponseEntity<>(userResponse, HttpStatus.OK);
 	}
 
-	@GetMapping("/verfiy/{token}")
-	public String verifyUser(@PathVariable String token){
-		return token;
-		// return service.verifyUser(token);
+	@GetMapping("/verify/{token}")
+	public ResponseEntity<ApiResponse> verifyUser(@PathVariable String token){
+		return service.verifyUser(token);
 	}
 	
 

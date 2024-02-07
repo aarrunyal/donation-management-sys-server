@@ -23,4 +23,15 @@ public class AppConstant {
 	public static final String[] WHITE_LIST_URL = {
 			"/api/v1/auth/**"
 	};
+
+
+	public final static String INTERNAL_SERVER_ERROR = "Internal Server Error";
+
+    public final static String NO_CONTETNT_FOUND = "No content found";
+
+    public final static String CREATED = "Request processed successfully";
+	
+    public final static String OK = "Request processed successfully";
+
+    public final static String NOT_ACCEPTABLE = "Request not acceptable";
 }

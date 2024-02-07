@@ -1,8 +1,10 @@
 package com.donationmanagementsystem.auth;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -49,7 +51,13 @@ public class AuthenticationService {
 	@Value("${app-url}")
 	private String APP_URL;
 
-	public AuthenticationResponse register(RegisterRequest request) {
+	public ResponseEntity<ApiResponse> register(RegisterRequest request) {
+		List<User> existingUser = repository.findAllByEmail(request.getEmail());
+		if(existingUser.size()>0){
+			return ResponseMessage.notAcceptable("User already exist");
+		}
+
+
 		var user = User.builder()
 				.firstName(request.getFirstName())
 				.lastName(request.getLastName())
@@ -58,12 +66,13 @@ public class AuthenticationService {
 				.role(request.getRole())
 				.build();
 		var savedUser = repository.save(user);
-		var jwtToken = jwtService.generateToken(user);
-		if (savedUserToken(savedUser, jwtToken)) {
-			generateTokenForVerification(savedUser);
+		// var jwtToken = jwtService.generateToken(user);
+		// if (savedUserToken(savedUser, jwtToken)) {
+		if(generateTokenForVerification(savedUser).getStatusCode() == HttpStatus.OK){
+			return ResponseMessage.ok("User created successfully");
 		}
-		return AuthenticationResponse.builder().token(jwtToken).build();
-
+		// }
+		return ResponseMessage.internalServerError(null);
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
