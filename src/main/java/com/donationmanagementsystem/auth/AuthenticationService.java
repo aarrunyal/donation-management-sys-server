@@ -10,10 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
 import com.donationmanagementsystem.config.JwtService;
-import com.donationmanagementsystem.config.Role;
 import com.donationmanagementsystem.entity.Token;
 import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.entity.UserVerification;
@@ -26,8 +23,6 @@ import com.donationmanagementsystem.service.EmailService;
 import com.donationmanagementsystem.utils.EmailDetails;
 import com.donationmanagementsystem.utils.Helper;
 import com.donationmanagementsystem.utils.ResponseMessage;
-
-import io.micrometer.core.ipc.http.HttpSender.Response;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -53,10 +48,9 @@ public class AuthenticationService {
 
 	public ResponseEntity<ApiResponse> register(RegisterRequest request) {
 		List<User> existingUser = repository.findAllByEmail(request.getEmail());
-		if(existingUser.size()>0){
+		if (existingUser.size() > 0) {
 			return ResponseMessage.notAcceptable("User already exist");
 		}
-
 
 		var user = User.builder()
 				.firstName(request.getFirstName())
@@ -68,7 +62,7 @@ public class AuthenticationService {
 		var savedUser = repository.save(user);
 		// var jwtToken = jwtService.generateToken(user);
 		// if (savedUserToken(savedUser, jwtToken)) {
-		if(generateTokenForVerification(savedUser).getStatusCode() == HttpStatus.OK){
+		if (generateTokenForVerification(savedUser).getStatusCode() == HttpStatus.OK) {
 			return ResponseMessage.ok("User created successfully");
 		}
 		// }
@@ -112,24 +106,15 @@ public class AuthenticationService {
 		return true;
 	}
 
-	private void saveUserVerification(User user) {
-		var userVerification = UserVerification
-				.builder()
-				.user(user)
-				.token(Helper.getRandomToken(100))
-				.expired(false).build();
-		userVerificationRepository.save(userVerification);
-	}
-
 	private ResponseEntity<ApiResponse> generateTokenForVerification(User user) {
 		Optional<UserVerification> userVerification = userVerificationRepository.findByUserIdAndExpired(user.getId());
-		
-		if(userVerification.isPresent()){
-			var existingVerification= userVerification.get();
+
+		if (userVerification.isPresent()) {
+			var existingVerification = userVerification.get();
 			existingVerification.setExpired(true);
 			userVerificationRepository.save(existingVerification);
 		}
-		
+
 		String randomText = Helper.getRandomToken(100);
 
 		var verfication = UserVerification

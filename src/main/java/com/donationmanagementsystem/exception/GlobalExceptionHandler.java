@@ -1,9 +1,7 @@
 package com.donationmanagementsystem.exception;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -22,11 +20,11 @@ public class GlobalExceptionHandler {
 //         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
 //     }
 
-    private Map<String, List<String>> getErrorsMap(List<String> errors) {
-        Map<String, List<String>> errorResponse = new HashMap<>();
-        errorResponse.put("errors", errors);
-        return errorResponse;
-    }
+    // private Map<String, List<String>> getErrorsMap(List<String> errors) {
+    //     Map<String, List<String>> errorResponse = new HashMap<>();
+    //     errorResponse.put("errors", errors);
+    //     return errorResponse;
+    // }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

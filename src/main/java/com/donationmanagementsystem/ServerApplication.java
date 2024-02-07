@@ -1,14 +1,10 @@
 package com.donationmanagementsystem;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.donationmanagementsystem.auth.AuthenticationService;
-import com.donationmanagementsystem.auth.RegisterRequest;
-import com.donationmanagementsystem.config.Role;
 
 @SpringBootApplication
 public class ServerApplication {

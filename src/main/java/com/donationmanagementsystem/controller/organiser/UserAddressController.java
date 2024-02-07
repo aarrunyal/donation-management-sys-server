@@ -1,4 +1,4 @@
-package com.donationmanagementsystem.controller.admin;
+package com.donationmanagementsystem.controller.organiser;
 
 import java.util.List;
 
@@ -22,8 +22,9 @@ import com.donationmanagementsystem.service.UserService;
 
 import jakarta.validation.Valid;
 
+
 @RestController
-@RequestMapping("/api/v1/admin/user-address")
+@RequestMapping("/api/v1/organiser/user-address")
 public class UserAddressController {
 
     @Autowired
@@ -31,6 +32,7 @@ public class UserAddressController {
 
     @Autowired
     private UserService userService;
+
 
     @PostMapping
     public ResponseEntity<ApiResponse> post(@Valid @RequestBody UserAddressRequest userAddressRequest) {
@@ -62,14 +64,5 @@ public class UserAddressController {
         User user = userService.getLoggedInUser();
         return this.userAddressService.show(id, user);
     }
-
-    // @GetMapping("/test/mail")
-    // public String testMail() {
-    //     var emailDetails = EmailDetails.builder().msgBody("Hello this is test mail")
-    //     .receipient("aarrunyal@gmail.com")
-    //     .subject("Test mail")
-    //     .build();
-    //     return emailService.sendMail(emailDetails);
-    // }
     
 }

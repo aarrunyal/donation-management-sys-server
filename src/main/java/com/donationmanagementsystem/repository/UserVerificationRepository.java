@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.donationmanagementsystem.entity.User;
-import com.donationmanagementsystem.entity.UserSetting;
 import com.donationmanagementsystem.entity.UserVerification;
 
 public interface UserVerificationRepository extends JpaRepository<UserVerification, Long>  {
