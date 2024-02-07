@@ -70,13 +70,13 @@ public class UserAddressController {
         return this.userAddressService.show(id, user);
     }
 
-    @GetMapping("/test/mail")
-    public String testMail() {
-        var emailDetails = EmailDetails.builder().msgBody("Hello this is test mail")
-        .receipient("aarrunyal@gmail.com")
-        .subject("Test mail")
-        .build();
-        return emailService.sendMail(emailDetails);
-    }
+    // @GetMapping("/test/mail")
+    // public String testMail() {
+    //     var emailDetails = EmailDetails.builder().msgBody("Hello this is test mail")
+    //     .receipient("aarrunyal@gmail.com")
+    //     .subject("Test mail")
+    //     .build();
+    //     return emailService.sendMail(emailDetails);
+    // }
     
 }

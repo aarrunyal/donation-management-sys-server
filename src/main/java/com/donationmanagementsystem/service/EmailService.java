@@ -4,7 +4,7 @@ import com.donationmanagementsystem.utils.EmailDetails;
 
 public interface EmailService {
     
-    String sendMail(EmailDetails details);
+    Boolean sendMail(EmailDetails details);
 
-    String sendMailWithAttachment(EmailDetails details);
+    Boolean sendMailWithAttachment(EmailDetails details);
 }

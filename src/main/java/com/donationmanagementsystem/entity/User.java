@@ -39,6 +39,7 @@ public class User  extends BaseEntity implements UserDetails {
 	private String lastName;
 	private String email;
 	private String password;
+	private boolean verified;
 	
 	@Enumerated(EnumType.STRING)
 	private Role role;

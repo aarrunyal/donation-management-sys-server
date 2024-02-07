@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.donationmanagementsystem.entity.User;
+import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.UserResponse;
 import com.donationmanagementsystem.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -49,7 +51,14 @@ public class AuthenticationController {
 		.email(user.getEmail()).build();
 		return new ResponseEntity<>(userResponse, HttpStatus.OK);
 	}
+
+	@GetMapping("/verfiy/{token}")
+	public String verifyUser(@PathVariable String token){
+		return token;
+		// return service.verifyUser(token);
+	}
 	
+
 
 	
 }
