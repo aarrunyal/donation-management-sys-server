@@ -9,13 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.donationmanagementsystem.config.Role;
 import com.donationmanagementsystem.utils.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -31,16 +29,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table (name="users")
+@JsonIgnoreProperties(value = {"createdBy", "lastModifiedBy"}, allowGetters = true)
 public class User  extends BaseEntity implements UserDetails {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO) // default is auto
-	private Long id;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String password;
 	private boolean verified;
+	private boolean status;
 	
 	@Enumerated(EnumType.STRING)
 	private Role role;

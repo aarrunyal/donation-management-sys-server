@@ -1,7 +1,10 @@
 package com.donationmanagementsystem.entity;
 
+import java.time.LocalDate;
+
 import com.donationmanagementsystem.utils.BaseEntity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,21 +17,35 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
 @EqualsAndHashCode(callSuper = true)
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Entity
-@Table(name="user_verifications")
-public class UserVerification extends BaseEntity{
+@Table(name="donation_payments")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class DonationPayment extends BaseEntity{
+
+    @Column(nullable = false)
+    private String transactionId;
+
+    @Column(nullable = false)
+    private String paymentMethod;
     
-    public String token;
-    public boolean expired;
+    
+    
+    @Column(nullable = false)
+    private LocalDate donatedAt;
+    
+    @Column(nullable = false)
+    private Long organisedFor;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
-    public User user;
+    @JoinColumn(name="organiser_id")
+    private User organiser;
 
-    private boolean status;
+    @ManyToOne
+    @JoinColumn(name="donation_id")
+    private Donation donation;
 }

@@ -23,8 +23,8 @@ import com.donationmanagementsystem.service.UserService;
 import jakarta.validation.Valid;
 
 
-@RestController
-@RequestMapping("/api/v1/organiser/user-address")
+@RestController("UserAddressController")
+@RequestMapping("/api/v1/user-address")
 public class UserAddressController {
 
     @Autowired

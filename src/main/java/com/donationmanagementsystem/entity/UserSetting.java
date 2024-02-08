@@ -1,8 +1,11 @@
 package com.donationmanagementsystem.entity;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.donationmanagementsystem.utils.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,6 +17,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+@EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
@@ -22,10 +27,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(name="user_settings")
 public class UserSetting extends BaseEntity{
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
 	
 	@Column(nullable = false)
 	private String contactNo;
@@ -35,5 +36,7 @@ public class UserSetting extends BaseEntity{
 	@OneToOne
 	@JoinColumn(name="user_id")
 	private User user;
+
+	private boolean status;
 	
 }

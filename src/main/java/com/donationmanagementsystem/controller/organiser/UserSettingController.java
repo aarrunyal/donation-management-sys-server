@@ -20,8 +20,8 @@ import com.donationmanagementsystem.service.UserSettingService;
 
 import jakarta.validation.Valid;
 
-@RestController
-@RequestMapping("/api/v1/organiser/user-setting")
+@RestController("UserSettingController")
+@RequestMapping("/api/v1/user-setting")
 public class UserSettingController {
 
 

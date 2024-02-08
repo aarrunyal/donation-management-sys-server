@@ -26,9 +26,6 @@ import lombok.NoArgsConstructor;
 @Table (name="tokens")
 public class Token extends BaseEntity{
 
-	@Id
-	@GeneratedValue(strategy =GenerationType.AUTO)
-	private Long id;
 	
 	private String token;
 	
