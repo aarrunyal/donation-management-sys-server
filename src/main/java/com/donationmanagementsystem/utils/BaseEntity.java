@@ -31,9 +31,9 @@ public abstract class BaseEntity {
     private LocalDateTime updatedAt;
 
     @CreatedBy
-    protected String createdBy;
+    protected Long createdBy;
 
     @LastModifiedBy
     @Column(nullable = true)
-    protected String lastModifiedBy;
+    protected Long lastModifiedBy;
 }

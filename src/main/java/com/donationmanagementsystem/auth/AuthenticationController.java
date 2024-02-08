@@ -47,6 +47,7 @@ public class AuthenticationController {
 		.builder()
 		.firstName(user.getFirstName())
 		.lastName(user.getLastName())
+		.id(user.getId())
 		.email(user.getEmail()).build();
 		return new ResponseEntity<>(userResponse, HttpStatus.OK);
 	}
