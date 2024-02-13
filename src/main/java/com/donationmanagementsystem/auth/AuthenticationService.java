@@ -70,11 +70,13 @@ public class AuthenticationService {
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
+		System.out.println("Here");
+		var user = repository.findByEmail(request.getEmail())
+				.orElseThrow(()->new ResourceNotFoundException("User", "email", request.getEmail()));
+		System.out.println("Exception");
 		authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(
 						request.getEmail(), request.getPassword()));
-		var user = repository.findByEmail(request.getEmail())
-				.orElseThrow();
 		var jwtToken = jwtService.generateToken(user);
 		savedUserToken(user, jwtToken);
 		return AuthenticationResponse.builder().token(jwtToken).build();
