@@ -1,5 +1,7 @@
 package com.donationmanagementsystem.payload.response;
 
+import com.donationmanagementsystem.config.Role;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,4 +16,5 @@ public class UserResponse {
 	public String firstName;
 	public String lastName;
 	public String email;
+	public Role role;
 }

@@ -60,19 +60,17 @@ public class AuthenticationService {
 				.role(request.getRole())
 				.build();
 		var savedUser = repository.save(user);
-		// var jwtToken = jwtService.generateToken(user);
-		// if (savedUserToken(savedUser, jwtToken)) {
-		if (generateTokenForVerification(savedUser).getStatusCode() == HttpStatus.OK) {
+		if (savedUser.getId() != null) {
 			return ResponseMessage.ok("User created successfully");
 		}
-		// }
+		System.out.println("not-working");
 		return ResponseMessage.internalServerError(null);
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
 		System.out.println("Here");
 		var user = repository.findByEmail(request.getEmail())
-				.orElseThrow(()->new ResourceNotFoundException("User", "email", request.getEmail()));
+				.orElseThrow(() -> new ResourceNotFoundException("User", "email", request.getEmail()));
 		System.out.println("Exception");
 		authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(
