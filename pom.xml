@@ -102,6 +102,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>donation-management-system</finalName>
 	</build>
 
 </project>
