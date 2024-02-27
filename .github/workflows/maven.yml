@@ -45,7 +45,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /dms
+            cd dms
             docker-compose stop dms_app
             docker rm dms_app
             docker pull aarrunyal/dms_app:latest
