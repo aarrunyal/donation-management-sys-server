@@ -1,11 +1,7 @@
-###  install docker in your system
+###  Install docker in your system
 
-    ```
     https://www.docker.com/products/docker-desktop/
-    ```
 
-### run project
+### Run project
 
-    ```
     docker-compose up -d --build
-    ```
