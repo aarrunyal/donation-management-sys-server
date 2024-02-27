@@ -2,11 +2,11 @@ version: '3.7'
 services:
   dms_db:
     container_name: dms_db
-    image: mysql:8.0
+    image: mysql:8.3
     networks:
       - dms_network
     environment:
-      - MYSQL_USER=root
+      - MYSQL_ROOT_USER=root
       - MYSQL_PASSWORD=Forgot911!
       - MYSQL_DATABASE=dms
       - MYSQL_ROOT_PASSWORD=Forgot911!
@@ -19,7 +19,7 @@ services:
   dms_app:
     build:
       context: .
-    container_name: dms-spring
+    container_name: dms_app
     image: dms_app
     ports:
       - "8080:8080"
@@ -28,7 +28,7 @@ services:
     depends_on:
       - dms_db
     environment:
-      - MYSQL_USER=root
+      - MYSQL_ROOT_USER=root
       - MYSQL_PASSWORD=Forgot911!
       - MYSQL_DATABASE=dms
       - MYSQL_ROOT_PASSWORD=Forgot911!
