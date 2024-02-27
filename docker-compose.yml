@@ -20,7 +20,7 @@ services:
     build:
       context: .
     container_name: dms_app
-    image: dms_app
+    image: aarrunyal/dms_app:latest
     ports:
       - "8080:8080"
     networks:
