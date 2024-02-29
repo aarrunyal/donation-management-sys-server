@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.donationmanagementsystem.entity.User;
+import com.donationmanagementsystem.payload.request.UserAddressRequest;
 import com.donationmanagementsystem.payload.request.UserRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.UserResponse;
@@ -33,8 +35,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    UserRepository userRepository;
+
 
     @GetMapping("")
     public ResponseEntity<List<UserResponse>> get() {
@@ -49,5 +50,11 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> post(@PathVariable("id") Long userId) {
         return userService.delete(userId);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> update(@Valid @RequestBody UserRequest userRequest,
+            @PathVariable Long id) {
+        return userService.update(userRequest, id);
     }
 }

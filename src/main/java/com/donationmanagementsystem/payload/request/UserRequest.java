@@ -14,24 +14,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserRequest {
 
-	@NotBlank
-	@NotNull
+	@NotBlank(message = "First name is blank")
+	@NotNull(message = "First name is empty")
 	private String firstName;
 
-	@NotBlank
-	@NotNull
+	@NotBlank(message = "Last name is empty")
+	@NotNull(message = "Last name is empty")
 	private String lastName;
 
-	@NotBlank
-	@NotNull
-	@Email
+	@NotBlank(message = "Email is empty")
+	@NotNull(message = "Email is empty")
+	@Email(message = "Not a valid email")
 	private String email;
 
-	@NotBlank
-	@NotNull
+	// @NotBlank(message="Password cannot be blank")
+	// @NotNull(message="Password cannot be empty")
 	private String password;
 
-	@NotNull
+	@NotNull(message = "Role cannot be empty")
 	private  Role role;
 
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.entity.UserAddress;
 import com.donationmanagementsystem.exception.ResourceNotFoundException;
+import com.donationmanagementsystem.payload.request.UserAddressRequest;
 import com.donationmanagementsystem.payload.request.UserRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.UserResponse;
@@ -94,9 +95,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ResponseEntity<ApiResponse> update(UserRequest userRequest, Long userSettingId) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'update'");
+	public ResponseEntity<ApiResponse> update(UserRequest userRequest, Long userId) {
+		try {
+			User savedUser = userRepository.findById(userId)
+					.orElseThrow(() -> new ResourceNotFoundException("User ", " id", userId));
+
+			savedUser.setFirstName(userRequest.getFirstName());
+			savedUser.setLastName(userRequest.getLastName());
+			savedUser.setRole(userRequest.getRole());
+			userRepository.save(savedUser);
+			return ResponseMessage.ok("User has been updated successfully");
+		} catch (Exception ex) {
+			return ResponseMessage.internalServerError(null);
+		}
 	}
 
 }
