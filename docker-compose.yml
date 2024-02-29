@@ -28,12 +28,9 @@ services:
     depends_on:
       - dms_db
     environment:
-      - MYSQL_ROOT_USER=root
-      - MYSQL_PASSWORD=Forgot911!
-      - MYSQL_DATABASE=dms
-      - MYSQL_ROOT_PASSWORD=Forgot911!
-      - MYSQL_PORT=3306
-
+      SPRING_DATASOURCE_URL: jdbc:mysql://dms_db:3306/dms
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Forgot911!
 networks:
   dms_network:
     name: dms_network

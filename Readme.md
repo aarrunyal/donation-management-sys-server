@@ -5,3 +5,7 @@
 ### Run project
 
     docker-compose up -d --build
+
+### Stopping project
+
+    docker-compose down
