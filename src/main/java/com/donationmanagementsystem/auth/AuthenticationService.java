@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.donationmanagementsystem.config.JwtService;
+import com.donationmanagementsystem.config.Role;
 import com.donationmanagementsystem.entity.Token;
 import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.entity.UserVerification;
@@ -51,13 +52,12 @@ public class AuthenticationService {
 		if (existingUser.size() > 0) {
 			return ResponseMessage.notAcceptable("User already exist");
 		}
-
 		var user = User.builder()
 				.firstName(request.getFirstName())
 				.lastName(request.getLastName())
 				.email(request.getEmail())
 				.password(encoder.encode(request.getPassword()))
-				.role(request.getRole())
+				.role(request.getRole() != null ? request.getRole() : Role.USER)
 				.build();
 		var savedUser = repository.save(user);
 		if (savedUser.getId() != null) {
