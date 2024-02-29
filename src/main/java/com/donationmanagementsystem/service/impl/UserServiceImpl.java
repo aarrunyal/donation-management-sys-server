@@ -14,12 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.donationmanagementsystem.entity.User;
-import com.donationmanagementsystem.entity.UserSetting;
+import com.donationmanagementsystem.entity.UserAddress;
+import com.donationmanagementsystem.exception.ResourceNotFoundException;
 import com.donationmanagementsystem.payload.request.UserRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.UserResponse;
 import com.donationmanagementsystem.repository.UserRepository;
 import com.donationmanagementsystem.service.UserService;
+import com.donationmanagementsystem.utils.Helper;
 import com.donationmanagementsystem.utils.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
@@ -44,16 +46,25 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ResponseEntity<List<UserResponse>> all() {
-		List<User> users = userRepository.findAll();
+		List<User> users = userRepository.findAll(Helper.sortByAsc("id", "DESC"));
 		List<UserResponse> userResponses = users.stream().map((user) -> this.modelMapper.map(user, UserResponse.class))
 				.collect(Collectors.toList());
 		return new ResponseEntity<List<UserResponse>>(userResponses, HttpStatus.OK);
 	}
 
 	@Override
-	public ApiResponse delete(Long userSettingId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<ApiResponse> delete(Long userId) {
+		try {
+			User savedUser = userRepository.findById(userId)
+					.orElseThrow(() -> new ResourceNotFoundException("User", " id", userId));
+			if (savedUser != null) {
+				userRepository.delete(savedUser);
+				return ResponseMessage.ok("User deleted successfully");
+			}
+			return ResponseMessage.internalServerError("");
+		} catch (Exception ex) {
+			return ResponseMessage.internalServerError("");
+		}
 	}
 
 	@Override
@@ -67,23 +78,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ResponseEntity<ApiResponse> create(UserRequest userRequest, User user) {
-		// try {
-			Optional<User> savedUser = userRepository.findByEmail(user.getEmail());
-			if (!savedUser.isEmpty())
+	public ResponseEntity<ApiResponse> create(UserRequest userRequest) {
+		try {
+			Optional<User> savedUser = userRepository.findByEmail(userRequest.getEmail());
+			if (savedUser.isPresent())
 				return ResponseMessage.notAcceptable(null);
 
 			User newUser = this.modelMapper.map(userRequest, User.class);
 			newUser.setPassword(encoder.encode(userRequest.getPassword()));
 			userRepository.save(newUser);
 			return ResponseMessage.created("User has been creeated successfully");
-		// } catch (Exception ex) {
-		// 	return ResponseMessage.internalServerError(null);
-		// }
+		} catch (Exception ex) {
+			return ResponseMessage.internalServerError(null);
+		}
 	}
 
 	@Override
-	public ResponseEntity<ApiResponse> update(UserRequest userRequest, Long userSettingId, User user) {
+	public ResponseEntity<ApiResponse> update(UserRequest userRequest, Long userSettingId) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'update'");
 	}

@@ -12,15 +12,15 @@ import com.donationmanagementsystem.payload.response.UserResponse;
 public interface UserService {
 
 	
-	ResponseEntity<ApiResponse> create(UserRequest userRequest, User user);
+	ResponseEntity<ApiResponse> create(UserRequest userRequest);
 
-	ResponseEntity<ApiResponse> update(UserRequest userRequest, Long userSettingId, User user);
+	ResponseEntity<ApiResponse> update(UserRequest userRequest, Long userSettingId);
 
 	ResponseEntity<UserResponse> show(Long userId);
 
 	ResponseEntity<List<UserResponse>> all();
 
-	ApiResponse delete(Long userId);
+	ResponseEntity<ApiResponse> delete(Long userId);
 	
 	User getLoggedInUser();
 }

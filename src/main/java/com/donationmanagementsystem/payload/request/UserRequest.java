@@ -1,5 +1,7 @@
 package com.donationmanagementsystem.payload.request;
 
+import com.donationmanagementsystem.config.Role;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,14 +17,21 @@ public class UserRequest {
 	@NotBlank
 	@NotNull
 	private String firstName;
+
 	@NotBlank
 	@NotNull
 	private String lastName;
+
 	@NotBlank
 	@NotNull
 	@Email
 	private String email;
+
 	@NotBlank
 	@NotNull
 	private String password;
+
+	@NotNull
+	private  Role role;
+
 }

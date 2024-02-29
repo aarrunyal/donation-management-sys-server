@@ -30,6 +30,6 @@ public class ResponseMessage {
 
     public static ResponseEntity<ApiResponse> notAcceptable(String message){
         message = !(message == null) ?message:AppConstant.NOT_ACCEPTABLE;
-        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, message), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(new ApiResponse(Boolean.FALSE, message), HttpStatus.NOT_ACCEPTABLE);
     }
 }
