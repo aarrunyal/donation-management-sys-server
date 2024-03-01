@@ -20,4 +20,6 @@ public interface DonationService {
     ResponseEntity<List<DonationResponse>> all();
 
     ResponseEntity<ApiResponse> delete(Long donationId);
+
+    ResponseEntity<ApiResponse> toggleStatus(Long id, String status);
 }

@@ -95,4 +95,23 @@ public class DonationServiceImpl implements DonationService {
         }
     }
 
+    @Override
+    public ResponseEntity<ApiResponse> toggleStatus(Long id, String status) {
+        try {
+            Donation savedDonation = donationRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Donation", "id", id));
+            if (status.equals("expired") || status.equals("not-expired"))
+                savedDonation.setExpired(!savedDonation.isExpired());
+            else if (status.equals("active") || status.equals("in-active"))
+                savedDonation.setStatus(!savedDonation.isStatus());
+            else
+                savedDonation.setVerified(!savedDonation.isVerified());
+            donationRepository.save(savedDonation);
+            return ResponseMessage.ok(null);
+        } catch (Exception ex) {
+            return ResponseMessage.internalServerError("");
+        }
+
+    }
+
 }

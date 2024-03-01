@@ -24,7 +24,7 @@ import com.donationmanagementsystem.service.UserService;
 import jakarta.validation.Valid;
 
 @RestController("AdminDonationController")
-@RequestMapping(value  = "/api/v1/admin/donation")
+@RequestMapping(value = "/api/v1/admin/donation")
 @PreAuthorize("hasRole('ADMIN')")
 public class DonationController {
 
@@ -59,5 +59,10 @@ public class DonationController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> delete(@PathVariable Long id) {
         return this.donationService.delete(id);
+    }
+
+    @GetMapping("/{id}/{status}")
+    public ResponseEntity<ApiResponse> toggleStatus(@PathVariable Long id, @PathVariable String status) {
+        return this.donationService.toggleStatus(id, status);
     }
 }
