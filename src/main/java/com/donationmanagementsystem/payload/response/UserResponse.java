@@ -16,5 +16,7 @@ public class UserResponse {
 	public String firstName;
 	public String lastName;
 	public String email;
+	public boolean verified;
+	public boolean status;
 	public Role role;
 }
