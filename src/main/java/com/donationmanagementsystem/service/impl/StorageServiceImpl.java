@@ -14,12 +14,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.donationmanagementsystem.exception.StorageException;
+import com.donationmanagementsystem.exception.StorageFileNotFoundException;
 import com.donationmanagementsystem.service.StorageService;
+import com.donationmanagementsystem.utils.AppConstant;
+
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.name.Rename;
 
 @Service
 public class StorageServiceImpl implements StorageService {
-
-    private static final String UPLOAD_PATH = "src/main/resources/uploads";
 
     @Override
     public void uploadFile(MultipartFile file, String directory) {
@@ -27,13 +30,12 @@ public class StorageServiceImpl implements StorageService {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file.");
             }
-
-            this.createDirectoryIfNotExist(directory);
-
-            Path path = Paths.get(UPLOAD_PATH + "/" + directory);
-
+            var destinationPath = AppConstant.UPLOAD_ROOT_PATH + "/" + directory;
+            this.createDirectoryIfNotExist(destinationPath);
+            Path path = Paths.get(destinationPath);
+            var fileName = this.generateFileName(file);
             Path destinationFile = path.resolve(
-                    Paths.get(this.generateFileName()))
+                    Paths.get(fileName))
                     .normalize().toAbsolutePath();
 
             if (!destinationFile.getParent().equals(path.toAbsolutePath())) {
@@ -45,6 +47,8 @@ public class StorageServiceImpl implements StorageService {
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFile,
                         StandardCopyOption.REPLACE_EXISTING);
+                if (AppConstant.IMAGE_EXTENSION.contains(this.getExtension(file)))
+                    this.createthumbnail(destinationPath, fileName);
             }
 
         } catch (IOException e) {
@@ -53,15 +57,33 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public void createthumbnail(String path, String fileName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createthumbnail'");
+    public void createthumbnail(String uploadedDirectory, String fileName) {
+        try {
+            Path path = Paths.get(uploadedDirectory);
+            File file = new File(path + "/" + fileName);
+            if (!file.exists()) {
+                throw new StorageFileNotFoundException("File cannot be found");
+            }
+            this.createDirectoryIfNotExist(uploadedDirectory + "/thumb");
+            var destinationDir = uploadedDirectory + "/thumb";
+            Thumbnails.of(uploadedDirectory + "/" + fileName)
+                    .size(AppConstant.THUMBNAIL_WIDTH, AppConstant.THUMBNAIL_LENGTH)
+                    .toFiles(new File(destinationDir), Rename.NO_CHANGE);
+        } catch (IOException e) {
+            throw new StorageException("Failed to store file.", e);
+        }
     }
 
     @Override
-    public void deleteFile(String path, String fileName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteFile'");
+    public void deleteFile(String directory, String fileName) {
+        File destinationPath = new File(AppConstant.UPLOAD_ROOT_PATH + "/" + directory + "/" + fileName);
+        if (!destinationPath.exists())
+            throw new StorageFileNotFoundException("File cannot be found");
+        File thumbnail = new File(AppConstant.UPLOAD_ROOT_PATH + "/" + directory + "/thumb/" + fileName);
+        if (thumbnail.exists()) {
+            thumbnail.delete();
+        }
+        destinationPath.delete();
     }
 
     @Override
@@ -71,27 +93,26 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public String generateFileName() {
-        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-        return timeStamp;
-
+    public String generateFileName(MultipartFile file) {
+        String timeStamp = new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
+        return timeStamp + "." + getExtension(file);
     }
 
     @Override
     public void createDirectoryIfNotExist(String directory) {
         try {
-            File theDir = new File(UPLOAD_PATH);
-            if (!theDir.exists()) {
-                theDir.mkdirs();
-            }
-
-            theDir = new File(UPLOAD_PATH + "/" + directory);
+            File theDir = new File(directory);
             if (!theDir.exists()) {
                 theDir.mkdirs();
             }
         } catch (Exception e) {
             throw new StorageException("Not a valid path", e);
         }
+    }
+
+    @Override
+    public String getExtension(MultipartFile file) {
+        return file.getOriginalFilename().split("\\.")[1];
     }
 
 }

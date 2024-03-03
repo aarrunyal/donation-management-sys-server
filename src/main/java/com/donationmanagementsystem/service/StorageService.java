@@ -8,14 +8,16 @@ public interface StorageService {
 
     public void uploadFile(MultipartFile file, String path);
 
-    public void createthumbnail(String path, String fileName);
+    public void createthumbnail(String directory, String fileName);
 
     public void deleteFile(String path, String fileName);
 
     public Path load(Path path, String fileName);
 
-    public String generateFileName();
+    public String generateFileName(MultipartFile file);
 
     public void createDirectoryIfNotExist(String directory);
+
+    public String getExtension(MultipartFile file);
 
 }
