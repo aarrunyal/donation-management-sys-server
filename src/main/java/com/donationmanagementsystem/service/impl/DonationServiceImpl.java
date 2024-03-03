@@ -17,6 +17,7 @@ import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.DonationResponse;
 import com.donationmanagementsystem.repository.DonationRepository;
 import com.donationmanagementsystem.service.DonationService;
+import com.donationmanagementsystem.service.StorageService;
 import com.donationmanagementsystem.utils.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DonationServiceImpl implements DonationService {
 
+    private static final String UPLOAD_PATH = "donation";
+
     private final DonationRepository donationRepository;
 
+    private final StorageService storageService;
+    
     @Autowired
     ModelMapper modelMapper;
 
