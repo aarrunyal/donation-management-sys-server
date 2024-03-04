@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.donationmanagementsystem.entity.Donation;
 import com.donationmanagementsystem.entity.User;
@@ -31,7 +32,7 @@ public class DonationServiceImpl implements DonationService {
     private final DonationRepository donationRepository;
 
     private final StorageService storageService;
-    
+
     @Autowired
     ModelMapper modelMapper;
 
@@ -39,12 +40,27 @@ public class DonationServiceImpl implements DonationService {
     public ResponseEntity<ApiResponse> create(DonationRequest donationRequest, User user) {
         try {
             Donation donation = this.modelMapper.map(donationRequest, Donation.class);
+            // if (donationRequest.getFile() != null) {
+                // var imageName = storageService.uploadFile(donationRequest.getFile(), UPLOAD_PATH);
+                // donationRequest.setImage(imageName);
+                // return create(donationRequest, user);
+            // }
             donation.setOrganiser(user);
             donationRepository.save(donation);
             return ResponseMessage.created("Donation campaign has been creeated successfully");
         } catch (Exception ex) {
             return ResponseMessage.internalServerError(null);
         }
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> create(DonationRequest donationRequest, User user, MultipartFile file) {
+        try {
+
+        } catch (Exception ex) {
+            return ResponseMessage.internalServerError(null);
+        }
+        return null;
     }
 
     @Override

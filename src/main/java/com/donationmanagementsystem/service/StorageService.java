@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface StorageService {
 
-    public void uploadFile(MultipartFile file, String path);
+    public String uploadFile(MultipartFile file, String path);
 
     public void createthumbnail(String directory, String fileName);
 

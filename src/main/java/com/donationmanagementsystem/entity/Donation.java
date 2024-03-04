@@ -41,14 +41,17 @@ public class Donation extends BaseEntity {
 
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="event_date")
     private LocalDate eventDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false , name="expected_collection")
     private Long expectedCollection;
 
-    @Column(nullable = false)
+    // @Column(nullable = true)
     private Long organisedFor;
+
+    @Column(nullable = true)
+    private String image;
 
     private boolean expired = false;
 

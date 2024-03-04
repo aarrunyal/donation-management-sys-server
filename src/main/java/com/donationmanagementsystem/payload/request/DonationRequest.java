@@ -2,6 +2,10 @@ package com.donationmanagementsystem.payload.request;
 
 import java.time.LocalDate;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,9 +35,11 @@ public class DonationRequest {
     // @NotBlank(message = "cannot be blank")
     @Future(message = "Event date must be a future date")
     @NotNull(message = "Event date cannot be blank")
+    @JsonProperty("event_date")
     private LocalDate eventDate;
 
     @NotNull(message = "Exepected collection cannot be blank")
+    @JsonProperty("expected_collection")
     private Long expectedCollection;
 
 
@@ -45,6 +51,9 @@ public class DonationRequest {
 
 
     private boolean status;
+
+
+    private String image=null;
 
 
 }

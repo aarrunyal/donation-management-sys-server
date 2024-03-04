@@ -25,7 +25,7 @@ import net.coobird.thumbnailator.name.Rename;
 public class StorageServiceImpl implements StorageService {
 
     @Override
-    public void uploadFile(MultipartFile file, String directory) {
+    public String uploadFile(MultipartFile file, String directory) {
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file.");
@@ -50,7 +50,7 @@ public class StorageServiceImpl implements StorageService {
                 if (AppConstant.IMAGE_EXTENSION.contains(this.getExtension(file)))
                     this.createthumbnail(destinationPath, fileName);
             }
-
+            return fileName;
         } catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
         }

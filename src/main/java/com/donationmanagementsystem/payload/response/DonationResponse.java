@@ -35,4 +35,6 @@ public class DonationResponse {
 
     @JsonIgnore
     private User organiser;
+
+    private String image;
 }
