@@ -37,30 +37,35 @@ public class DonationServiceImpl implements DonationService {
     ModelMapper modelMapper;
 
     @Override
-    public ResponseEntity<ApiResponse> create(DonationRequest donationRequest, User user) {
+    public ResponseEntity<DonationResponse> create(DonationRequest donationRequest, User user) {
         try {
             Donation donation = this.modelMapper.map(donationRequest, Donation.class);
-            // if (donationRequest.getFile() != null) {
-                // var imageName = storageService.uploadFile(donationRequest.getFile(), UPLOAD_PATH);
-                // donationRequest.setImage(imageName);
-                // return create(donationRequest, user);
-            // }
             donation.setOrganiser(user);
-            donationRepository.save(donation);
-            return ResponseMessage.created("Donation campaign has been creeated successfully");
+            Donation newDonation = donationRepository.save(donation);
+            DonationResponse donationResponse = this.modelMapper.map(newDonation, DonationResponse.class);
+            return new ResponseEntity<>(donationResponse, HttpStatus.OK);
         } catch (Exception ex) {
-            return ResponseMessage.internalServerError(null);
+            return null;
         }
     }
 
     @Override
-    public ResponseEntity<ApiResponse> create(DonationRequest donationRequest, User user, MultipartFile file) {
+    public ResponseEntity<ApiResponse> uploadImage(Long id, MultipartFile file) {
         try {
-
+            Donation savedDonation = donationRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Donation", "id", id));
+            if (!file.isEmpty()) {
+                if (savedDonation.getImage() != null) {
+                    storageService.deleteFile(UPLOAD_PATH, savedDonation.getImage());
+                }
+                var imageName = storageService.uploadFile(file, UPLOAD_PATH);
+                savedDonation.setImage(imageName);
+                donationRepository.save(savedDonation);
+            }
+            return ResponseMessage.internalServerError(null);
         } catch (Exception ex) {
             return ResponseMessage.internalServerError(null);
         }
-        return null;
     }
 
     @Override

@@ -12,9 +12,9 @@ import com.donationmanagementsystem.payload.response.DonationResponse;
 
 public interface DonationService {
 
-    ResponseEntity<ApiResponse> create(DonationRequest donationRequest, User user);
+    ResponseEntity<DonationResponse> create(DonationRequest donationRequest, User user);
 
-    ResponseEntity<ApiResponse> create(DonationRequest donationRequest, User user, MultipartFile file);
+    ResponseEntity<ApiResponse> uploadImage(Long id, MultipartFile file);
 
     ResponseEntity<ApiResponse> update(DonationRequest donationRequest, Long donationId);
 

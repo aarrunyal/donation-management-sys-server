@@ -14,12 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.donationmanagementsystem.entity.User;
-import com.donationmanagementsystem.payload.request.UserAddressRequest;
 import com.donationmanagementsystem.payload.request.UserRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.UserResponse;
-import com.donationmanagementsystem.repository.UserRepository;
 import com.donationmanagementsystem.service.UserService;
 
 import jakarta.validation.Valid;
