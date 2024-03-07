@@ -6,6 +6,7 @@ import com.donationmanagementsystem.utils.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,11 +42,13 @@ public class DonationPayment extends BaseEntity{
     @Column(nullable = false)
     private Long organisedFor;
 
-    @ManyToOne
-    @JoinColumn(name="organiser_id")
-    private User organiser;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="donation_id")
     private Donation donation;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="donated_by")
+    private User doner;
+
 }

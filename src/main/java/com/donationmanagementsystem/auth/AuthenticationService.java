@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.donationmanagementsystem.config.JwtService;
+import com.donationmanagementsystem.config.Role;
 import com.donationmanagementsystem.entity.Token;
 import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.entity.UserVerification;
@@ -51,30 +52,29 @@ public class AuthenticationService {
 		if (existingUser.size() > 0) {
 			return ResponseMessage.notAcceptable("User already exist");
 		}
-
 		var user = User.builder()
 				.firstName(request.getFirstName())
 				.lastName(request.getLastName())
 				.email(request.getEmail())
 				.password(encoder.encode(request.getPassword()))
-				.role(request.getRole())
+				.role(request.getRole() != null ? request.getRole() : Role.USER)
 				.build();
 		var savedUser = repository.save(user);
-		// var jwtToken = jwtService.generateToken(user);
-		// if (savedUserToken(savedUser, jwtToken)) {
-		if (generateTokenForVerification(savedUser).getStatusCode() == HttpStatus.OK) {
+		if (savedUser.getId() != null) {
 			return ResponseMessage.ok("User created successfully");
 		}
-		// }
+		System.out.println("not-working");
 		return ResponseMessage.internalServerError(null);
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
+		System.out.println("Here");
+		var user = repository.findByEmail(request.getEmail())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "email", request.getEmail()));
+		System.out.println("Exception");
 		authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(
 						request.getEmail(), request.getPassword()));
-		var user = repository.findByEmail(request.getEmail())
-				.orElseThrow();
 		var jwtToken = jwtService.generateToken(user);
 		savedUserToken(user, jwtToken);
 		return AuthenticationResponse.builder().token(jwtToken).build();

@@ -1,0 +1,39 @@
+version: '3.7'
+services:
+  dms_db:
+    container_name: dms_db
+    image: mysql:8.3
+    networks:
+      - dms_network
+    environment:
+      - MYSQL_ROOT_USER=root
+      - MYSQL_PASSWORD=Forgot911!
+      - MYSQL_DATABASE=dms
+      - MYSQL_ROOT_PASSWORD=Forgot911!
+    volumes:
+      - dms_db:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    restart: always
+
+  dms_app:
+    build:
+      context: .
+    container_name: dms_app
+    image: aarrunyal/dms_app:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - dms_network
+    depends_on:
+      - dms_db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://dms_db:3306/dms
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Forgot911!
+networks:
+  dms_network:
+    name: dms_network
+
+volumes:
+ dms_db:

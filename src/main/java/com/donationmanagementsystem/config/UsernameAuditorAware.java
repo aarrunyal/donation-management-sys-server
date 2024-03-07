@@ -9,17 +9,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.donationmanagementsystem.entity.User;
 
-public class UsernameAuditorAware implements AuditorAware<String> {
+public class UsernameAuditorAware implements AuditorAware<Long> {
 
     @Override
-    public Optional<String> getCurrentAuditor() {
+    public Optional<Long> getCurrentAuditor() {
          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
  
         if (authentication == null || !authentication.isAuthenticated()) {
             return null;
         }
  
-        return Optional.ofNullable(((User) authentication.getPrincipal()).getEmail());
+        return Optional.ofNullable(((User) authentication.getPrincipal()).getId());
     }
 
     

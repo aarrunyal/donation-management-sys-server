@@ -11,10 +11,13 @@ import com.donationmanagementsystem.utils.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,9 +45,34 @@ public class User  extends BaseEntity implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<Token> tokens;
 	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY,  orphanRemoval = true )
+	@JsonIgnore
+	private List<UserAddress> addresses;
+
+	@OneToMany(mappedBy = "organiser", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<Donation> donations;
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
+	private UserSetting setting;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY,  orphanRemoval = true)
+	@JsonIgnore
+	private List<UserVerification> verifications;
+
+
+	@OneToMany(mappedBy = "doner", cascade = CascadeType.ALL, fetch = FetchType.LAZY,  orphanRemoval = true)
+	@JsonIgnore
+	private List<DonationPayment> donors;
+
+	
+	
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return role.getAuthorities();

@@ -1,14 +1,22 @@
 package com.donationmanagementsystem.payload.response;
 
+import com.donationmanagementsystem.config.Role;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class UserResponse {
-	private Long id;
-	private String firstName;
-	private String lastName;
-	private String email;
-	private String password;
+	public Long id;
+	public String firstName;
+	public String lastName;
+	public String email;
+	public boolean verified;
+	public boolean status;
+	public Role role;
 }
