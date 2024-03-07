@@ -14,6 +14,7 @@ import lombok.Data;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -33,6 +34,12 @@ public class TestController {
     public ResponseEntity<ApiResponse> uploadFile(@ModelAttribute FileUpload file) {
         storageService.uploadFile(file.getFile(), "test");
         return new ResponseEntity<>(new ApiResponse(true, "File uploaded successfully"), HttpStatus.OK);
+    }
+
+
+    @GetMapping(value="/say-hello")
+    public String hello(){
+        return "Hello, Team";
     }
 
 }
