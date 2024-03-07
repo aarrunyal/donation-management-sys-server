@@ -1,5 +1,6 @@
 package com.donationmanagementsystem.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -20,6 +21,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 	
+	@Value("${image.upload.path}")
+    private String uploadPath;
+
 	private final UserRepository userRepository;
 	
 	@Bean
@@ -46,4 +50,8 @@ public class ApplicationConfig {
 		return new BCryptPasswordEncoder();
 	}
 	
+	@Bean
+    public String getUploadPath() {
+        return uploadPath;
+    }
 }

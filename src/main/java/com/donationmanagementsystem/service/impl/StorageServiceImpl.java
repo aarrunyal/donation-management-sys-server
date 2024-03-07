@@ -10,6 +10,7 @@ import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ import com.donationmanagementsystem.exception.StorageException;
 import com.donationmanagementsystem.exception.StorageFileNotFoundException;
 import com.donationmanagementsystem.service.StorageService;
 import com.donationmanagementsystem.utils.AppConstant;
+import com.donationmanagementsystem.utils.Helper;
 
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.name.Rename;
@@ -24,13 +26,16 @@ import net.coobird.thumbnailator.name.Rename;
 @Service
 public class StorageServiceImpl implements StorageService {
 
+    @Value("${image.upload.path}")
+    private String uploadPath;
+
     @Override
     public String uploadFile(MultipartFile file, String directory) {
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file.");
             }
-            var destinationPath = AppConstant.UPLOAD_ROOT_PATH + "/" + directory;
+            var destinationPath = uploadPath + "/" + directory;
             this.createDirectoryIfNotExist(destinationPath);
             Path path = Paths.get(destinationPath);
             var fileName = this.generateFileName(file);
@@ -76,10 +81,10 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public void deleteFile(String directory, String fileName) {
-        File destinationPath = new File(AppConstant.UPLOAD_ROOT_PATH + "/" + directory + "/" + fileName);
+        File destinationPath = new File(uploadPath + "/" + directory + "/" + fileName);
         if (!destinationPath.exists())
             throw new StorageFileNotFoundException("File cannot be found");
-        File thumbnail = new File(AppConstant.UPLOAD_ROOT_PATH + "/" + directory + "/thumb/" + fileName);
+        File thumbnail = new File(uploadPath + "/" + directory + "/thumb/" + fileName);
         if (thumbnail.exists()) {
             thumbnail.delete();
         }
@@ -94,7 +99,7 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public String generateFileName(MultipartFile file) {
-        String timeStamp = new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
+        String timeStamp =new String(Helper.getRandomToken(10)) +  new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
         return timeStamp + "." + getExtension(file);
     }
 

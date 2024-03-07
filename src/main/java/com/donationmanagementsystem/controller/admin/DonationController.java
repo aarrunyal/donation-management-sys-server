@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,12 +47,13 @@ public class DonationController {
     @PostMapping(value = "/{id}/upload", consumes = { "multipart/form-data" })
     public ResponseEntity<ApiResponse> uploadImage(
             @PathVariable(value="id") Long id,
-            @RequestParam(value = "file") MultipartFile file) {
+            @RequestPart MultipartFile file) {
+                System.out.println("helo");
         return donationService.uploadImage(id, file);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> update(@Valid @RequestBody DonationRequest donationRequest,
+    public ResponseEntity<DonationResponse> update(@Valid @RequestBody DonationRequest donationRequest,
             @PathVariable Long id) {
         return donationService.update(donationRequest, id);
     }

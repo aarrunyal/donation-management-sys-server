@@ -16,7 +16,7 @@ public interface DonationService {
 
     ResponseEntity<ApiResponse> uploadImage(Long id, MultipartFile file);
 
-    ResponseEntity<ApiResponse> update(DonationRequest donationRequest, Long donationId);
+    public ResponseEntity<DonationResponse> update(DonationRequest donationRequest, Long donationId);
 
     ResponseEntity<DonationResponse> show(Long donationId);
 
