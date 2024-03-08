@@ -48,7 +48,6 @@ public class DonationController {
     public ResponseEntity<ApiResponse> uploadImage(
             @PathVariable(value="id") Long id,
             @RequestPart MultipartFile file) {
-                System.out.println("helo");
         return donationService.uploadImage(id, file);
     }
 
@@ -77,4 +76,11 @@ public class DonationController {
     public ResponseEntity<ApiResponse> toggleStatus(@PathVariable Long id, @PathVariable String status) {
         return this.donationService.toggleStatus(id, status);
     }
+
+    @GetMapping("/{id}/randomly/{size}")
+    public ResponseEntity<List<DonationResponse>> getOtherCampaignRandomly(@PathVariable Long id, @PathVariable int size) {
+        return this.donationService.getOtherCampaignRandomly(id, size);
+    }
+
+    
 }

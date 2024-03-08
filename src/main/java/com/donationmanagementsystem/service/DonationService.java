@@ -3,6 +3,7 @@ package com.donationmanagementsystem.service;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.donationmanagementsystem.entity.User;
@@ -25,4 +26,6 @@ public interface DonationService {
     ResponseEntity<ApiResponse> delete(Long donationId);
 
     ResponseEntity<ApiResponse> toggleStatus(Long id, String status);
+
+    ResponseEntity<List<DonationResponse>> getOtherCampaignRandomly(Long id, int size);
 }

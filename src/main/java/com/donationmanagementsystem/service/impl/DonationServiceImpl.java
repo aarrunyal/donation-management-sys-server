@@ -146,4 +146,16 @@ public class DonationServiceImpl implements DonationService {
 
     }
 
+    @Override
+    public ResponseEntity<List<DonationResponse>> getOtherCampaignRandomly(Long id, int size) {
+        List<Donation> donations = donationRepository.findOtherCampaignRandomly(id, size);
+        List<DonationResponse> donaitonResponses = donations
+                .stream()
+                .map(
+                        (donation) -> this.modelMapper
+                                .map(donation, DonationResponse.class))
+                .collect(Collectors.toList());
+        return new ResponseEntity<List<DonationResponse>>(donaitonResponses, HttpStatus.OK);
+    }
+
 }

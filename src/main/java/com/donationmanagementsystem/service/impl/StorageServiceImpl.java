@@ -82,13 +82,13 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public void deleteFile(String directory, String fileName) {
         File destinationPath = new File(uploadPath + "/" + directory + "/" + fileName);
-        if (!destinationPath.exists())
-            throw new StorageFileNotFoundException("File cannot be found");
-        File thumbnail = new File(uploadPath + "/" + directory + "/thumb/" + fileName);
-        if (thumbnail.exists()) {
-            thumbnail.delete();
+        if (destinationPath.exists()) {
+            File thumbnail = new File(uploadPath + "/" + directory + "/thumb/" + fileName);
+            if (thumbnail.exists()) {
+                thumbnail.delete();
+            }
+            destinationPath.delete();
         }
-        destinationPath.delete();
     }
 
     @Override
@@ -99,7 +99,8 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public String generateFileName(MultipartFile file) {
-        String timeStamp =new String(Helper.getRandomToken(10)) +  new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
+        String timeStamp = new String(Helper.getRandomToken(10))
+                + new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
         return timeStamp + "." + getExtension(file);
     }
 
