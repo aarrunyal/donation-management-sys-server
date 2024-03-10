@@ -19,6 +19,7 @@ import com.donationmanagementsystem.payload.response.DonationResponse;
 import com.donationmanagementsystem.repository.DonationRepository;
 import com.donationmanagementsystem.service.DonationService;
 import com.donationmanagementsystem.service.StorageService;
+import com.donationmanagementsystem.utils.Helper;
 import com.donationmanagementsystem.utils.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
@@ -61,6 +62,7 @@ public class DonationServiceImpl implements DonationService {
                 var imageName = storageService.uploadFile(file, UPLOAD_PATH);
                 savedDonation.setImage(imageName);
                 donationRepository.save(savedDonation);
+                return ResponseMessage.ok(null);
             }
             return ResponseMessage.internalServerError(null);
         } catch (Exception ex) {
@@ -69,7 +71,7 @@ public class DonationServiceImpl implements DonationService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> update(DonationRequest donationRequest, Long donationId) {
+    public ResponseEntity<DonationResponse> update(DonationRequest donationRequest, Long donationId) {
         try {
             Donation savedDonation = donationRepository.findById(donationId)
                     .orElseThrow(() -> new ResourceNotFoundException("Donation", "id", donationId));
@@ -81,10 +83,11 @@ public class DonationServiceImpl implements DonationService {
             savedDonation.setExpired(donationRequest.isExpired());
             savedDonation.setVerified(donationRequest.isVerified());
             savedDonation.setStatus(donationRequest.isStatus());
-            donationRepository.save(savedDonation);
-            return ResponseMessage.ok("Donation campaign has been updated successfully");
+            Donation updateDonation = donationRepository.save(savedDonation);
+            DonationResponse donationResponse = this.modelMapper.map(updateDonation, DonationResponse.class);
+            return new ResponseEntity<>(donationResponse, HttpStatus.OK);
         } catch (Exception ex) {
-            return ResponseMessage.internalServerError(null);
+            return null;
         }
     }
 
@@ -97,7 +100,7 @@ public class DonationServiceImpl implements DonationService {
 
     @Override
     public ResponseEntity<List<DonationResponse>> all() {
-        List<Donation> donations = donationRepository.findAll();
+        List<Donation> donations = donationRepository.findAll(Helper.sortByAsc("id", "DESC"));
         List<DonationResponse> donaitonResponses = donations
                 .stream()
                 .map(
@@ -113,6 +116,9 @@ public class DonationServiceImpl implements DonationService {
             Donation savedDonation = donationRepository.findById(donationId)
                     .orElseThrow(() -> new ResourceNotFoundException("Donation", "id", donationId));
             if (savedDonation != null) {
+                if (savedDonation.getImage() != null) {
+                    storageService.deleteFile(UPLOAD_PATH, savedDonation.getImage());
+                }
                 donationRepository.delete(savedDonation);
             }
             return ResponseMessage.ok("Donation deleted successfully");
@@ -138,6 +144,18 @@ public class DonationServiceImpl implements DonationService {
             return ResponseMessage.internalServerError("");
         }
 
+    }
+
+    @Override
+    public ResponseEntity<List<DonationResponse>> getOtherCampaignRandomly(Long id, int size) {
+        List<Donation> donations = donationRepository.findOtherCampaignRandomly(id, size);
+        List<DonationResponse> donaitonResponses = donations
+                .stream()
+                .map(
+                        (donation) -> this.modelMapper
+                                .map(donation, DonationResponse.class))
+                .collect(Collectors.toList());
+        return new ResponseEntity<List<DonationResponse>>(donaitonResponses, HttpStatus.OK);
     }
 
 }

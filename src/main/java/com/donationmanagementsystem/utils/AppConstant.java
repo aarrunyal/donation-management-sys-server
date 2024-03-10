@@ -27,7 +27,8 @@ public class AppConstant {
 
 	public static final String[] WHITE_LIST_URL = {
 			"/api/v1/auth/**",
-			"/api/test/**"
+			"/api/test/**",
+			"/uploads/**"
 	};
 
 	public final static String INTERNAL_SERVER_ERROR = "Internal Server Error";
@@ -44,7 +45,7 @@ public class AppConstant {
 
 	public final static int THUMBNAIL_LENGTH = 200;
 
-	public static final String UPLOAD_ROOT_PATH = "src/main/resources/uploads";
+	public static final String UPLOAD_ROOT_PATH = "uploads";
 
 	public static final List<String> IMAGE_EXTENSION = new ArrayList(Arrays.asList("png", "jpg", "jpeg"));
 }
