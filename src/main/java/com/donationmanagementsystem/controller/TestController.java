@@ -39,7 +39,7 @@ public class TestController {
 
     @GetMapping(value="/say-hello")
     public String hello(){
-        return "Hello, Team";
+        return "./../../../../resources/invoice.html";
     }
 
 }
