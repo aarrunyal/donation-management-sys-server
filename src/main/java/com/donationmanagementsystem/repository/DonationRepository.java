@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.donationmanagementsystem.entity.Donation;
+import com.donationmanagementsystem.payload.request.DonationFilterRequest;
 
 public interface DonationRepository extends JpaRepository<Donation, Long> {
 
@@ -22,5 +23,7 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
              ORDER BY RAND() LIMIT :size
     """)
     List<Donation> findOtherCampaignRandomly(@Param("id") Long id,@Param("size") int size);
+
+    List<Donation> findAllByFilter(DonationFilterRequest donationFilterRequest);
 
 }

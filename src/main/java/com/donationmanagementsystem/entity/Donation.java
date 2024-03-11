@@ -39,6 +39,7 @@ public class Donation extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false, name="event_date")

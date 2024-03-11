@@ -2,11 +2,14 @@ package com.donationmanagementsystem.service;
 
 import java.util.List;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.donationmanagementsystem.entity.Donation;
 import com.donationmanagementsystem.entity.User;
+import com.donationmanagementsystem.payload.request.DonationFilterRequest;
 import com.donationmanagementsystem.payload.request.DonationRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.DonationResponse;
