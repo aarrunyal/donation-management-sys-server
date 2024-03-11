@@ -3,8 +3,10 @@ package com.donationmanagementsystem.controller.admin;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,13 +19,16 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.donationmanagementsystem.entity.Donation;
 import com.donationmanagementsystem.entity.User;
+import com.donationmanagementsystem.payload.request.DonationFilterRequest;
 import com.donationmanagementsystem.payload.request.DonationRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.DonationResponse;
 import com.donationmanagementsystem.service.DonationService;
 import com.donationmanagementsystem.service.UserService;
 
+import cz.jirutka.rsql.parser.RSQLParser;
 import jakarta.validation.Valid;
 
 @RestController("AdminDonationController")
@@ -46,7 +51,7 @@ public class DonationController {
 
     @PostMapping(value = "/{id}/upload", consumes = { "multipart/form-data" })
     public ResponseEntity<ApiResponse> uploadImage(
-            @PathVariable(value="id") Long id,
+            @PathVariable(value = "id") Long id,
             @RequestPart MultipartFile file) {
         return donationService.uploadImage(id, file);
     }
@@ -78,9 +83,9 @@ public class DonationController {
     }
 
     @GetMapping("/{id}/randomly/{size}")
-    public ResponseEntity<List<DonationResponse>> getOtherCampaignRandomly(@PathVariable Long id, @PathVariable int size) {
+    public ResponseEntity<List<DonationResponse>> getOtherCampaignRandomly(@PathVariable Long id,
+            @PathVariable int size) {
         return this.donationService.getOtherCampaignRandomly(id, size);
     }
 
-    
 }
