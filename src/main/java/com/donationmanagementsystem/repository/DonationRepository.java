@@ -24,6 +24,6 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
     """)
     List<Donation> findOtherCampaignRandomly(@Param("id") Long id,@Param("size") int size);
 
-    List<Donation> findAllByFilter(DonationFilterRequest donationFilterRequest);
+    // List<Donation> findAllByFilter(DonationFilterRequest donationFilterRequest);
 
 }
