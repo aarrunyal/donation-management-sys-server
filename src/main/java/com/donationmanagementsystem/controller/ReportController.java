@@ -1,4 +1,4 @@
-package com.donationmanagementsystem.controller.organiser;
+package com.donationmanagementsystem.controller;
 
 import org.springframework.http.ResponseEntity;
 
