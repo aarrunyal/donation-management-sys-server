@@ -50,8 +50,5 @@ public class ApplicationConfig {
 		return new BCryptPasswordEncoder();
 	}
 	
-	@Bean
-    public String getUploadPath() {
-        return uploadPath;
-    }
+	
 }

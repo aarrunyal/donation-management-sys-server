@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.donationmanagementsystem.entity.Donation;
 import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.exception.ResourceNotFoundException;
-import com.donationmanagementsystem.payload.request.DonationFilterRequest;
+
 import com.donationmanagementsystem.payload.request.DonationRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.DonationResponse;

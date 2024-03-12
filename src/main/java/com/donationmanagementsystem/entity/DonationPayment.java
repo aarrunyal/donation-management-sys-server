@@ -3,13 +3,13 @@ package com.donationmanagementsystem.entity;
 import java.time.LocalDate;
 
 import com.donationmanagementsystem.utils.BaseEntity;
+import com.donationmanagementsystem.utils.DonationStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -34,6 +34,8 @@ public class DonationPayment extends BaseEntity{
     @Column(nullable = false)
     private String paymentMethod;
     
+    @Column(nullable = false)
+    private Long amountDonated;
     
     
     @Column(nullable = false)
@@ -50,5 +52,9 @@ public class DonationPayment extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="donated_by")
     private User doner;
+
+    @Enumerated(EnumType.STRING)
+    private DonationStatus status;
+
 
 }

@@ -28,7 +28,6 @@ import com.donationmanagementsystem.payload.response.DonationResponse;
 import com.donationmanagementsystem.service.DonationService;
 import com.donationmanagementsystem.service.UserService;
 
-import cz.jirutka.rsql.parser.RSQLParser;
 import jakarta.validation.Valid;
 
 @RestController("AdminDonationController")

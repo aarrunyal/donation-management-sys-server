@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@PropertySource("classpath:application.properties")
 public class DonationResponse {
 
     private Long id;

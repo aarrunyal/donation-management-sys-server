@@ -14,9 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.donationmanagementsystem.entity.User;
-import com.donationmanagementsystem.entity.UserAddress;
 import com.donationmanagementsystem.exception.ResourceNotFoundException;
-import com.donationmanagementsystem.payload.request.UserAddressRequest;
 import com.donationmanagementsystem.payload.request.UserRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.UserResponse;
