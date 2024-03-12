@@ -39,7 +39,6 @@ public class SecurityConfig {
 	        .authorizeHttpRequests(request ->
 	        	request.requestMatchers(AppConstant.WHITE_LIST_URL)
 	        	.permitAll()
-	        	
 	        	.requestMatchers("/api/v1/organiser/**").hasAnyRole(Role.ADMIN.name(), Role.ORGANISER.name())
 	        	.requestMatchers(HttpMethod.GET, "/api/v1/organiser/**").hasAnyAuthority(Permission.ADMIN_READ.name(), Permission.ORGANISER_READ.name())
 	        	.requestMatchers(HttpMethod.POST, "/api/v1/organiser/**").hasAnyAuthority(Permission.ADMIN_CREATE.name(), Permission.ORGANISER_CREATE.name())
