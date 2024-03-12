@@ -30,6 +30,13 @@ public class TestController {
     @Autowired
     StorageService storageService;
 
+    @GetMapping(value="/check")
+    public String check(){
+        return "Hey Hi, I am fine";
+    }
+
+
+
     @PostMapping(value = "/upload-file",  consumes = { "multipart/form-data" })
     public ResponseEntity<ApiResponse> uploadFile(@ModelAttribute FileUpload file) {
         storageService.uploadFile(file.getFile(), "test");
