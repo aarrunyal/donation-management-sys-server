@@ -3,17 +3,18 @@ services:
   dms_db:
     container_name: dms_db
     image: mysql:8.3
+    env_file: ./.env
     networks:
       - dms_network
     environment:
-      - MYSQL_ROOT_USER=root
-      - MYSQL_PASSWORD=Forgot911!
-      - MYSQL_DATABASE=dms
-      - MYSQL_ROOT_PASSWORD=Forgot911!
+      - MYSQL_ROOT_USER=${MYSQLDB_USER}
+      - MYSQL_PASSWORD=${MYSQLDB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQLDB_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQLDB_ROOT_PASSWORD}
     volumes:
       - dms_db:/var/lib/mysql
     ports:
-      - "3307:3306"
+      - "${MYSQLDB_LOCAL_PORT}:${MYSQLDB_DOCKER_PORT}"
     restart: always
 
   dms_app:
@@ -21,19 +22,21 @@ services:
       context: .
     container_name: dms_app
     image: aarrunyal/dms_app:latest
+    env_file: ./.env
     ports:
-      - "8080:8080"
+      - "${SPRING_LOCAL_PORT}:${SPRING_DOCKER_PORT}"
     networks:
       - dms_network
     depends_on:
       - dms_db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://dms_db:3306/dms
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: Forgot911!
+      SPRING_DATASOURCE_URL: ${DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${MYSQLDB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQLDB_ROOT_PASSWORD}
 networks:
   dms_network:
     name: dms_network
 
 volumes:
  dms_db:
+  name: dms_db_volume
