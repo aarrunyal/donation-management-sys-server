@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DonationPayment extends BaseEntity{
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String transactionId;
 
     @Column(nullable = false)
@@ -38,11 +38,8 @@ public class DonationPayment extends BaseEntity{
     private Long amountDonated;
     
     
-    @Column(nullable = false)
     private LocalDate donatedAt;
-    
-    @Column(nullable = false)
-    private Long organisedFor;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="donation_id")

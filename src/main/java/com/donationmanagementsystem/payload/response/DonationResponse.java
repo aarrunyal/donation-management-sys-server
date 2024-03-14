@@ -44,6 +44,9 @@ public class DonationResponse {
 
     private String image;
 
-    private String imagePath = AppConstant.UPLOAD_ROOT_PATH + "/donation";
+
+    public String getImagePath(){
+        return AppConstant.UPLOAD_ROOT_PATH + "/donation";
+    }
 
 }

@@ -17,23 +17,21 @@ public class DonationPaymentRequest {
 
     private String transactionId;
 
+    @NotBlank(message = "Payment Method cannot be blank")
+    @NotNull(message = "Payment Method cannot be blank")
     private String paymentMethod;
 
     private LocalDate donatedAt;
 
-    @NotBlank(message = "Donation cannot be blank")
     @NotNull(message = "Donation cannot be blank")
     private Long donationId;
 
-    @NotBlank(message = "Doner cannot be blank")
     @NotNull(message = "Doner cannot be blank")
     private Long donerId;
 
-    @NotBlank(message = "Status cannot be blank")
     @NotNull(message = "Status cannot be blank")
     private DonationStatus status;
 
-    @NotBlank(message = "Amount donated be blank")
     @NotNull(message = "Amount donated be blank")
     private Long amountDonated;
 }

@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import com.donationmanagementsystem.entity.Donation;
 import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.utils.DonationStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,10 +33,20 @@ public class DonationPaymentResponse {
 
     private Long organisedFor;
 
+    @JsonIgnore
     private Donation donation;
 
+    @JsonIgnore
     private User doner;
 
     private DonationStatus status;
+
+    public String getDonationName() {
+        return this.donation.getName();
+    }
+
+    public String getDonerName(){
+        return this.doner.getFirstName() + " " +this.doner.getLastName();
+    }
 
 }

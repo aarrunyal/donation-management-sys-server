@@ -9,31 +9,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.donationmanagementsystem.entity.DonationPayment;
-import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.payload.request.DonationPaymentRequest;
-import com.donationmanagementsystem.payload.request.DonationRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.DonationPaymentResponse;
-import com.donationmanagementsystem.payload.response.DonationResponse;
 import com.donationmanagementsystem.service.DonationPaymentService;
-import com.donationmanagementsystem.service.DonationService;
-import com.donationmanagementsystem.service.UserService;
 import java.util.List;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/api/v1/donation-payment")
+@RequestMapping(value = "/api/v1/admin/donation-payment")
 public class DontaionPaymentController {
 
     @Autowired
     private DonationPaymentService donationPaymentService;
-
 
     @PostMapping
     public ResponseEntity<DonationPaymentResponse> post(
@@ -62,7 +54,5 @@ public class DontaionPaymentController {
     public ResponseEntity<ApiResponse> delete(@PathVariable Long id) {
         return this.donationPaymentService.delete(id);
     }
-
-    
 
 }

@@ -45,8 +45,8 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
 
     @Override
     public ResponseEntity<DonationPaymentResponse> create(DonationPaymentRequest donationPaymentRequest) {
-        try {
-            DonationPayment donationPayment = this.modelMapper.map(donationPaymentRequest, DonationPayment.class);
+        // try {
+            DonationPayment donationPayment = new DonationPayment();
             if (donationPaymentRequest.getDonerId() != null) {
                 User user = userRepository.findById(donationPaymentRequest.getDonerId()).orElseThrow(() -> {
                     throw new ResourceNotFoundException("User", "id", donationPaymentRequest.getDonerId());
@@ -61,15 +61,17 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
                         });
                 donationPayment.setDonation(donation);
             }
+            donationPayment.setPaymentMethod(donationPaymentRequest.getPaymentMethod());
+            donationPayment.setAmountDonated(donationPaymentRequest.getAmountDonated());
             donationPayment.setStatus(DonationStatus.PENDING);
 
             DonationPayment newDonationPayment = donationPaymentRepository.save(donationPayment);
             DonationPaymentResponse donationResponse = this.modelMapper.map(newDonationPayment,
                     DonationPaymentResponse.class);
             return new ResponseEntity<>(donationResponse, HttpStatus.OK);
-        } catch (Exception ex) {
-            return null;
-        }
+        // } catch (Exception ex) {
+        //     return null;
+        // }
     }
 
     @Override
