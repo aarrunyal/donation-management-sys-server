@@ -2,12 +2,10 @@ package com.donationmanagementsystem.entity;
 
 import com.donationmanagementsystem.utils.BaseEntity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -52,12 +50,12 @@ public class Invoice extends BaseEntity {
     private Long total;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="donation_id")
-    private Donation donation;
+    @JoinColumn(name="donation_payment_id")
+    private DonationPayment donationPayment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
-    private User user;
+    @JoinColumn(name="doner_id")
+    private User doner;
 
     
 }
