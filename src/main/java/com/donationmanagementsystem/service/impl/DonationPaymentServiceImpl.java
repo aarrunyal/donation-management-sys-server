@@ -25,6 +25,7 @@ import com.donationmanagementsystem.repository.DonationPaymentRepository;
 import com.donationmanagementsystem.repository.DonationRepository;
 import com.donationmanagementsystem.repository.UserRepository;
 import com.donationmanagementsystem.service.DonationPaymentService;
+import com.donationmanagementsystem.service.InvoiceService;
 import com.donationmanagementsystem.utils.DonationStatus;
 import com.donationmanagementsystem.utils.Helper;
 import com.donationmanagementsystem.utils.ResponseMessage;
@@ -55,6 +56,9 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
     private final UserRepository userRepository;
 
     private Stripe stripe;
+
+    @Autowired
+    InvoiceService invoiceService;
 
     @Autowired
     ModelMapper modelMapper;
@@ -107,7 +111,10 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
                 return ResponseMessage.internalServerError("Invalid data supplied !!!");
             savedDonationPayment.setDonatedAt(LocalDate.now());
             savedDonationPayment.setStatus(donationPaymentRequest.getStatus());
-            donationPaymentRepository.save(savedDonationPayment);
+            DonationPayment donationPayment = donationPaymentRepository.save(savedDonationPayment);
+            if (donationPayment != null) {
+                invoiceService.createInvoice(donationPayment);
+            }
             return ResponseMessage.ok("Donation payment has been updated successfully !!!");
         } catch (Exception ex) {
             return ResponseMessage.internalServerError(null);

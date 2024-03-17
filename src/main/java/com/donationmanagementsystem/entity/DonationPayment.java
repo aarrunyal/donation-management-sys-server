@@ -3,6 +3,8 @@ package com.donationmanagementsystem.entity;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.donationmanagementsystem.utils.BaseEntity;
 import com.donationmanagementsystem.utils.DonationStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -23,7 +26,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
+@EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "donation_payments")
