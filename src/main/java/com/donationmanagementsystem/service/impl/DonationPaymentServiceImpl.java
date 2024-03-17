@@ -65,36 +65,36 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
 
     @Override
     public DonationPaymentResponse create(DonationPaymentRequest donationPaymentRequest) {
-        // try {
-        DonationPayment donationPayment = new DonationPayment();
-        if (donationPaymentRequest.getDonerId() != null) {
-            User user = userRepository.findById(donationPaymentRequest.getDonerId()).orElseThrow(() -> {
-                throw new ResourceNotFoundException("User", "id", donationPaymentRequest.getDonerId());
-            });
-            donationPayment.setDoner(user);
-        }
+        try {
+            DonationPayment donationPayment = new DonationPayment();
+            if (donationPaymentRequest.getDonerId() != null) {
+                User user = userRepository.findById(donationPaymentRequest.getDonerId()).orElseThrow(() -> {
+                    throw new ResourceNotFoundException("User", "id", donationPaymentRequest.getDonerId());
+                });
+                donationPayment.setDoner(user);
+            }
 
-        if (donationPaymentRequest.getDonationId() != null) {
-            Donation donation = donationRepository.findById(donationPaymentRequest.getDonationId())
-                    .orElseThrow(() -> {
-                        throw new ResourceNotFoundException("Donation", "id", donationPaymentRequest.getDonerId());
-                    });
-            donationPayment.setDonation(donation);
-        }
-        donationPayment.setPaymentMethod(donationPaymentRequest.getPaymentMethod());
-        donationPayment.setAmountDonated(donationPaymentRequest.getAmountDonated());
-        var checkoutToken = Helper.getTimestamp() + Helper.getRandomToken(10);
-        donationPayment.setCheckoutToken(checkoutToken);
-        donationPayment.setStatus(DonationStatus.PENDING);
-        donationPayment.setCurrency(donationPaymentRequest.getCurrency());
+            if (donationPaymentRequest.getDonationId() != null) {
+                Donation donation = donationRepository.findById(donationPaymentRequest.getDonationId())
+                        .orElseThrow(() -> {
+                            throw new ResourceNotFoundException("Donation", "id", donationPaymentRequest.getDonerId());
+                        });
+                donationPayment.setDonation(donation);
+            }
+            donationPayment.setPaymentMethod(donationPaymentRequest.getPaymentMethod());
+            donationPayment.setAmountDonated(donationPaymentRequest.getAmountDonated());
+            var checkoutToken = Helper.getTimestamp() + Helper.getRandomToken(10);
+            donationPayment.setCheckoutToken(checkoutToken);
+            donationPayment.setStatus(DonationStatus.PENDING);
+            donationPayment.setCurrency(donationPaymentRequest.getCurrency());
 
-        DonationPayment newDonationPayment = donationPaymentRepository.save(donationPayment);
-        DonationPaymentResponse donationResponse = this.modelMapper.map(newDonationPayment,
-                DonationPaymentResponse.class);
-        return donationResponse;
-        // } catch (Exception ex) {
-        // return null;
-        // }
+            DonationPayment newDonationPayment = donationPaymentRepository.save(donationPayment);
+            DonationPaymentResponse donationResponse = this.modelMapper.map(newDonationPayment,
+                    DonationPaymentResponse.class);
+            return donationResponse;
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     @Override
