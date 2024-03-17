@@ -29,10 +29,16 @@ import lombok.NoArgsConstructor;
 public class DonationPayment extends BaseEntity{
 
     @Column(nullable = true)
+    private String checkoutToken;
+
+
+    @Column(nullable = true)
     private String transactionId;
 
     @Column(nullable = false)
     private String paymentMethod;
+
+    private String currency;
     
     @Column(nullable = false)
     private Long amountDonated;

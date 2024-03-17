@@ -21,7 +21,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class DonationPaymentResponse {
 
-    private Long id;
+    private String checkoutToken;
 
     private String transactionId;
 
@@ -40,6 +40,8 @@ public class DonationPaymentResponse {
     private User doner;
 
     private DonationStatus status;
+
+    private String currency;
 
     public String getDonationName() {
         return this.donation.getName();

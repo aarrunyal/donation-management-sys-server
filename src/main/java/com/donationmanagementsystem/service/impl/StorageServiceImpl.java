@@ -99,9 +99,7 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public String generateFileName(MultipartFile file) {
-        String timeStamp = new String(Helper.getRandomToken(10))
-                + new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
-        return timeStamp + "." + getExtension(file);
+        return Helper.getTimestamp() + Helper.getRandomToken(10) + "." + getExtension(file);
     }
 
     @Override

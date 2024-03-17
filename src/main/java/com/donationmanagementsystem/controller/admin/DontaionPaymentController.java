@@ -1,6 +1,7 @@
 package com.donationmanagementsystem.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.donationmanagementsystem.entity.DonationPayment;
 import com.donationmanagementsystem.payload.request.DonationPaymentRequest;
+import com.donationmanagementsystem.payload.request.DonationPaymentUpdateRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.DonationPaymentResponse;
+import com.donationmanagementsystem.payload.response.PaymentIntentResponse;
 import com.donationmanagementsystem.service.DonationPaymentService;
 import java.util.List;
 
@@ -28,16 +31,16 @@ public class DontaionPaymentController {
     private DonationPaymentService donationPaymentService;
 
     @PostMapping
-    public ResponseEntity<DonationPaymentResponse> post(
+    public DonationPaymentResponse post(
             @Valid @RequestBody DonationPaymentRequest donationPaymentRequest) {
         return donationPaymentService.create(donationPaymentRequest);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<DonationPaymentResponse> update(
-            @Valid @RequestBody DonationPaymentRequest donationPaymentRequest,
-            @PathVariable Long id) {
-        return donationPaymentService.update(donationPaymentRequest, id);
+    @PutMapping("/{checkoutToken}")
+    public ResponseEntity<ApiResponse> update(
+            @Valid @RequestBody DonationPaymentUpdateRequest donationPaymentRequest,
+            @PathVariable String checkoutToken) {
+        return donationPaymentService.update(donationPaymentRequest, checkoutToken);
     }
 
     @GetMapping("/{id}")
@@ -53,6 +56,13 @@ public class DontaionPaymentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> delete(@PathVariable Long id) {
         return this.donationPaymentService.delete(id);
+    }
+
+    @PostMapping("/create-payment-intent")
+    public ResponseEntity<PaymentIntentResponse> createPaymentIntent(
+            @Valid @RequestBody DonationPaymentRequest donationPaymentRequest) {
+        DonationPaymentResponse donationPaymentResponse = donationPaymentService.create(donationPaymentRequest);
+        return donationPaymentService.createPaymentIntent(donationPaymentResponse);
     }
 
 }
