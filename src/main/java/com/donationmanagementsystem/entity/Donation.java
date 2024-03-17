@@ -65,9 +65,7 @@ public class Donation extends BaseEntity {
     @JoinColumn(name = "organiser_id")
     private User organiser;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "donation")
-    @JsonIgnore
-    private List<Invoice> invoices;
+
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "donation")
     @JsonIgnore
