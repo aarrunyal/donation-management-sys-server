@@ -1,9 +1,9 @@
 package com.donationmanagementsystem.config;
 
-import java.nio.file.attribute.UserPrincipalNotFoundException;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -21,6 +21,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 	
+	@Value("${image.upload.path}")
+    private String uploadPath;
+
 	private final UserRepository userRepository;
 	
 	@Bean
@@ -46,5 +49,6 @@ public class ApplicationConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
 	
 }
