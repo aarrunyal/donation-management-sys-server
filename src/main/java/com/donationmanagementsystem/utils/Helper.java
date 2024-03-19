@@ -1,5 +1,7 @@
 package com.donationmanagementsystem.utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 import org.springframework.data.domain.Sort;
@@ -19,11 +21,14 @@ public class Helper {
         return saltStr;
     }
 
-    public static Sort sortByAsc(String field, String direction){
-        if(direction == "ASC")
-            return  Sort.by(Sort.Direction.ASC, field);
-        return  Sort.by(Sort.Direction.DESC, field);
-        
+    public static Sort sortByAsc(String field, String direction) {
+        if (direction == "ASC")
+            return Sort.by(Sort.Direction.ASC, field);
+        return Sort.by(Sort.Direction.DESC, field);
+    }
+
+    public static String getTimestamp() {
+        return new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
     }
 
 }

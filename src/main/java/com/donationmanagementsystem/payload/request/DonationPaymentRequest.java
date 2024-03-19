@@ -21,6 +21,8 @@ public class DonationPaymentRequest {
     @NotNull(message = "Payment Method cannot be blank")
     private String paymentMethod;
 
+    private String currency;
+
     private LocalDate donatedAt;
 
     @NotNull(message = "Donation cannot be blank")

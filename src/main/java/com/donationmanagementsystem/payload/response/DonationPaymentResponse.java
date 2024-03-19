@@ -23,6 +23,8 @@ public class DonationPaymentResponse {
 
     private Long id;
 
+    private String checkoutToken;
+
     private String transactionId;
 
     private String paymentMethod;
@@ -41,12 +43,14 @@ public class DonationPaymentResponse {
 
     private DonationStatus status;
 
+    private String currency;
+
     public String getDonationName() {
         return this.donation.getName();
     }
 
-    public String getDonerName(){
-        return this.doner.getFirstName() + " " +this.doner.getLastName();
+    public String getDonerName() {
+        return this.doner.getFirstName() + " " + this.doner.getLastName();
     }
 
 }

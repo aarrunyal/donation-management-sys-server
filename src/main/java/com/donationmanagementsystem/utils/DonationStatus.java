@@ -9,5 +9,6 @@ public enum DonationStatus {
     PENDING,
     DECLINED,
     EXPIRED,
-    CANCELLED
+    CANCELLED,
+    REFUNDED
 }
