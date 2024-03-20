@@ -8,7 +8,7 @@ public interface EmailService {
 
     Boolean sendMail(EmailDetails details);
 
-    Boolean sendMailWithHtmlTemplate(EmailDetails details, String templateName, Context context);
+    Boolean sendMailWithHtmlTemplate(EmailDetails details, Context context);
 
-    Boolean sendMailWithAttachment(EmailDetails details, String templateName);
+    Boolean sendMailWithAttachment(EmailDetails details, Context context);
 }

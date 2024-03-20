@@ -27,7 +27,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private TemplateEngine templateEngine;
-    
+
     @Value("${spring.mail.username}")
     private String sender;
 
@@ -35,31 +35,31 @@ public class EmailServiceImpl implements EmailService {
     public Boolean sendMail(EmailDetails details) {
         // Try block to check for exceptions
         // try {
-            System.out.println(sender);
-            // Creating a simple mail message
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
+        System.out.println(sender);
+        // Creating a simple mail message
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-            // Setting up necessary details
-            mailMessage.setFrom(sender);
-            mailMessage.setTo(details.getReceipient());
-            mailMessage.setText(details.getMsgBody());
-            mailMessage.setSubject(details.getSubject());
+        // Setting up necessary details
+        mailMessage.setFrom(sender);
+        mailMessage.setTo(details.getReceipient());
+        mailMessage.setText(details.getMsgBody());
+        mailMessage.setSubject(details.getSubject());
 
-            // Sending the mail
-            javaMailSender.send(mailMessage);
-            System.out.println("Mail Sent Successfully...");
-            return true;
+        // Sending the mail
+        javaMailSender.send(mailMessage);
+        System.out.println("Mail Sent Successfully...");
+        return true;
         // }
 
         // Catch block to handle the exceptions
         // catch (Exception e) {
-        //     System.out.println("Error while sending mail");
-        //     return false;
+        // System.out.println("Error while sending mail");
+        // return false;
         // }
     }
 
     @Override
-    public Boolean sendMailWithAttachment(EmailDetails details, String templateName) {
+    public Boolean sendMailWithAttachment(EmailDetails details, Context context) {
 
         // Creating a mime message
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -72,7 +72,7 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getReceipient());
-            mimeMessageHelper.setText(details.getMsgBody());
+            mimeMessageHelper.setText(templateEngine.process(details.getTemplateName(), context));
             mimeMessageHelper.setSubject(
                     details.getSubject());
 
@@ -99,7 +99,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public Boolean sendMailWithHtmlTemplate(EmailDetails details, String templateName, Context context) {
+    public Boolean sendMailWithHtmlTemplate(EmailDetails details, Context context) {
         // Try block to check for exceptions
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
@@ -107,7 +107,7 @@ public class EmailServiceImpl implements EmailService {
         try {
             helper.setTo(details.getReceipient());
             helper.setSubject(details.getSubject());
-            String htmlContent = templateEngine.process(templateName, context);
+            String htmlContent = templateEngine.process(details.getTemplateName(), context);
             helper.setText(htmlContent, true);
             javaMailSender.send(mimeMessage);
             return true;

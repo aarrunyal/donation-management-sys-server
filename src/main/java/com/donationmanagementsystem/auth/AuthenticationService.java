@@ -136,8 +136,9 @@ public class AuthenticationService {
 					.msgBody("Please find below link to validate your profile \n\n" + url)
 					.subject("Verify your account")
 					.receipient(user.getEmail())
+					.templateName("email/new-account.html")
 					.build();
-			if (emailService.sendMailWithHtmlTemplate(emailDetail, "email/new-account.html", context)) {
+			if (emailService.sendMailWithHtmlTemplate(emailDetail, context)) {
 				// if (emailService.sendMail(emailDetail)) {
 				return ResponseMessage.ok("Verificaiton email sent");
 			}

@@ -21,7 +21,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     InvoiceRepository invoiceRepository;
 
     @Override
-    public void createInvoice(DonationPayment donationPayment) {
+    public Invoice  createInvoice(DonationPayment donationPayment) {
 
         Invoice invoice = invoiceRepository.findByDonationPaymentIdDonerId(
                 donationPayment.getId(), donationPayment.getDoner().getId());
@@ -29,9 +29,10 @@ public class InvoiceServiceImpl implements InvoiceService {
         if (invoice == null) {
             var newInvoice = this.buildInvoiceData(donationPayment);
             if (newInvoice != null) {
-                invoiceRepository.save(newInvoice);
+                return invoiceRepository.save(newInvoice);
             }
         }
+        return null;
     }
 
     @Override

@@ -5,5 +5,5 @@ import org.thymeleaf.context.Context;
 public interface PdfGeneratorService {
     
 
-    public boolean generatePdf(Context context, String fileName, String templatePath);
+    public String generatePdf(Context context, String fileName, String templatePath);
 }

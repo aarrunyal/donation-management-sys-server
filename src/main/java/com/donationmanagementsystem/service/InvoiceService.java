@@ -8,7 +8,7 @@ public interface InvoiceService {
     /**
      * @param checkoutToken
      */
-    void createInvoice(DonationPayment donationPayment);
+    Invoice createInvoice(DonationPayment donationPayment);
 
     Long generateInvoiceNo();
 

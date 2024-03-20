@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 import com.donationmanagementsystem.entity.Donation;
 import com.donationmanagementsystem.entity.DonationPayment;
+import com.donationmanagementsystem.entity.Invoice;
 import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.exception.ResourceNotFoundException;
 import com.donationmanagementsystem.payload.request.DonationPaymentRequest;
@@ -33,7 +35,6 @@ import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.PaymentIntentCreateParams.AutomaticPaymentMethods.AllowRedirects;
 
-
 import java.time.LocalDate;
 
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,8 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
     private final UserRepository userRepository;
 
     private Stripe stripe;
+
+    private final PdfGeneratorServiceImpl pdfGeneratorServiceImpl;
 
     @Autowired
     InvoiceService invoiceService;
@@ -109,11 +112,29 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
             savedDonationPayment.setStatus(donationPaymentRequest.getStatus());
             DonationPayment donationPayment = donationPaymentRepository.save(savedDonationPayment);
             if (donationPayment != null) {
-                invoiceService.createInvoice(donationPayment);
+                this.createInvoiceAndSendEmail(donationPayment);
             }
             return ResponseMessage.ok("Donation payment has been updated successfully !!!");
         } catch (Exception ex) {
             return ResponseMessage.internalServerError(null);
+        }
+    }
+
+    public boolean createInvoiceAndSendEmail(DonationPayment donationPayment) {
+        try {
+            Invoice invoice = invoiceService.createInvoice(donationPayment);
+            if (invoice != null) {
+                Context context = new Context();
+                context.setVariable("invoice", invoice);
+                var invoicePath = pdfGeneratorServiceImpl.generatePdf(context, "invoice-" + invoice.getInvoiceNo() + ".pdf",
+                        "invoice/index.html");
+
+                        
+                return true;
+            }
+            return false;
+        } catch (Exception ex) {
+            return false;
         }
     }
 

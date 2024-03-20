@@ -18,7 +18,7 @@ import com.donationmanagementsystem.service.PdfGeneratorService;
 public class PdfGeneratorServiceImpl implements PdfGeneratorService {
 
     @Override
-    public boolean generatePdf(Context context, String fileName, String templatePath) {
+    public String generatePdf(Context context, String fileName, String templatePath) {
         try {
             ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
             templateResolver.setPrefix("templates/");
@@ -34,13 +34,12 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
             var html = templateEngine.process(templatePath, context);
 
             var outputFolder = Paths.get(".").normalize().toAbsolutePath()
-            .toString()+ "/public/pdf/";
+                    .toString() + "/public/pdf/";
             File dir = new File(outputFolder);
             if (dir.exists() == false) {
                 dir.mkdirs();
             }
-            var outputFile = outputFolder  + fileName;
-            System.out.println(outputFile);
+            var outputFile = outputFolder + fileName;
             OutputStream outputStream = new FileOutputStream(outputFile);
 
             ITextRenderer renderer = new ITextRenderer();
@@ -48,9 +47,15 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
             renderer.layout();
             renderer.createPDF(outputStream);
             outputStream.close();
-            return true;
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println("Invoice generated successfully");
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+            return outputFile;
         } catch (Exception exception) {
-            return false;
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println("Error while generating new invoice pdf");
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+            return null;
         }
 
     }

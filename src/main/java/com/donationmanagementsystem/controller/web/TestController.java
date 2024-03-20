@@ -54,15 +54,10 @@ public class TestController {
     public String checkInvoice(@PathVariable("invoiceNo") Long invoiceNo, Model model)
             throws IOException, java.io.IOException {
         Invoice invoice = invoiceService.findByInvoiceNo(invoiceNo);
-
         Context context = new Context();
         context.setVariable("invoice", invoice);
-
         generatorService.generatePdf(context, "invoice-" + invoiceNo + ".pdf", "invoice/invoice.html");
-        // var html = templateEngine.process("invoice/index.html", context);
-
         return "invoice/index";
-
     }
 
 }
