@@ -18,5 +18,7 @@ public interface UserVerificationRepository extends JpaRepository<UserVerificati
 
     @Query("SELECT v FROM UserVerification v where v.token=:token and expired=false")
     Optional<UserVerification> findByTokenAndExpired(@Param("token") String token);
+
+    UserVerification findByToken(String code);
     
 }

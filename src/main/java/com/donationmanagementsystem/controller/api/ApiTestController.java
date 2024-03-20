@@ -1,4 +1,4 @@
-package com.donationmanagementsystem.controller;
+package com.donationmanagementsystem.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,11 +52,10 @@ public class ApiTestController {
 
     @GetMapping("/mail")
     public ResponseEntity<Boolean> testMail() {
-        return new ResponseEntity<>(true, HttpStatus.OK);
-        // var emailDetails = EmailDetails.builder().msgBody("Hello this is test mail")
-        //         .receipient("aarrunyal@gmail.com")
-        //         .subject("Test mail")
-        //         .build();
-        // return new ResponseEntity<>(emailService.sendMail(emailDetails), HttpStatus.OK);
+        var emailDetails = EmailDetails.builder().msgBody("Hello this is test mail")
+                .receipient("aarrunyal@gmail.com")
+                .subject("Test mail")
+                .build();
+        return new ResponseEntity<>(emailService.sendMail(emailDetails), HttpStatus.OK);
     }
 }

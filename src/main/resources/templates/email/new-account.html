@@ -35,7 +35,7 @@
               <!-- START MAIN CONTENT AREA -->
               <tr>
                 <td class="wrapper">
-                  <p th:text="${name}">Hi</p>
+                  <p th:text="'Hi'+ ${name}"></p>
                   <p>Thank you for creating account with us.</p>
 
                   <p>Please follow below link to verify your email.</p>
@@ -64,6 +64,11 @@
                               </tr>
                             </tbody>
                           </table>
+                          <br/>
+                          <p>If you are having trouble validating with the above button, Please follow the below link to verify</p>
+                          
+                          <p th:text="${link}"></p>
+                          
                         </td>
                       </tr>
                     </tbody>

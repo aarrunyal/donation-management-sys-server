@@ -71,7 +71,7 @@ public class AuthenticationService {
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
 		System.out.println("Here");
-		var user = repository.findByEmailAndVerified(request.getEmail())
+		var user = repository.findByEmailAndVerified(request.getEmail(), true)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "email", request.getEmail()));
 		System.out.println("Exception");
 		authenticationManager.authenticate(
@@ -125,7 +125,7 @@ public class AuthenticationService {
 				.token(randomText)
 				.expired(false).build();
 		if (userVerificationRepository.save(verfication) != null) {
-			var url = APP_URL + "/api/v1/auth/verify/" + randomText;
+			var url = APP_URL + "/auth/verify/" + randomText;
 
 			Context context = new Context();
 			context.setVariable("name", user.getFirstName());
@@ -137,9 +137,8 @@ public class AuthenticationService {
 					.subject("Verify your account")
 					.receipient(user.getEmail())
 					.build();
-			// if (emailService.sendMailWithHtmlTemplate(emailDetail,
-			// "email/new-account.html", context)) {
-			if (emailService.sendMail(emailDetail)) {
+			if (emailService.sendMailWithHtmlTemplate(emailDetail, "email/new-account.html", context)) {
+				// if (emailService.sendMail(emailDetail)) {
 				return ResponseMessage.ok("Verificaiton email sent");
 			}
 		}

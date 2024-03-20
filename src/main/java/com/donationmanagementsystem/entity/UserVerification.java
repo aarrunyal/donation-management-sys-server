@@ -2,6 +2,7 @@ package com.donationmanagementsystem.entity;
 
 import com.donationmanagementsystem.utils.BaseEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -24,7 +25,7 @@ public class UserVerification extends BaseEntity{
     public String token;
     public boolean expired;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
     public User user;
 
