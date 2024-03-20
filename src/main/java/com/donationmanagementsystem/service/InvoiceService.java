@@ -3,7 +3,6 @@ package com.donationmanagementsystem.service;
 import com.donationmanagementsystem.entity.DonationPayment;
 import com.donationmanagementsystem.entity.Invoice;
 
-
 public interface InvoiceService {
 
     /**
@@ -14,4 +13,6 @@ public interface InvoiceService {
     Long generateInvoiceNo();
 
     Invoice buildInvoiceData(DonationPayment donationPayment);
+
+    Invoice findByInvoiceNo(Long invoiceNo);
 }

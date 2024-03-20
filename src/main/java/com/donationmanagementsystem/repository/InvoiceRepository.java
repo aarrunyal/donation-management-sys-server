@@ -21,4 +21,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     // findFirstByOrderByPublicationDateDesc
     Invoice findFirstByOrderByIdDesc();
 
+    Invoice findByInvoiceNo(Long invoiceNo);
+
 }

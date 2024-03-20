@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.donationmanagementsystem.entity.Donation;
 import com.donationmanagementsystem.entity.DonationPayment;
@@ -19,7 +18,6 @@ import com.donationmanagementsystem.payload.request.DonationPaymentRequest;
 import com.donationmanagementsystem.payload.request.DonationPaymentUpdateRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.DonationPaymentResponse;
-import com.donationmanagementsystem.payload.response.DonationResponse;
 import com.donationmanagementsystem.payload.response.PaymentIntentResponse;
 import com.donationmanagementsystem.repository.DonationPaymentRepository;
 import com.donationmanagementsystem.repository.DonationRepository;
@@ -31,12 +29,10 @@ import com.donationmanagementsystem.utils.Helper;
 import com.donationmanagementsystem.utils.ResponseMessage;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Customer;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.PaymentIntentCreateParams.AutomaticPaymentMethods.AllowRedirects;
 
-import jakarta.annotation.PostConstruct;
 
 import java.time.LocalDate;
 
