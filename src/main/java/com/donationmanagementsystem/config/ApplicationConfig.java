@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import com.donationmanagementsystem.repository.UserRepository;
 
@@ -48,6 +50,17 @@ public class ApplicationConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
+	// @Bean
+    // public ClassLoaderTemplateResolver templateResolver() {
+    //     ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+    //     templateResolver.setPrefix("/templates/");
+    //     templateResolver.setSuffix(".html");
+    //     templateResolver.setTemplateMode(TemplateMode.HTML);
+    //     templateResolver.setCacheable(false);
+    //     templateResolver.setCharacterEncoding("UTF-8");
+    //     return templateResolver;
+    // }
 	
 	
 }

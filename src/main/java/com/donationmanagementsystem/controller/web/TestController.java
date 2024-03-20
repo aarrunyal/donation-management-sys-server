@@ -1,14 +1,21 @@
 package com.donationmanagementsystem.controller.web;
 
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+
+import java.nio.file.Paths;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.thymeleaf.context.Context;
 import com.donationmanagementsystem.entity.Invoice;
 import com.donationmanagementsystem.service.InvoiceService;
+import com.donationmanagementsystem.service.PdfGeneratorService;
 
+import io.jsonwebtoken.io.IOException;
 import org.springframework.ui.Model;
 
 @Controller
@@ -17,6 +24,9 @@ public class TestController {
 
     @Autowired
     InvoiceService invoiceService;
+
+    @Autowired
+    PdfGeneratorService generatorService;
 
     @GetMapping(value = "/email-template")
     public String emailTemplate(Model model) {
@@ -31,10 +41,26 @@ public class TestController {
         return "redirect:invoice.html";
     }
 
+    // @GetMapping(value = "/invoice/{invoiceNo}")
+    // public String checkInvoice(@PathVariable("invoiceNo") Long invoiceNo, Model
+    // model) {
+    // Invoice invoice = invoiceService.findByInvoiceNo(invoiceNo);
+    // model.addAttribute("invoice", invoice);
+    // return "invoice/index";
+
+    // }
+
     @GetMapping(value = "/invoice/{invoiceNo}")
-    public String checkInvoice(@PathVariable("invoiceNo") Long invoiceNo, Model model) {
+    public String checkInvoice(@PathVariable("invoiceNo") Long invoiceNo, Model model)
+            throws IOException, java.io.IOException {
         Invoice invoice = invoiceService.findByInvoiceNo(invoiceNo);
-        model.addAttribute("invoice", invoice);
+
+        Context context = new Context();
+        context.setVariable("invoice", invoice);
+
+        generatorService.generatePdf(context, "invoice-" + invoiceNo + ".pdf", "invoice/invoice.html");
+        // var html = templateEngine.process("invoice/index.html", context);
+
         return "invoice/index";
 
     }

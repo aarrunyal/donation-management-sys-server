@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org"
+
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donation Management System</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eceeef;
+      }
+      .invoice-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .invoice-header {
+        /* text-align: left; */
+        margin-bottom: 20px;
+      }
+      .invoice-logo {
+        width: 100px;
+        height: auto;
+      }
+      .invoice-details {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        gap: 10px;
+        background-color: #68b1ec41;
+        padding: 10px;
+      }
+      .invoice-details div {
+        flex: 1;
+      }
+      .invoice-items {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      .invoice-items th,
+      .invoice-items td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+      }
+      .invoice-total {
+        display: block;
+        text-align: right;
+        font-weight: bold;
+      }
+      .heading-container {
+        display: flex;
+        align-items: center; /* To vertically center align items */
+      }
+
+      .invoice-header,
+      .invoice-information {
+        flex: 1; /* To make both divs occupy equal space */
+      }
+
+      .invoice-information {
+        text-align: right; /* Aligning the invoice information to the right */
+      }
+
+      div h1 {
+        color: rgb(30, 197, 197);
+      }
+      div h4 {
+        color: rgb(93, 189, 189);
+      }
+      hr {
+        border: 4px solid gray;
+        border-radius: 20px;
+      }
+      .invoice-details-heading {
+        grid-column-start: 1;
+        grid-column-end: 5;
+      }
+      .invoice-details-from {
+        grid-column-start: 1;
+        grid-column-end: 3;
+      }
+      .info {
+        border: 1px dotted gray;
+      }
+      thead {
+        background-color: #382f2f;
+        color: #ddeff7;
+      }
+      .invoice-total {
+        display: grid;
+        grid-template-columns: auto 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-container">
+      <div class="heading-container">
+        <div class="invoice-header">
+          <h1>Invoice</h1>
+        </div>
+        <div class="invoice-information">
+          <div th:if="${invoice.invoiceNo}">
+            <h4 th:text="'Invoice Number ' + ${invoice.invoiceNo}">:</h4>
+          </div>
+          <p></p>
+          <div th:if="${invoice.invoiceDate}">
+            <h4 th:text="'Invoice Date ' + ${invoice.invoiceDate?:''}">:</h4>
+          </div>
+
+          <p></p>
+        </div>
+      </div>
+      <hr />
+      <div class="invoice-details">
+        <div class="invoice-details-heading"><h2>Billing Informations</h2></div>
+        <div class="invoice-details-from">
+          <div th:if="${invoice.firstName}">
+            <p><strong>Name:</strong></p>
+            <p th:text="${invoice.firstName} + ' '+ ${invoice.lastName}"></p>
+          </div>
+
+          <div th:if="${invoice.billingAddress}">
+            <p><strong>Address:</strong></p>
+            <p th:text="${invoice.billingAddress}"></p>
+          </div>
+          <div th:if="${invoice.email}">
+            <p><strong>Emial:</strong></p>
+            <p th:text="${invoice.email}"></p>
+          </div>
+          
+         
+        </div>
+      </div>
+      <hr class="info" />
+      <table class="invoice-items">
+        <thead>
+          <tr>
+            <th>Item</th>
+
+            <th>Unit</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td th:text="${invoice.getDonationPayment().getDonation().getName()}"></td>
+            <td >1</td>
+
+            <td th:text="${invoice.subTotal}"></td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="invoice-total">
+        <p>Before Tax:</p>
+        <p th:text="${invoice.subTotal}">130</p>
+        <p>HST(13% of price):</p>
+        <p>0</p>
+        <p>Total(including Tax):</p>
+        <p th:text="${invoice.total}">130</p>
+      </div>
+    </div>
+  </body>
+</html>

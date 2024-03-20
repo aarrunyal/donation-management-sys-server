@@ -108,14 +108,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.itextpdf</groupId>
-			<artifactId>kernel</artifactId>
-			<version>8.0.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.itextpdf</groupId>
-			<artifactId>html2pdf</artifactId>
-			<version>5.0.3</version>
+			<groupId>org.xhtmlrenderer</groupId>
+			<artifactId>flying-saucer-pdf</artifactId>
+			<version>9.5.1</version>
 		</dependency>
 	</dependencies>
 
