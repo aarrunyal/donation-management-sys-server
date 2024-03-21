@@ -25,8 +25,11 @@ import com.donationmanagementsystem.repository.DonationPaymentRepository;
 import com.donationmanagementsystem.repository.DonationRepository;
 import com.donationmanagementsystem.repository.UserRepository;
 import com.donationmanagementsystem.service.DonationPaymentService;
+import com.donationmanagementsystem.service.EmailService;
 import com.donationmanagementsystem.service.InvoiceService;
+import com.donationmanagementsystem.service.StorageService;
 import com.donationmanagementsystem.utils.DonationStatus;
+import com.donationmanagementsystem.utils.EmailDetails;
 import com.donationmanagementsystem.utils.Helper;
 import com.donationmanagementsystem.utils.ResponseMessage;
 import com.stripe.Stripe;
@@ -35,6 +38,7 @@ import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.PaymentIntentCreateParams.AutomaticPaymentMethods.AllowRedirects;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 
 import lombok.RequiredArgsConstructor;
@@ -61,6 +65,12 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    EmailService emailService;
+
+    @Autowired
+    StorageService storageService;
 
     @Override
     public DonationPaymentResponse create(DonationPaymentRequest donationPaymentRequest) {
@@ -120,22 +130,37 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
         }
     }
 
-    public boolean createInvoiceAndSendEmail(DonationPayment donationPayment) {
-        try {
-            Invoice invoice = invoiceService.createInvoice(donationPayment);
-            if (invoice != null) {
-                Context context = new Context();
-                context.setVariable("invoice", invoice);
-                var invoicePath = pdfGeneratorServiceImpl.generatePdf(context, "invoice-" + invoice.getInvoiceNo() + ".pdf",
-                        "invoice/index.html");
-
-                        
-                return true;
+    public boolean createInvoiceAndSendEmail(DonationPayment donationPayment) throws FileNotFoundException {
+        // try {
+        Invoice invoice = invoiceService.createInvoice(donationPayment);
+        if (invoice != null) {
+            Context context = new Context();
+            context.setVariable("invoice", invoice);
+            var invoicePath = pdfGeneratorServiceImpl.generatePdf(context,
+                    "invoice-" + invoice.getInvoiceNo() + ".pdf",
+                    "invoice/index.html");
+            System.out.println(invoicePath);
+            var emailDetails = EmailDetails.builder()
+                    .receipient(donationPayment.getDoner().getEmail())
+                    .subject("Donation Payment")
+                    .msgBody("Donation payment has been made")
+                    .templateName("email/payment-made")
+                    .attachment(invoicePath).build();
+            if (emailService.sendMailWithAttachment(emailDetails, context) == true) {
+                storageService.deleteFile(invoicePath);
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                System.out.println("Email has been sent to doner and pdf has been deleted successfully !!!");
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             }
-            return false;
-        } catch (Exception ex) {
-            return false;
+
+            return true;
         }
+        return false;
+        // } catch (Exception ex) {
+        // System.out.println("Error sending email");
+        // return false;
+
+        // }
     }
 
     @Override

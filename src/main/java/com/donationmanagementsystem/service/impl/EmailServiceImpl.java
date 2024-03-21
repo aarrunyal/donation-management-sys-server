@@ -72,7 +72,7 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getReceipient());
-            mimeMessageHelper.setText(templateEngine.process(details.getTemplateName(), context));
+            mimeMessageHelper.setText(templateEngine.process(details.getTemplateName(), context), true);
             mimeMessageHelper.setSubject(
                     details.getSubject());
 
@@ -85,7 +85,9 @@ public class EmailServiceImpl implements EmailService {
 
             // Sending the mail
             javaMailSender.send(mimeMessage);
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             System.out.println("Mail Sent Successfully...");
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             return true;
         }
 

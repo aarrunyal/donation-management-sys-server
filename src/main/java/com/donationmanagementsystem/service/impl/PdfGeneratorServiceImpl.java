@@ -1,6 +1,7 @@
 package com.donationmanagementsystem.service.impl;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.nio.file.Paths;
@@ -18,7 +19,7 @@ import com.donationmanagementsystem.service.PdfGeneratorService;
 public class PdfGeneratorServiceImpl implements PdfGeneratorService {
 
     @Override
-    public String generatePdf(Context context, String fileName, String templatePath) {
+    public String generatePdf(Context context, String fileName, String templatePath) throws FileNotFoundException {
         try {
             ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
             templateResolver.setPrefix("templates/");
@@ -50,9 +51,11 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
             System.out.println("Invoice generated successfully");
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println(outputFile);
             return outputFile;
         } catch (Exception exception) {
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println(exception.getMessage());
             System.out.println("Error while generating new invoice pdf");
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
             return null;

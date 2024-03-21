@@ -12,6 +12,8 @@ public interface StorageService {
 
     public void deleteFile(String path, String fileName);
 
+    public void deleteFile(String path);
+
     public Path load(Path path, String fileName);
 
     public String generateFileName(MultipartFile file);
