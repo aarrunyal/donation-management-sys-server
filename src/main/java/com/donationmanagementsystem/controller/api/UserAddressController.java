@@ -1,4 +1,4 @@
-package com.donationmanagementsystem.controller.admin;
+package com.donationmanagementsystem.controller.api;
 
 import java.util.List;
 

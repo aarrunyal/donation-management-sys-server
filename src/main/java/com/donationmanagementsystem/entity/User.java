@@ -61,7 +61,7 @@ public class User  extends BaseEntity implements UserDetails {
 	@JsonIgnore
 	private UserSetting setting;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY,  orphanRemoval = true)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER,  orphanRemoval = true)
 	@JsonIgnore
 	private List<UserVerification> verifications;
 

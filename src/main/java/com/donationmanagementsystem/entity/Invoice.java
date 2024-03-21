@@ -1,5 +1,7 @@
 package com.donationmanagementsystem.entity;
 
+import java.time.LocalDate;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.donationmanagementsystem.utils.BaseEntity;
@@ -30,6 +32,8 @@ public class Invoice extends BaseEntity {
     @Column(nullable = false)
     private Long invoiceNo;
 
+    private LocalDate invoiceDate;
+
     @Column(nullable = false)
     private String firstName;
 
@@ -45,7 +49,7 @@ public class Invoice extends BaseEntity {
     private Long donationAmount;
 
     @Column(nullable = false)
-    private Long sutTotal;
+    private Long subTotal;
 
     private Long tax;
 

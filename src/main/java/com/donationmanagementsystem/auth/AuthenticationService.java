@@ -4,12 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+
 import com.donationmanagementsystem.config.JwtService;
 import com.donationmanagementsystem.config.Role;
 import com.donationmanagementsystem.entity.Token;
@@ -24,6 +25,7 @@ import com.donationmanagementsystem.service.EmailService;
 import com.donationmanagementsystem.utils.EmailDetails;
 import com.donationmanagementsystem.utils.Helper;
 import com.donationmanagementsystem.utils.ResponseMessage;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -61,15 +63,15 @@ public class AuthenticationService {
 				.build();
 		var savedUser = repository.save(user);
 		if (savedUser.getId() != null) {
+			generateTokenForVerification(savedUser);
 			return ResponseMessage.ok("User created successfully");
 		}
-		System.out.println("not-working");
 		return ResponseMessage.internalServerError(null);
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
 		System.out.println("Here");
-		var user = repository.findByEmail(request.getEmail())
+		var user = repository.findByEmailAndVerified(request.getEmail(), true)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "email", request.getEmail()));
 		System.out.println("Exception");
 		authenticationManager.authenticate(
@@ -123,14 +125,20 @@ public class AuthenticationService {
 				.token(randomText)
 				.expired(false).build();
 		if (userVerificationRepository.save(verfication) != null) {
-			var url = APP_URL + "/api/v1/auth/verify/" + randomText;
+			var url = APP_URL + "/auth/verify/" + randomText;
+
+			Context context = new Context();
+			context.setVariable("name", user.getFirstName());
+			context.setVariable("link", url);
+
 			var emailDetail = EmailDetails
 					.builder()
 					.msgBody("Please find below link to validate your profile \n\n" + url)
 					.subject("Verify your account")
 					.receipient(user.getEmail())
 					.build();
-			if (emailService.sendMail(emailDetail)) {
+			if (emailService.sendMailWithHtmlTemplate(emailDetail, "email/new-account.html", context)) {
+				// if (emailService.sendMail(emailDetail)) {
 				return ResponseMessage.ok("Verificaiton email sent");
 			}
 		}

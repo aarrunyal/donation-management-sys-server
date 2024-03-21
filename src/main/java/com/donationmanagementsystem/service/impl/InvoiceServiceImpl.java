@@ -1,5 +1,7 @@
 package com.donationmanagementsystem.service.impl;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -40,7 +42,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             return number;
         } else {
             number = lastInvoice.getInvoiceNo();
-            return number+1;
+            return number + 1;
         }
     }
 
@@ -50,7 +52,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             // PaymentMethod paymentMethod = paymentService
             // .getPaymentDetail(donationPaymentResponse.getTransactionId());
             return Invoice.builder()
-                    .sutTotal(donationPayment.getAmountDonated())
+                    .subTotal(donationPayment.getAmountDonated())
                     .total(donationPayment.getAmountDonated())
                     .invoiceNo(generateInvoiceNo())
                     .doner(donationPayment.getDoner())
@@ -60,9 +62,15 @@ public class InvoiceServiceImpl implements InvoiceService {
                     .email(donationPayment.getDoner().getEmail())
                     .donationAmount(donationPayment.getAmountDonated())
                     .phoneNumber("905")
+                    .invoiceDate(LocalDate.now())
                     .build();
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    public Invoice findByInvoiceNo(Long invoiceNo) {
+        return invoiceRepository.findByInvoiceNo(invoiceNo);
     }
 }
