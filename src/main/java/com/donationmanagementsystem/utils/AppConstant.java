@@ -23,6 +23,7 @@ public class AppConstant {
 	public static final long ACCESS_TOKEN_VALIDITY = 1000 * 60 * 24;
 
 	public static final String[] WHITE_LIST_URL = {
+			"/invoice/**",
 			"/success",
 			"/error",
 			"/auth/verify/**",

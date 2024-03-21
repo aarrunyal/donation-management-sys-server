@@ -66,6 +66,6 @@ public class DonationPayment extends BaseEntity {
     // @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "donation")
     @OneToOne(mappedBy = "donationPayment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private Invoice invoices;
+    private Invoice invoice;
 
 }

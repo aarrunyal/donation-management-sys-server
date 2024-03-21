@@ -109,28 +109,29 @@
           <p></p>
         </div>
         <hr />
-        <div class="invoice-details">
-          <div class="invoice-details-heading">
-            <h2>Billing Informations</h2>
+    
+      </div>
+      <div class="invoice-details">
+        <div class="invoice-details-heading">
+          <h2>Billing Informations</h2>
+        </div>
+        <div class="invoice-details-from">
+          <div th:if="${invoice.invoiceDate}">
+            <p><strong>Invoice Date</strong></p>
+            <p th:text="${invoice.invoiceDate}"></p>
           </div>
-          <div class="invoice-details-from">
-            <div th:if="${invoice.invoiceDate}">
-              <p><strong>Invoice Date</strong></p>
-              <p th:text="${invoice.invoiceDate}"></p>
-            </div>
-            <div th:if="${invoice.firstName}">
-              <p><strong>Name:</strong></p>
-              <p th:text="${invoice.firstName} + ' '+ ${invoice.lastName}"></p>
-            </div>
+          <div th:if="${invoice.firstName}">
+            <p><strong>Name:</strong></p>
+            <p th:text="${invoice.firstName} + ' '+ ${invoice.lastName}"></p>
+          </div>
 
-            <div th:if="${invoice.billingAddress}">
-              <p><strong>Address:</strong></p>
-              <p th:text="${invoice.billingAddress}"></p>
-            </div>
-            <div th:if="${invoice.email}">
-              <p><strong>Emial:</strong></p>
-              <p th:text="${invoice.email}"></p>
-            </div>
+          <div th:if="${invoice.billingAddress}">
+            <p><strong>Address:</strong></p>
+            <p th:text="${invoice.billingAddress}"></p>
+          </div>
+          <div th:if="${invoice.email}">
+            <p><strong>Emial:</strong></p>
+            <p th:text="${invoice.email}"></p>
           </div>
         </div>
       </div>

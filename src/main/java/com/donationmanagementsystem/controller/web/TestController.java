@@ -50,14 +50,6 @@ public class TestController {
 
     // }
 
-    @GetMapping(value = "/invoice/{invoiceNo}")
-    public String checkInvoice(@PathVariable("invoiceNo") Long invoiceNo, Model model)
-            throws IOException, java.io.IOException {
-        Invoice invoice = invoiceService.findByInvoiceNo(invoiceNo);
-        Context context = new Context();
-        context.setVariable("invoice", invoice);
-        generatorService.generatePdf(context, "invoice-" + invoiceNo + ".pdf", "invoice/invoice.html");
-        return "invoice/index";
-    }
+ 
 
 }
