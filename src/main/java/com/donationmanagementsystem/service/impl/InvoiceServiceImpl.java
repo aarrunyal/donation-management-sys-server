@@ -1,5 +1,7 @@
 package com.donationmanagementsystem.service.impl;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     InvoiceRepository invoiceRepository;
 
     @Override
-    public void createInvoice(DonationPayment donationPayment) {
+    public Invoice  createInvoice(DonationPayment donationPayment) {
 
         Invoice invoice = invoiceRepository.findByDonationPaymentIdDonerId(
                 donationPayment.getId(), donationPayment.getDoner().getId());
@@ -27,9 +29,10 @@ public class InvoiceServiceImpl implements InvoiceService {
         if (invoice == null) {
             var newInvoice = this.buildInvoiceData(donationPayment);
             if (newInvoice != null) {
-                invoiceRepository.save(newInvoice);
+                return invoiceRepository.save(newInvoice);
             }
         }
+        return null;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             return number;
         } else {
             number = lastInvoice.getInvoiceNo();
-            return number+1;
+            return number + 1;
         }
     }
 
@@ -50,7 +53,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             // PaymentMethod paymentMethod = paymentService
             // .getPaymentDetail(donationPaymentResponse.getTransactionId());
             return Invoice.builder()
-                    .sutTotal(donationPayment.getAmountDonated())
+                    .subTotal(donationPayment.getAmountDonated())
                     .total(donationPayment.getAmountDonated())
                     .invoiceNo(generateInvoiceNo())
                     .doner(donationPayment.getDoner())
@@ -60,9 +63,15 @@ public class InvoiceServiceImpl implements InvoiceService {
                     .email(donationPayment.getDoner().getEmail())
                     .donationAmount(donationPayment.getAmountDonated())
                     .phoneNumber("905")
+                    .invoiceDate(LocalDate.now())
                     .build();
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    public Invoice findByInvoiceNo(Long invoiceNo) {
+        return invoiceRepository.findByInvoiceNo(invoiceNo);
     }
 }

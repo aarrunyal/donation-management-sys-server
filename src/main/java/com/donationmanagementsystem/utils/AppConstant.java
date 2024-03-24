@@ -6,9 +6,6 @@ import java.util.List;
 
 public class AppConstant {
 
-	// public static final String SECRET_KEY =
-	// "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
-
 	public static final String PAGE_NUMBER = "0";
 
 	public static final String PAGE_SIZE = "5";
@@ -26,6 +23,10 @@ public class AppConstant {
 	public static final long ACCESS_TOKEN_VALIDITY = 1000 * 60 * 24;
 
 	public static final String[] WHITE_LIST_URL = {
+			"/invoice/**",
+			"/success",
+			"/error",
+			"/auth/verify/**",
 			"/test/**",
 			"/api/v1/auth/**",
 			"/api/test/**",

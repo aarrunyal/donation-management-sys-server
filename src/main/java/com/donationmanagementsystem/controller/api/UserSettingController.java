@@ -1,4 +1,4 @@
-package com.donationmanagementsystem.controller.admin;
+package com.donationmanagementsystem.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

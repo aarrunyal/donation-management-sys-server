@@ -92,6 +92,14 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
+    public void deleteFile(String path) {
+        File destinationPath = new File(path);
+        if (destinationPath.exists()) {
+            destinationPath.delete();
+        }
+    }
+
+    @Override
     public Path load(Path path, String fileName) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'load'");

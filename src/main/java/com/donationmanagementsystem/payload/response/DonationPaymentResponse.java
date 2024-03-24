@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
 import com.donationmanagementsystem.entity.Donation;
+import com.donationmanagementsystem.entity.Invoice;
 import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.utils.DonationStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,6 +42,9 @@ public class DonationPaymentResponse {
     @JsonIgnore
     private User doner;
 
+    @JsonIgnore
+    private Invoice invoice;
+
     private DonationStatus status;
 
     private String currency;
@@ -51,6 +55,12 @@ public class DonationPaymentResponse {
 
     public String getDonerName() {
         return this.doner.getFirstName() + " " + this.doner.getLastName();
+    }
+
+    public Long getInvoiceNo() {
+        if (this.invoice != null)
+            return this.invoice.getInvoiceNo();
+        return null;
     }
 
 }

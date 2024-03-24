@@ -9,35 +9,36 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.context.Context;
 
 import com.donationmanagementsystem.entity.Donation;
 import com.donationmanagementsystem.entity.DonationPayment;
+import com.donationmanagementsystem.entity.Invoice;
 import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.exception.ResourceNotFoundException;
 import com.donationmanagementsystem.payload.request.DonationPaymentRequest;
 import com.donationmanagementsystem.payload.request.DonationPaymentUpdateRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.DonationPaymentResponse;
-import com.donationmanagementsystem.payload.response.DonationResponse;
 import com.donationmanagementsystem.payload.response.PaymentIntentResponse;
 import com.donationmanagementsystem.repository.DonationPaymentRepository;
 import com.donationmanagementsystem.repository.DonationRepository;
 import com.donationmanagementsystem.repository.UserRepository;
 import com.donationmanagementsystem.service.DonationPaymentService;
+import com.donationmanagementsystem.service.EmailService;
 import com.donationmanagementsystem.service.InvoiceService;
+import com.donationmanagementsystem.service.StorageService;
 import com.donationmanagementsystem.utils.DonationStatus;
+import com.donationmanagementsystem.utils.EmailDetails;
 import com.donationmanagementsystem.utils.Helper;
 import com.donationmanagementsystem.utils.ResponseMessage;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Customer;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.PaymentIntentCreateParams.AutomaticPaymentMethods.AllowRedirects;
 
-import jakarta.annotation.PostConstruct;
-
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 
 import lombok.RequiredArgsConstructor;
@@ -57,11 +58,19 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
 
     private Stripe stripe;
 
+    private final PdfGeneratorServiceImpl pdfGeneratorServiceImpl;
+
     @Autowired
     InvoiceService invoiceService;
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    EmailService emailService;
+
+    @Autowired
+    StorageService storageService;
 
     @Override
     public DonationPaymentResponse create(DonationPaymentRequest donationPaymentRequest) {
@@ -113,12 +122,45 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
             savedDonationPayment.setStatus(donationPaymentRequest.getStatus());
             DonationPayment donationPayment = donationPaymentRepository.save(savedDonationPayment);
             if (donationPayment != null) {
-                invoiceService.createInvoice(donationPayment);
+                this.createInvoiceAndSendEmail(donationPayment);
             }
             return ResponseMessage.ok("Donation payment has been updated successfully !!!");
         } catch (Exception ex) {
             return ResponseMessage.internalServerError(null);
         }
+    }
+
+    public boolean createInvoiceAndSendEmail(DonationPayment donationPayment) throws FileNotFoundException {
+        // try {
+        Invoice invoice = invoiceService.createInvoice(donationPayment);
+        if (invoice != null) {
+            Context context = new Context();
+            context.setVariable("invoice", invoice);
+            var invoicePath = pdfGeneratorServiceImpl.generatePdf(context,
+                    "invoice-" + invoice.getInvoiceNo() + ".pdf",
+                    "invoice/index.html");
+            System.out.println(invoicePath);
+            var emailDetails = EmailDetails.builder()
+                    .receipient(donationPayment.getDoner().getEmail())
+                    .subject("Donation Payment")
+                    .msgBody("Donation payment has been made")
+                    .templateName("email/payment-made")
+                    .attachment(invoicePath).build();
+            if (emailService.sendMailWithAttachment(emailDetails, context) == true) {
+                storageService.deleteFile(invoicePath);
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                System.out.println("Email has been sent to doner and pdf has been deleted successfully !!!");
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            }
+
+            return true;
+        }
+        return false;
+        // } catch (Exception ex) {
+        // System.out.println("Error sending email");
+        // return false;
+
+        // }
     }
 
     @Override
