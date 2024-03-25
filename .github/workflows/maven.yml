@@ -9,6 +9,8 @@
 name: Donation Management System | Build and Deploy
 
 on:
+  push:
+    branches: [ "develop" ]
   pull_request:
     branches: [ "main" ]
 
