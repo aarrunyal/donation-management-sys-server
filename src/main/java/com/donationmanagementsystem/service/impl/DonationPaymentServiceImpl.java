@@ -131,36 +131,36 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
     }
 
     public boolean createInvoiceAndSendEmail(DonationPayment donationPayment) throws FileNotFoundException {
-        // try {
-        Invoice invoice = invoiceService.createInvoice(donationPayment);
-        if (invoice != null) {
-            Context context = new Context();
-            context.setVariable("invoice", invoice);
-            var invoicePath = pdfGeneratorServiceImpl.generatePdf(context,
-                    "invoice-" + invoice.getInvoiceNo() + ".pdf",
-                    "invoice/index.html");
-            System.out.println(invoicePath);
-            var emailDetails = EmailDetails.builder()
-                    .receipient(donationPayment.getDoner().getEmail())
-                    .subject("Donation Payment")
-                    .msgBody("Donation payment has been made")
-                    .templateName("email/payment-made")
-                    .attachment(invoicePath).build();
-            if (emailService.sendMailWithAttachment(emailDetails, context) == true) {
-                storageService.deleteFile(invoicePath);
-                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                System.out.println("Email has been sent to doner and pdf has been deleted successfully !!!");
-                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        try {
+            Invoice invoice = invoiceService.createInvoice(donationPayment);
+            if (invoice != null) {
+                Context context = new Context();
+                context.setVariable("invoice", invoice);
+                var invoicePath = pdfGeneratorServiceImpl.generatePdf(context,
+                        "invoice-" + invoice.getInvoiceNo() + ".pdf",
+                        "invoice/index.html");
+                System.out.println(invoicePath);
+                var emailDetails = EmailDetails.builder()
+                        .receipient(donationPayment.getDoner().getEmail())
+                        .subject("Donation Payment")
+                        .msgBody("Donation payment has been made")
+                        .templateName("email/payment-made")
+                        .attachment(invoicePath).build();
+                if (emailService.sendMailWithAttachment(emailDetails, context) == true) {
+                    storageService.deleteFile(invoicePath);
+                    System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                    System.out.println("Email has been sent to doner and pdf has been deleted successfully !!!");
+                    System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                }
+
+                return true;
             }
+            return false;
+        } catch (Exception ex) {
+            System.out.println("Error sending email");
+            return false;
 
-            return true;
         }
-        return false;
-        // } catch (Exception ex) {
-        // System.out.println("Error sending email");
-        // return false;
-
-        // }
     }
 
     @Override

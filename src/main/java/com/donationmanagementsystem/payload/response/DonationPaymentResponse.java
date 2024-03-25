@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
 import com.donationmanagementsystem.entity.Donation;
+import com.donationmanagementsystem.entity.DonationPayment;
 import com.donationmanagementsystem.entity.Invoice;
 import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.utils.DonationStatus;
@@ -16,6 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
