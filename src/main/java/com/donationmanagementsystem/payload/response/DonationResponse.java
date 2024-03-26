@@ -45,24 +45,13 @@ public class DonationResponse {
 
     private String image;
 
+    private Long totalCollected;
+
     @JsonIgnore
     List<DonationPayment> payments;
 
     public String getImagePath() {
         return AppConstant.UPLOAD_ROOT_PATH + "/donation";
     }
-
-    // public Long getPaymentTotal() {
-    //     long total = (long) 0;
-    //     if (this.payments.isEmpty())
-    //         return total;
-
-    //     // payment.getAmountDonated() : (long) 0);
-    //     for (var payment : this.payments) {
-    //         System.out.println(payment);
-    //         total += (long) (payment.getAmountDonated() != null ? payment.getAmountDonated() : 0);
-    //     }
-    //     return total;
-    // }
 
 }

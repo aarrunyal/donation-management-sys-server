@@ -9,6 +9,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.thymeleaf.context.Context;
 
 import com.donationmanagementsystem.entity.Donation;
@@ -55,6 +60,8 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
     private final DonationRepository donationRepository;
 
     private final UserRepository userRepository;
+
+    private final TransactionTemplate transactionTemplate;
 
     private Stripe stripe;
 
@@ -131,36 +138,54 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
     }
 
     public boolean createInvoiceAndSendEmail(DonationPayment donationPayment) throws FileNotFoundException {
-        try {
-            Invoice invoice = invoiceService.createInvoice(donationPayment);
-            if (invoice != null) {
-                Context context = new Context();
-                context.setVariable("invoice", invoice);
-                var invoicePath = pdfGeneratorServiceImpl.generatePdf(context,
-                        "invoice-" + invoice.getInvoiceNo() + ".pdf",
-                        "invoice/index.html");
-                System.out.println(invoicePath);
-                var emailDetails = EmailDetails.builder()
-                        .receipient(donationPayment.getDoner().getEmail())
-                        .subject("Donation Payment")
-                        .msgBody("Donation payment has been made")
-                        .templateName("email/payment-made")
-                        .attachment(invoicePath).build();
-                if (emailService.sendMailWithAttachment(emailDetails, context) == true) {
-                    storageService.deleteFile(invoicePath);
-                    System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                    System.out.println("Email has been sent to doner and pdf has been deleted successfully !!!");
-                    System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                }
+        // try {
+        Invoice invoice = invoiceService.createInvoice(donationPayment);
+        if (invoice != null) {
+            Context context = new Context();
+            context.setVariable("invoice", invoice);
+            var invoicePath = pdfGeneratorServiceImpl.generatePdf(context,
+                    "invoice-" + invoice.getInvoiceNo() + ".pdf",
+                    "invoice/index.html");
+            System.out.println(invoicePath);
+            var emailDetails = EmailDetails.builder()
+                    .receipient(donationPayment.getDoner().getEmail())
+                    .subject("Donation Payment")
+                    .msgBody("Donation payment has been made")
+                    .templateName("email/payment-made")
+                    .attachment(invoicePath).build();
+            if (emailService.sendMailWithAttachment(emailDetails, context) == true) {
+                storageService.deleteFile(invoicePath);
 
-                return true;
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                System.out.println("Email has been sent to doner and pdf has been deleted successfully !!!");
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                System.out.println("Transaction Initiated !!!");
+                this.calculateDonationTotal(donationPayment.getDonation().getId());
+                System.out.println("Transaction Completed !!!");
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
             }
-            return false;
-        } catch (Exception ex) {
-            System.out.println("Error sending email");
-            return false;
 
+            return true;
         }
+        return false;
+        // } catch (Exception ex) {
+        // System.out.println("Error sending email");
+        // return false;
+
+        // }
+    }
+
+    public void calculateDonationTotal(Long donationId) {
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                donationRepository.calculateTotal(donationId);
+            }
+        });
     }
 
     @Override
