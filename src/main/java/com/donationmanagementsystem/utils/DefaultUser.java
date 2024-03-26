@@ -50,6 +50,7 @@ public class DefaultUser implements CommandLineRunner {
 			.role(Role.ADMIN)
 			.password(encoder.encode(adminPassword))
 			.verified(true)
+			.status(true)
 			.build();
 			System.out.println("Admin === "+ newUser.toString());
 			userRepository.save(newUser);
@@ -65,6 +66,7 @@ public class DefaultUser implements CommandLineRunner {
 			.role(Role.ORGANISER)
 			.password(encoder.encode(organiserPassword))
 			.verified(true)
+			.status(true)
 			.build();
 			System.out.println("Organiser === "+ newUser.toString());
 			userRepository.save(newUser);

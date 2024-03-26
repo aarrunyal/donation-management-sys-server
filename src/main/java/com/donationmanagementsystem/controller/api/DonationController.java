@@ -3,6 +3,10 @@ package com.donationmanagementsystem.controller.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +31,8 @@ import jakarta.validation.Valid;
 
 @RestController("AdminDonationController")
 @RequestMapping(value = "/api/v1/admin/donation")
-@PreAuthorize("hasRole('ADMIN')")
+@CacheConfig(cacheNames = "donations")
+// @PreAuthorize("hasRole('ADMIN')")
 public class DonationController {
 
     @Autowired
@@ -51,13 +56,18 @@ public class DonationController {
     }
 
     @PutMapping("/{id}")
+    @CachePut(key = "#id")
     public ResponseEntity<DonationResponse> update(@Valid @RequestBody DonationRequest donationRequest,
             @PathVariable Long id) {
         return donationService.update(donationRequest, id);
     }
 
     @GetMapping("/{id}")
+    @Cacheable(key = "#id")
     public ResponseEntity<DonationResponse> show(@PathVariable Long id) {
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("Fetching from database :" + id);
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++");
         return donationService.show(id);
     }
 
@@ -67,6 +77,7 @@ public class DonationController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(key = "#id", beforeInvocation = true)
     public ResponseEntity<ApiResponse> delete(@PathVariable Long id) {
         return this.donationService.delete(id);
     }

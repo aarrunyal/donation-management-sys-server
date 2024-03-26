@@ -23,7 +23,7 @@ import jakarta.validation.Valid;
 
 @RestController("AdminUserSettingController")
 @RequestMapping("/api/v1/admin/user-setting")
-@PreAuthorize("hasRole('ADMIN')")
+// @PreAuthorize("hasRole('ADMIN')")
 public class UserSettingController {
 
 

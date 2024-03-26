@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 
 @RestController("AdminUserAddressController")
 @RequestMapping("/api/v1/admin/user-address")
-@PreAuthorize("hasRole('ADMIN')")
+// @PreAuthorize("hasRole('ADMIN')")
 public class UserAddressController {
 
     @Autowired
