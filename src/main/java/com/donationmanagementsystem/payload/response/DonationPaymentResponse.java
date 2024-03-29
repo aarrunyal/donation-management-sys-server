@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -51,6 +52,9 @@ public class DonationPaymentResponse {
 
     private String currency;
 
+    @JsonIgnore
+    private LocalDateTime createdAt;
+
     public String getDonationName() {
         return this.donation.getName();
     }
@@ -63,6 +67,10 @@ public class DonationPaymentResponse {
         if (this.invoice != null)
             return this.invoice.getInvoiceNo();
         return null;
+    }
+
+    public LocalDate getAttemptedAt() {
+        return this.createdAt.toLocalDate();
     }
 
 }

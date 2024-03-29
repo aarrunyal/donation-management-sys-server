@@ -1,6 +1,7 @@
 package com.donationmanagementsystem.payload.response;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,8 @@ public class DonationResponse {
     private String image;
 
     private Long totalCollected;
+
+    private LocalDateTime createdAt;
 
     @JsonIgnore
     List<DonationPayment> payments;
