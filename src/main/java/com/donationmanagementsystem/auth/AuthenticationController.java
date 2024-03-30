@@ -44,7 +44,7 @@ public class AuthenticationController {
 	}
 
 	@GetMapping("/user")
-	@Cacheable(value = "auth_user", keyGenerator = "customKeyGenerator")
+	// @Cacheable(value = "auth_user", keyGenerator = "customKeyGenerator")
 	public ResponseEntity<UserResponse> getLoggedInUser() {
 		User user = userService.getLoggedInUser();
 		var userResponse = UserResponse
@@ -52,6 +52,7 @@ public class AuthenticationController {
 				.firstName(user.getFirstName())
 				.lastName(user.getLastName())
 				.id(user.getId())
+				.role(user.getRole())
 				.email(user.getEmail()).build();
 		log.info("***************************************************************");
 		log.info("***********Getting form database********** :" + user.getId());

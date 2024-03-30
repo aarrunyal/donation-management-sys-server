@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getLoggedInUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(authentication.getName());
 		if (authentication.getName() != null) {
 			return userRepository.findByEmail(authentication.getName()).orElse(null);
 		}
