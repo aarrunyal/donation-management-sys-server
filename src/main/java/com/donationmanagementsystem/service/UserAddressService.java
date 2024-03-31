@@ -20,4 +20,6 @@ public interface UserAddressService {
 	ResponseEntity<List<UserAddressResponse>> all(User user);
 
 	ResponseEntity<ApiResponse> delete(Long userAddressId, User user);
+
+    ResponseEntity<UserAddressResponse> byUser(Long id);
 }

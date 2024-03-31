@@ -65,6 +65,11 @@ public class UserAddressController {
         return this.userAddressService.show(id, user);
     }
 
+    @GetMapping("/by/{id}")
+    public ResponseEntity<UserAddressResponse> byUser(@PathVariable Long id) {
+        return this.userAddressService.byUser(id);
+    }
+
     // @GetMapping("/test/mail")
     // public String testMail() {
     //     var emailDetails = EmailDetails.builder().msgBody("Hello this is test mail")

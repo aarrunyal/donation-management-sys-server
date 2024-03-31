@@ -1,6 +1,7 @@
 package com.donationmanagementsystem.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -91,6 +92,20 @@ public class UserAddressServiceImpl implements UserAddressService {
             return ResponseMessage.ok("User address deleted successfully");
         } catch (Exception ex) {
             return ResponseMessage.internalServerError("");
+        }
+    }
+
+    @Override
+    public ResponseEntity<UserAddressResponse> byUser(Long id) {
+        try {
+            Optional<UserAddress> address = userAddressRepository.findByUserId(id);
+            if (address.isPresent()) {
+                UserAddressResponse userAddress = this.modelMapper.map(address.get(), UserAddressResponse.class);
+                return new ResponseEntity<>(userAddress, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

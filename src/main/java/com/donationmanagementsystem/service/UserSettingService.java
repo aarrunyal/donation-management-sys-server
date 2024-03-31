@@ -20,4 +20,6 @@ public interface UserSettingService {
 	ResponseEntity<List<UserSettingResponse>> all();
 
 	ResponseEntity<ApiResponse> delete(Long userSettingId, User user);
+
+    ResponseEntity<UserSettingResponse> byUser(Long id);
 }

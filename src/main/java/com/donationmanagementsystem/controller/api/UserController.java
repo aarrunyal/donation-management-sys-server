@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.donationmanagementsystem.payload.request.UserDetailRequest;
 import com.donationmanagementsystem.payload.request.UserRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.UserResponse;
@@ -66,4 +67,10 @@ public class UserController {
             @PathVariable Long id) {
         return userService.update(userRequest, id);
     }
+
+    @PostMapping("/user-details/create-or-update")
+    public ResponseEntity<ApiResponse> createOrUpdateUserDetails(@Valid @RequestBody UserDetailRequest detailRequest) {
+        return userService.createOrUpdateUserDetails(detailRequest);
+    }
+    
 }

@@ -44,7 +44,7 @@ public class AuthenticationController {
 	}
 
 	@GetMapping("/user")
-	// @Cacheable(value = "auth_user", keyGenerator = "customKeyGenerator")
+	@Cacheable(value = "auth_user", keyGenerator = "customKeyGenerator")
 	public ResponseEntity<UserResponse> getLoggedInUser() {
 		User user = userService.getLoggedInUser();
 		var userResponse = UserResponse

@@ -14,15 +14,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.donationmanagementsystem.entity.User;
+import com.donationmanagementsystem.entity.UserAddress;
+import com.donationmanagementsystem.entity.UserSetting;
 import com.donationmanagementsystem.exception.ResourceNotFoundException;
+import com.donationmanagementsystem.payload.request.UserDetailRequest;
 import com.donationmanagementsystem.payload.request.UserRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
 import com.donationmanagementsystem.payload.response.UserResponse;
+import com.donationmanagementsystem.repository.UserAddressRepository;
 import com.donationmanagementsystem.repository.UserRepository;
+import com.donationmanagementsystem.repository.UserSettingRepository;
 import com.donationmanagementsystem.service.UserService;
 import com.donationmanagementsystem.utils.Helper;
 import com.donationmanagementsystem.utils.ResponseMessage;
+import com.stripe.model.PaymentLink.CustomField.Dropdown.Option;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -33,6 +40,10 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 
 	private final PasswordEncoder encoder;
+
+	private final UserAddressRepository userAddressRepository;
+
+	private final UserSettingRepository userSettingRepository;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -106,6 +117,71 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception ex) {
 			return ResponseMessage.internalServerError(null);
 		}
+	}
+
+	@Override
+	public ResponseEntity<ApiResponse> createOrUpdateUserDetails(UserDetailRequest detailRequest) {
+		try {
+			User user = this.getLoggedInUser();
+			Optional<UserSetting> setting = userSettingRepository.findByUserId(user.getId());
+			Optional<UserAddress> address = userAddressRepository.findByUserId(user.getId());
+			if (setting.isPresent()) {
+				userSettingRepository.save(buildUserSetting(setting.get(), detailRequest));
+			} else {
+				userSettingRepository.save(buildUserSetting(detailRequest, user));
+			}
+
+			if (address.isPresent()) {
+				userAddressRepository.save(buildUserAddress(address.get(), detailRequest));
+			} else {
+				userAddressRepository.save(buildUserAddress(detailRequest, user));
+			}
+			return ResponseMessage.ok(null);
+		} catch (Exception ex) {
+			return ResponseMessage.internalServerError(null);
+		}
+
+	}
+
+	public UserSetting buildUserSetting(UserDetailRequest detailRequest, User user) {
+		return UserSetting.builder()
+				.contactNo(detailRequest.getContactNumber())
+				.dob(detailRequest.getDob())
+				.gender(detailRequest.getGender())
+				.alternativeContactNo(null)
+				.status(true)
+				.user(user)
+				.build();
+	}
+
+	public UserAddress buildUserAddress(UserDetailRequest detailRequest, User user) {
+		return UserAddress.builder()
+				.addressLine1(detailRequest.getAddressLine1())
+				.addressLine2(detailRequest.getAddressLine2() != null ? detailRequest.getAddressLine2() : null)
+				.city(detailRequest.getCity())
+				.state(detailRequest.getState())
+				.postalCode(detailRequest.getPostalCode())
+				.country(detailRequest.getCountry())
+				.status(true)
+				.user(user)
+				.build();
+	}
+
+	public UserAddress buildUserAddress(UserAddress address, UserDetailRequest detailRequest) {
+		address.setAddressLine1(detailRequest.getAddressLine1());
+		address.setAddressLine2(detailRequest.getAddressLine2());
+		address.setCity(detailRequest.getCity());
+		address.setState(detailRequest.getState());
+		address.setCountry(detailRequest.getCountry());
+		address.setPostalCode(detailRequest.getPostalCode());
+		return address;
+	}
+
+	public UserSetting buildUserSetting(UserSetting userSetting, UserDetailRequest detailRequest) {
+		userSetting.setContactNo(detailRequest.getContactNumber());
+		userSetting.setDob(detailRequest.getDob());
+		userSetting.setGender(detailRequest.getGender());
+		return userSetting;
 	}
 
 }
