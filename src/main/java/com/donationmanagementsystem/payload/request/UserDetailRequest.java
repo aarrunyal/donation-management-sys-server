@@ -33,8 +33,8 @@ public class UserDetailRequest {
     public String country;
 
     @NotNull
-    @JsonProperty("contact_number")
-    public String contactNumber;
+    @JsonProperty("contact_no")
+    public String contactNo;
 
     @Past(message="Date must be from past")
     @NotNull

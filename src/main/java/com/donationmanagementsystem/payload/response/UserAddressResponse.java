@@ -6,8 +6,7 @@ import lombok.Data;
 
 @Data
 public class UserAddressResponse {
-	public Long id;
-	
+
 	@JsonProperty("address_line_1")
 	public String addressLine1;
 

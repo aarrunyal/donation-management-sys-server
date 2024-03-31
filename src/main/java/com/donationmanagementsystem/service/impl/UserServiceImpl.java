@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
 
 	public UserSetting buildUserSetting(UserDetailRequest detailRequest, User user) {
 		return UserSetting.builder()
-				.contactNo(detailRequest.getContactNumber())
+				.contactNo(detailRequest.getContactNo())
 				.dob(detailRequest.getDob())
 				.gender(detailRequest.getGender())
 				.alternativeContactNo(null)
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public UserSetting buildUserSetting(UserSetting userSetting, UserDetailRequest detailRequest) {
-		userSetting.setContactNo(detailRequest.getContactNumber());
+		userSetting.setContactNo(detailRequest.getContactNo());
 		userSetting.setDob(detailRequest.getDob());
 		userSetting.setGender(detailRequest.getGender());
 		return userSetting;
