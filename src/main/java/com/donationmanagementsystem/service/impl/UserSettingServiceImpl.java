@@ -98,4 +98,18 @@ public class UserSettingServiceImpl implements UserSettingService {
 		}
 	}
 
+	@Override
+	public ResponseEntity<UserSettingResponse> byUser(Long id) {
+		try {
+			Optional<UserSetting> address = userSettingRepository.findByUserId(id);
+			if (address.isPresent()) {
+				UserSettingResponse userSetting = this.modelMapper.map(address.get(), UserSettingResponse.class);
+				return new ResponseEntity<>(userSetting, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }

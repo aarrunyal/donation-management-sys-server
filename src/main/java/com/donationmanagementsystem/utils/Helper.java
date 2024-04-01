@@ -31,4 +31,8 @@ public class Helper {
         return new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
     }
 
+    public static String replaceCharFromString(String value, String search, String replace) {
+        return value.replace(search, replace);
+    }
+
 }

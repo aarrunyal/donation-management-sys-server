@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.payload.request.UserSettingRequest;
 import com.donationmanagementsystem.payload.response.ApiResponse;
+import com.donationmanagementsystem.payload.response.UserAddressResponse;
 import com.donationmanagementsystem.payload.response.UserSettingResponse;
 import com.donationmanagementsystem.service.UserService;
 import com.donationmanagementsystem.service.UserSettingService;
@@ -23,38 +24,42 @@ import jakarta.validation.Valid;
 
 @RestController("AdminUserSettingController")
 @RequestMapping("/api/v1/admin/user-setting")
-@PreAuthorize("hasRole('ADMIN')")
+// @PreAuthorize("hasRole('ADMIN')")
 public class UserSettingController {
-
 
 	@Autowired
 	private UserSettingService userSettingService;
-	
+
 	@Autowired
 	private UserService userService;
 
 	@PostMapping
-	public ResponseEntity<ApiResponse> post(@Valid @RequestBody UserSettingRequest userSettingRequest){
+	public ResponseEntity<ApiResponse> post(@Valid @RequestBody UserSettingRequest userSettingRequest) {
 		User user = userService.getLoggedInUser();
 		return userSettingService.create(userSettingRequest, user);
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<ApiResponse> update(@Valid @RequestBody UserSettingRequest userSettingRequest, @PathVariable Long id){
+	public ResponseEntity<ApiResponse> update(@Valid @RequestBody UserSettingRequest userSettingRequest,
+			@PathVariable Long id) {
 		User user = userService.getLoggedInUser();
 		return userSettingService.update(userSettingRequest, id, user);
 	}
 
-
 	@GetMapping("")
-	public ResponseEntity<UserSettingResponse> get(){
+	public ResponseEntity<UserSettingResponse> get() {
 		User user = userService.getLoggedInUser();
 		return userSettingService.show(user);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<ApiResponse> delete(@PathVariable Long id){
+	public ResponseEntity<ApiResponse> delete(@PathVariable Long id) {
 		User user = userService.getLoggedInUser();
 		return this.userSettingService.delete(id, user);
+	}
+
+	@GetMapping("/by/{id}")
+	public ResponseEntity<UserSettingResponse> byUser(@PathVariable Long id) {
+		return this.userSettingService.byUser(id);
 	}
 }

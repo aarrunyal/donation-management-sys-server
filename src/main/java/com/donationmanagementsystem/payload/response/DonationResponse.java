@@ -1,12 +1,15 @@
 package com.donationmanagementsystem.payload.response;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
+import com.donationmanagementsystem.entity.DonationPayment;
 import com.donationmanagementsystem.entity.User;
 import com.donationmanagementsystem.utils.AppConstant;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Data
 @AllArgsConstructor
@@ -44,8 +46,14 @@ public class DonationResponse {
 
     private String image;
 
+    private Long totalCollected;
 
-    public String getImagePath(){
+    private LocalDateTime createdAt;
+
+    @JsonIgnore
+    List<DonationPayment> payments;
+
+    public String getImagePath() {
         return AppConstant.UPLOAD_ROOT_PATH + "/donation";
     }
 

@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 
 @RestController("AdminUserAddressController")
 @RequestMapping("/api/v1/admin/user-address")
-@PreAuthorize("hasRole('ADMIN')")
+// @PreAuthorize("hasRole('ADMIN')")
 public class UserAddressController {
 
     @Autowired
@@ -63,6 +63,11 @@ public class UserAddressController {
     public ResponseEntity<UserAddressResponse> show(@PathVariable Long id) {
         User user = userService.getLoggedInUser();
         return this.userAddressService.show(id, user);
+    }
+
+    @GetMapping("/by/{id}")
+    public ResponseEntity<UserAddressResponse> byUser(@PathVariable Long id) {
+        return this.userAddressService.byUser(id);
     }
 
     // @GetMapping("/test/mail")

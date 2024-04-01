@@ -1,6 +1,8 @@
 package com.donationmanagementsystem.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -9,6 +11,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.thymeleaf.context.Context;
 
 import com.donationmanagementsystem.entity.Donation;
@@ -56,7 +63,7 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
 
     private final UserRepository userRepository;
 
-    private Stripe stripe;
+    private final TransactionTemplate transactionTemplate;
 
     private final PdfGeneratorServiceImpl pdfGeneratorServiceImpl;
 
@@ -148,9 +155,17 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
                     .attachment(invoicePath).build();
             if (emailService.sendMailWithAttachment(emailDetails, context) == true) {
                 storageService.deleteFile(invoicePath);
+
                 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                 System.out.println("Email has been sent to doner and pdf has been deleted successfully !!!");
                 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                System.out.println("Transaction Initiated !!!");
+                this.calculateDonationTotal(donationPayment.getDonation().getId());
+                System.out.println("Transaction Completed !!!");
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
             }
 
             return true;
@@ -161,6 +176,16 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
         // return false;
 
         // }
+    }
+
+    public void calculateDonationTotal(Long donationId) {
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                donationRepository.calculateTotal(donationId);
+            }
+        });
     }
 
     @Override
@@ -218,6 +243,36 @@ public class DonationPaymentServiceImpl implements DonationPaymentService {
         } catch (StripeException e) {
             return new ResponseEntity<>(new PaymentIntentResponse(false, e.getMessage(), null, null),
                     HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<List<DonationPaymentResponse>> getByUser(User user, Long size) {
+        List<DonationPayment> donationPayments = null;
+        if (size == 5)
+            donationPayments = donationPaymentRepository.findTop5ByDonerOrderByIdDesc(user);
+        else
+            donationPayments = donationPaymentRepository.findByDonerOrderByIdDesc(user);
+        List<DonationPaymentResponse> donationPaymentResponses = donationPayments
+                .stream()
+                .map(
+                        (payment) -> this.modelMapper
+                                .map(payment, DonationPaymentResponse.class))
+                .collect(Collectors.toList());
+        return new ResponseEntity<List<DonationPaymentResponse>>(donationPaymentResponses, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Map<String, String>> totalDonatedByUser(User user) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            response.put("total", donationPaymentRepository.calculateTotalByUser(user.getId()).toString());
+            response.put("status", "true");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception ex) {
+            response.put("message", ex.getMessage());
+            response.put("status", "false");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

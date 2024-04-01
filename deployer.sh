@@ -1,5 +1,5 @@
 #!/bin/sh
 
-scp ./docker-compose.yml root@178.128.228.234:node_api/docker-compose.yml
+scp ./docker-compose.yml root@178.128.228.234:dms/docker-compose.yml
 
-scp ./.env root@178.128.228.234:node_api/.env
+scp ./.env root@178.128.228.234:dms/.env

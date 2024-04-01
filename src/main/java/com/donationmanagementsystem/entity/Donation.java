@@ -46,14 +46,17 @@ public class Donation extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false, name="event_date")
+    @Column(nullable = false, name = "event_date")
     private LocalDate eventDate;
 
-    @Column(nullable = false , name="expected_collection")
+    @Column(nullable = false, name = "expected_collection")
     private Long expectedCollection;
 
     // @Column(nullable = true)
     private Long organisedFor;
+
+    @Column(nullable = true, name = "total_collected")
+    private Long totalCollected;
 
     @Column(nullable = true)
     private String image;
@@ -68,8 +71,6 @@ public class Donation extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organiser_id")
     private User organiser;
-
-
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "donation")
     @JsonIgnore

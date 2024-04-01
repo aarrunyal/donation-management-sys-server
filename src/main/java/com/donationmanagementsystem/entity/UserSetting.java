@@ -1,5 +1,7 @@
 package com.donationmanagementsystem.entity;
 
+import java.time.LocalDate;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.donationmanagementsystem.utils.BaseEntity;
@@ -26,18 +28,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name="user_settings")
-public class UserSetting extends BaseEntity{
-	
+@Table(name = "user_settings")
+public class UserSetting extends BaseEntity {
+
 	@Column(nullable = false)
 	private String contactNo;
-	
+
 	private String alternativeContactNo;
-	
+
+	private LocalDate dob;
+	public String gender;
+
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="user_id")
+	@JoinColumn(name = "user_id")
 	private User user;
 
 	private boolean status;
-	
+
 }

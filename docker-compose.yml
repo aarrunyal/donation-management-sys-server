@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 services:
   dms_db:
     container_name: dms_db
@@ -29,14 +29,30 @@ services:
       - dms_network
     depends_on:
       - dms_db
+      - dms_cache
     environment:
       SPRING_DATASOURCE_URL: ${DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${MYSQLDB_USER}
       SPRING_DATASOURCE_PASSWORD: ${MYSQLDB_ROOT_PASSWORD}
+
+  dms_cache:
+    image: redis:6.2-alpine
+    restart: always
+    container_name: dms_cache
+    env_file: ./.env
+    networks:
+      - dms_network
+    ports:
+      - "${REDIS_LOCAL_PORT}:${REDIS_DOCKER_PORT}"
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - dms_cache:/var/lib/redis
 networks:
   dms_network:
     name: dms_network
 
 volumes:
- dms_db:
-  name: dms_db_volume
+  dms_db:
+    name: dms_db_volume
+  dms_cache:
+    name: dms_cache_volume
